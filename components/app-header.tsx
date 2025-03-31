@@ -1,7 +1,7 @@
 import { MenuIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
-import { ThemeToggle } from '~/components/ThemeToggle'
+import { ThemeToggle } from '~/components/theme-toggle'
 import { Button } from '~/components/ui/button'
 
 function AppLogo() {
