@@ -2,37 +2,11 @@ import { BanknoteIcon, DollarSignIcon, MicIcon, PlusIcon, SmileIcon } from 'luci
 import * as React from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { AmountDisplay } from '~/components/amount-display'
 import { AppHeader } from '~/components/AppHeader'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardTitle } from '~/components/ui/card'
 import { Label } from '~/components/ui/label'
-import { cn } from '~/lib/utils'
-
-interface AmountDisplayProps {
-  amount: number
-  unit: string
-}
-
-function AmountDisplay({
-  amount,
-  unit,
-}: AmountDisplayProps): React.ReactElement {
-  return (
-    <Text className={cn(
-      `text-xl font-semibold`,
-      amount > 0 && `text-green-500`,
-      amount < 0 && `text-red-500`,
-    )}
-    >
-      { amount > 0
-        ? '＋'
-        : '－' }
-      {Math.abs(amount)}
-      {' '}
-      {unit}
-    </Text>
-  )
-}
 
 function ExpenseView() {
   const dailyBalance = -200
