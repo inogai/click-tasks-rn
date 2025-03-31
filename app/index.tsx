@@ -1,78 +1,11 @@
-import { BanknoteIcon, DollarSignIcon, MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
+import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AmountDisplay } from '~/components/amount-display'
 import { AppHeader } from '~/components/AppHeader'
+import { ExpenseView } from '~/components/expense-view'
+import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
-import { Card, CardContent, CardTitle } from '~/components/ui/card'
-import { Label } from '~/components/ui/label'
-
-function ExpenseView() {
-  const dailyBalance = -200
-  const monthlyBalance = +2000
-  const unit = 'HKD'
-
-  return (
-    <Card>
-      <CardTitle />
-      <CardContent>
-        <View className="flex-row items-center justify-center">
-          <View className="flex-col items-end">
-            <Label>Daily</Label>
-            <View className="flex-row gap-x-1">
-              <DollarSignIcon className="text-foreground" />
-              <AmountDisplay amount={dailyBalance} unit={unit} />
-            </View>
-          </View>
-
-          <View className="mx-4 h-full w-px bg-border" />
-
-          <View className="flex-col items-start">
-            <Label>Monthly</Label>
-            <View className="flex-row gap-x-1">
-              {/* Blocked by lucide-nativewind update */}
-              {/* {monthlyBalance > 0 */}
-              {/*   ? <BanknoteArrowUpIcon /> */}
-              {/*   : <BanknoteArrowDownIcon />} */}
-              <BanknoteIcon className="text-foreground" />
-              <AmountDisplay amount={monthlyBalance} unit={unit} />
-            </View>
-          </View>
-        </View>
-      </CardContent>
-    </Card>
-  )
-}
-
-const tasks = [
-  { title: 'Task 1', time: 8 },
-  { title: 'Task 2', time: 9 },
-  { title: 'Task 3', time: 13 },
-]
-
-function TasksView() {
-  return (
-    <View className="flex-col gap-y-2">
-      {
-        tasks.map(task => (
-          <View
-            key={task.title}
-            className="flex flex-row items-start gap-x-2"
-          >
-            <Text className="w-12 pt-2.5 text-muted-foreground">
-              {task.time.toString().padStart(2, '0')}
-              :00
-            </Text>
-            <View className="grow rounded-xl bg-blue-300 px-4 py-2">
-              <Text>{task.title}</Text>
-            </View>
-          </View>
-        ))
-      }
-    </View>
-  )
-}
 
 export default function Screen() {
   return (
