@@ -14,7 +14,7 @@ function AppLogo() {
 
 export function AppHeader() {
   return (
-    <View className="flex flex-row items-center justify-between border-b p-4">
+    <View className="flex flex-row items-center justify-between border-border border-b p-4">
       <View>
         <Button size="icon" variant="ghost">
           <MenuIcon className="text-foreground" />

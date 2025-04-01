@@ -18,10 +18,9 @@ export default function Screen() {
       <View className="flex h-full flex-col items-stretch gap-5 bg-background">
         <AppHeader />
         <View className="grow flex-col justify-stretch gap-y-6 px-4">
-
           <View className="relative h-36">
             <CalendarStrip
-              className="absolute z-10 rounded-xl border bg-background py-4"
+              className="absolute z-10 rounded-xl border border-border bg-background py-4"
               selectedDate={currentDate}
               onSelectedDateChange={setCurrentDate}
               initialExpaned={true}
