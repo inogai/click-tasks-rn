@@ -10,8 +10,6 @@ import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
 const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const INITIAL_SCROLL_INDEX = 7
-const SCROLL_THRESHOLD_NUM = 1
 const DAY_ITEM_HEIGHT = 56
 
 interface DayItemProps {
@@ -167,8 +165,6 @@ export function CalendarStrip({
   ), [month, weekStartsOn])
 
   const [width, setWidth] = useState(20)
-  const [scrollIndicator, setScrollIndicator] = useState<null | 'left' | 'right'>(null)
-  const [scrolling, setScrolling] = useState(false)
 
   const [controlledExpanded, setControlledExpanded] = useState(initialExpaned)
 
@@ -196,39 +192,6 @@ export function CalendarStrip({
   const loadLeft = useCallback(() => navigateCalendar('left'), [navigateCalendar])
   const loadRight = useCallback(() => navigateCalendar('right'), [navigateCalendar])
 
-  // Scroll handlers
-  const handleScrollBegin = useCallback(() => {
-    setScrolling(true)
-  }, [])
-
-  const handleScrollEnd = useCallback(() => {
-    setScrolling(false)
-    if (scrollIndicator === 'left') {
-      loadLeft()
-    }
-    else if (scrollIndicator === 'right') {
-      loadRight()
-    }
-    setScrollIndicator(null)
-    listRef.current?.scrollToIndex({ index: 1, animated: true })
-  }, [scrollIndicator, loadLeft, loadRight])
-
-  const handleScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!scrolling)
-      return
-
-    const offset = e.nativeEvent.contentOffset.x
-    if (offset <= (INITIAL_SCROLL_INDEX - SCROLL_THRESHOLD_NUM) * width) {
-      setScrollIndicator('left')
-    }
-    else if (offset >= (INITIAL_SCROLL_INDEX - SCROLL_THRESHOLD_NUM) * width) {
-      setScrollIndicator('right')
-    }
-    else {
-      setScrollIndicator(null)
-    }
-  }, [scrolling, width])
-
   // Calculate item width based on container width
   useLayoutEffect(() => {
     wrapperRef.current?.measure((_, __, w) => {
@@ -242,7 +205,7 @@ export function CalendarStrip({
         {item.map((date, index) => {
           const key = formatDate(date, 'yyyy-MM-dd')
           const isSelected = selectedDateKey === key
-          const hidden = !expanded && index !== 1
+          const hidden = !expanded && index !== weekOfMonth
 
           return (
             <DayItem
@@ -265,7 +228,7 @@ export function CalendarStrip({
   }, [anchorDate, expanded, onSelectedDateChange, selectedDateKey])
 
   const height = useDerivedValue(
-    () => withTiming(expanded ? 64 * 6 : 64, { duration: 1500, easing }),
+    () => withTiming(expanded ? DAY_ITEM_HEIGHT * 6 : DAY_ITEM_HEIGHT, { duration: STAGGERING * 6 + 300, easing }),
     [expanded],
   )
 
@@ -299,30 +262,11 @@ export function CalendarStrip({
           <FlashList
             ref={listRef}
             data={daylist}
-            extraData={[selectedDateKey, expanded, weekOfMonth]}
+            extraData={[selectedDateKey, expanded, weekOfMonth, anchorDate]}
             horizontal
             estimatedItemSize={width}
             renderItem={renderDayItem}
-            onScrollEndDrag={handleScrollEnd}
-            onScrollBeginDrag={handleScrollBegin}
-            onScroll={handleScroll}
-          />
-        </View>
-
-        {/* Scroll indicators */}
-        <View className={`
-          pointer-events-none absolute flex-row items-center justify-between
-        `}
-        >
-          <ArrowLeftCircleIcon
-            className={cn('text-blue-400', scrollIndicator !== 'left' && `
-              opacity-0
-            `)}
-          />
-          <ArrowRightCircleIcon
-            className={cn('text-blue-400', scrollIndicator !== 'right' && `
-              opacity-0
-            `)}
+            scrollEnabled={false}
           />
         </View>
       </Animated.View>
