@@ -20,6 +20,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "io.github.inogai.clicktasks",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
