@@ -25,6 +25,18 @@ export interface CalendarStripProps {
   className?: string
 }
 
+/**
+ * Generates an array of 7 Date objects representing a complete week
+ *
+ * This function calculates all 7 days of a week starting from a specified
+ * day of the week (weekStartsOn). It uses the provided date to determine
+ * the reference week and adjusts the starting day according to weekStartsOn.
+ *
+ * @param week - Any date within the desired week
+ * @param weekStartsOn - Day enum (0-6) representing which day the week starts on
+ *                       (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+ * @returns An array of 7 dates representing the days of the week
+ */
 function getWeekDays(week: Date, weekStartsOn: Day) {
   // A 7-day week starting from the given dayOfWeek
   const weekStart = startOfWeek(week, { weekStartsOn })
@@ -33,6 +45,18 @@ function getWeekDays(week: Date, weekStartsOn: Day) {
   return dayIndices.map(dayIndex => addDays(weekStart, dayIndex))
 }
 
+/**
+ * Generates a 6-week calendar grid for a given month
+ *
+ * This function creates a calendar grid containing 6 rows (weeks) with 7 days each,
+ * starting from the week that contains the first day of the specified month.
+ * The calendar can be adjusted to start on any day of the week.
+ *
+ * @param monthDate - Any date within the desired month
+ * @param weekStartsOn - Day enum (0-6) representing which day the week starts on
+ *                       (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+ * @returns A 2D array of Date objects, where each inner array represents a week (7 days)
+ */
 function getWeekRows(monthDate: Date, weekStartsOn: Day = 0) {
   const firstDayOfMonth = startOfMonth(monthDate)
   const firstDayOfCalendar = startOfWeek(firstDayOfMonth, { weekStartsOn })
