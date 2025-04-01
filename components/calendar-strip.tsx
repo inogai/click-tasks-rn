@@ -1,11 +1,11 @@
 import type { Day } from 'date-fns'
-import type { NativeScrollEvent, NativeSyntheticEvent, ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
-import { addDays, addMonths, addWeeks, formatDate, getWeekOfMonth, nextDay, startOfMonth, startOfWeek } from 'date-fns'
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
+import { addDays, addMonths, addWeeks, endOfWeek, formatDate, getWeekOfMonth, nextDay, startOfMonth, startOfWeek } from 'date-fns'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated'
+import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated'
 import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
@@ -17,7 +17,7 @@ interface DayItemProps {
   isSelected: boolean
   onPress: () => void
   className?: string
-  style?: ViewStyle
+  style?: ViewStyle & { opacity?: number }
   hidden?: boolean
   dayIndex: number
 }
@@ -39,8 +39,10 @@ function DayItem({
   const dayOfWeek = item.getDay()
   const isSunday = dayOfWeek === 0
 
+  const { opacity: normalOpacity = 1, ...restStyle } = style || {}
+
   // Create animated properties with initial values
-  const opacity = useSharedValue(hidden ? 0 : 1)
+  const opacity = useSharedValue(hidden ? 0 : normalOpacity)
   const height = useSharedValue(hidden ? 0 : DAY_ITEM_HEIGHT)
   const scale = useSharedValue(1)
 
@@ -63,7 +65,7 @@ function DayItem({
 
     opacity.value = withDelay(
       animationDelay,
-      withTiming(hidden ? 0 : 1, { duration, easing }),
+      withTiming(hidden ? 0 : normalOpacity, { duration, easing }),
     )
 
     height.value = withDelay(
@@ -84,7 +86,7 @@ function DayItem({
       activeOpacity={0.7}
     >
       <Animated.View
-        style={animatedStyle}
+        style={[animatedStyle, restStyle]}
         className={cn(
           `flex flex-col items-center justify-center overflow-hidden`,
           isSelected && 'rounded-full bg-primary',
@@ -157,6 +159,8 @@ export function CalendarStrip({
 
   const month = useMemo(() => startOfMonth(anchorDate), [anchorDate])
   const weekOfMonth = useMemo(() => getWeekOfMonth(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
+  const week = useMemo(() => startOfWeek(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
+  const endWeek = useMemo(() => endOfWeek(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
 
   const daylist = useMemo(() => R.pipe(
     R.range(0, 7),
@@ -199,33 +203,39 @@ export function CalendarStrip({
     })
   }, [])
 
+  function handleDayItemPress(date: Date) {
+    onSelectedDateChange(date)
+    setAnchorDate(date)
+    setExpanded?.(false)
+  }
+
   const renderDayItem = useCallback(({ item }: { item: Date[] }) => {
     return (
       <View className="h-96 w-16">
         {item.map((date, index) => {
           const key = formatDate(date, 'yyyy-MM-dd')
           const isSelected = selectedDateKey === key
-          const hidden = !expanded && index !== weekOfMonth
+          const shown = expanded || (date >= week && date <= endWeek)
 
           return (
             <DayItem
               dayIndex={index}
               key={key}
-              className={cn(
-                date.getMonth() !== anchorDate.getMonth() && 'opacity-50',
-              )}
+              style={{
+                opacity: date.getMonth() === anchorDate.getMonth() ? 1 : 0.5,
+              }}
               item={date}
               isSelected={isSelected}
-              hidden={hidden}
+              hidden={!shown}
               onPress={() => {
-                onSelectedDateChange(date)
+                handleDayItemPress(date)
               }}
             />
           )
         })}
       </View>
     )
-  }, [anchorDate, expanded, onSelectedDateChange, selectedDateKey])
+  }, [anchorDate, expanded, onSelectedDateChange, selectedDateKey, weekOfMonth])
 
   const height = useDerivedValue(
     () => withTiming(expanded ? DAY_ITEM_HEIGHT * 6 : DAY_ITEM_HEIGHT, { duration: STAGGERING * 6 + 300, easing }),
@@ -244,7 +254,7 @@ export function CalendarStrip({
           <ChevronLeftIcon className="text-foreground" />
         </Button>
         <Text className="font-semibold text-muted-foreground">
-          {formatDate(anchorDate, 'MMMM yyyy')}
+          {'W' + formatDate(anchorDate, 'w MMMM yyyy')}
         </Text>
         <Button size="icon" variant="ghost" onPress={loadRight}>
           <ChevronRightIcon className="text-foreground" />
