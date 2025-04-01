@@ -1,6 +1,7 @@
 import { cva } from 'class-variance-authority'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { isHoliday } from '~/lib/holidays'
+import { cn } from '~/lib/utils'
 
 const dayContainerVariants = cva(
   'flex h-16 w-16 flex-col items-center justify-center overflow-hidden',
@@ -21,14 +22,14 @@ const dayNameVariants = cva(
   'text-sm font-semibold text-muted-foreground',
   {
     variants: {
-      selected: {
-        true: 'text-primary-foreground',
-        false: '',
-      },
       variant: {
         holiday: 'text-red-500',
         saturday: 'text-blue-500',
         default: '',
+      },
+      selected: {
+        true: 'text-primary-foreground',
+        false: '',
       },
       active: {
         true: '',
@@ -46,14 +47,14 @@ const dayNumberVariants = cva(
   'text-foreground',
   {
     variants: {
-      selected: {
-        true: 'text-primary-foreground',
-        false: '',
-      },
       variant: {
         holiday: 'font-semibold text-red-500',
         saturday: 'font-semibold text-blue-500',
         default: '',
+      },
+      selected: {
+        true: 'text-primary-foreground',
+        false: '',
       },
       active: {
         true: '',
@@ -87,6 +88,7 @@ export interface CalendarDayProps {
   selected?: boolean
   active?: boolean
   onSelectedChange?: (selected: boolean) => void
+  className?: string
 }
 
 export function CalendarDay({
@@ -94,6 +96,7 @@ export function CalendarDay({
   selected,
   active = true,
   onSelectedChange,
+  className,
 }: CalendarDayProps) {
   const dayOfMonth = date.getDate()
   const dayOfWeek = date.getDay()
@@ -108,23 +111,23 @@ export function CalendarDay({
       onPress={handlePress}
     >
       <View
-        className={dayContainerVariants({ selected })}
+        className={cn(dayContainerVariants({ selected }), className)}
       >
         <Text
-          className={dayNameVariants({
+          className={cn(dayNameVariants({
             selected,
             variant,
             active,
-          })}
+          }))}
         >
           {DAYS_OF_WEEK[dayOfWeek]}
         </Text>
         <Text
-          className={dayNumberVariants({
+          className={cn(dayNumberVariants({
             selected,
             variant,
             active,
-          })}
+          }))}
         >
           { dayOfMonth }
         </Text>
