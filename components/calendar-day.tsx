@@ -1,0 +1,134 @@
+import { cva } from 'class-variance-authority'
+import { Text, TouchableOpacity, View } from 'react-native'
+import { isHoliday } from '~/lib/holidays'
+
+const dayContainerVariants = cva(
+  'flex h-16 flex-col items-center justify-center overflow-hidden',
+  {
+    variants: {
+      selected: {
+        true: 'rounded-xl bg-primary',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      selected: false,
+    },
+  },
+)
+
+const dayNameVariants = cva(
+  'text-sm font-semibold text-muted-foreground',
+  {
+    variants: {
+      selected: {
+        true: 'text-primary-foreground',
+        false: '',
+      },
+      variant: {
+        holiday: 'text-red-500',
+        saturday: 'text-blue-500',
+        default: '',
+      },
+      active: {
+        true: '',
+        false: 'opacity-50',
+      },
+    },
+    defaultVariants: {
+      selected: false,
+      variant: 'default',
+    },
+  },
+)
+
+const dayNumberVariants = cva(
+  'text-foreground',
+  {
+    variants: {
+      selected: {
+        true: 'text-primary-foreground',
+        false: '',
+      },
+      variant: {
+        holiday: 'font-semibold text-red-500',
+        saturday: 'font-semibold text-blue-500',
+        default: '',
+      },
+      active: {
+        true: '',
+        false: 'opacity-50',
+      },
+    },
+    defaultVariants: {
+      selected: false,
+      variant: 'default',
+      active: true,
+    },
+  },
+)
+
+const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+function getDateVariant(date: Date) {
+  if (isHoliday(date)) {
+    return 'holiday'
+  }
+
+  if (date.getDay() === 6) {
+    return 'saturday'
+  }
+
+  return 'default'
+}
+
+export interface CalendarDayProps {
+  date: Date
+  selected?: boolean
+  active?: boolean
+  onSelectedChange?: (selected: boolean) => void
+}
+
+export function CalendarDay({
+  date,
+  selected,
+  active = true,
+  onSelectedChange,
+}: CalendarDayProps) {
+  const dayOfMonth = date.getDate()
+  const dayOfWeek = date.getDay()
+  const variant = getDateVariant(date)
+
+  const handlePress = () => {
+    onSelectedChange?.(!selected)
+  }
+
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
+    >
+      <View
+        className={dayContainerVariants({ selected })}
+      >
+        <Text
+          className={dayNameVariants({
+            selected,
+            variant,
+            active,
+          })}
+        >
+          {DAYS_OF_WEEK[dayOfWeek]}
+        </Text>
+        <Text
+          className={dayNumberVariants({
+            selected,
+            variant,
+            active,
+          })}
+        >
+          { dayOfMonth }
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
+}

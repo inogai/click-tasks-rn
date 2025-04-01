@@ -1,118 +1,19 @@
 import type { Day } from 'date-fns'
-import type { ViewStyle } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import { addDays, addMonths, addWeeks, endOfWeek, formatDate, getWeekOfMonth, nextDay, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated'
+import Animated, { Easing, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated'
+import { CalendarDay } from '~/components/calendar-day'
+import { Collasper } from '~/components/collasper'
 import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
-const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const DAY_ITEM_HEIGHT = 56
 
-interface DayItemProps {
-  item: Date
-  isSelected: boolean
-  onPress: () => void
-  className?: string
-  style?: ViewStyle & { opacity?: number }
-  hidden?: boolean
-  dayIndex: number
-}
-
 const STAGGERING = 50
-const duration = 300
 const easing = Easing.bezier(0.25, 0.1, 0.25, 1)
-
-function DayItem({
-  item,
-  isSelected,
-  onPress,
-  className,
-  style,
-  hidden = false,
-  dayIndex,
-}: DayItemProps) {
-  const dayOfMonth = item.getDate()
-  const dayOfWeek = item.getDay()
-  const isSunday = dayOfWeek === 0
-
-  const { opacity: normalOpacity = 1, ...restStyle } = style || {}
-
-  // Create animated properties with initial values
-  const opacity = useSharedValue(hidden ? 0 : normalOpacity)
-  const height = useSharedValue(hidden ? 0 : DAY_ITEM_HEIGHT)
-  const scale = useSharedValue(1)
-
-  useEffect(() => {
-    if (isSelected) {
-      scale.value = withSequence(
-        withTiming(1.2, { duration: 100, easing }),
-        withTiming(1, { duration: 100, easing }),
-      )
-    }
-  }, [isSelected])
-
-  // Apply staggered animation effect based on dayIndex
-
-  // Update animated values when props change
-  useEffect(() => {
-    const animationDelay = hidden
-      ? (6 - dayIndex) * STAGGERING // Stagger effect
-      : dayIndex * STAGGERING // Stagger effect
-
-    opacity.value = withDelay(
-      animationDelay,
-      withTiming(hidden ? 0 : normalOpacity, { duration, easing }),
-    )
-
-    height.value = withDelay(
-      animationDelay,
-      withTiming(hidden ? 0 : DAY_ITEM_HEIGHT, { duration, easing }),
-    )
-  }, [hidden, isSelected, dayIndex, opacity, height])
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    height: height.value,
-    transform: [{ scale: scale.value }],
-  }))
-
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
-      <Animated.View
-        style={[animatedStyle, restStyle]}
-        className={cn(
-          `flex flex-col items-center justify-center overflow-hidden`,
-          isSelected && 'rounded-full bg-primary',
-          className,
-        )}
-      >
-        <Text className={cn(
-          'text-sm font-semibold text-muted-foreground',
-          isSelected && 'text-primary-foreground',
-          isSunday && 'text-red-500',
-        )}
-        >
-          {DAYS_OF_WEEK[dayOfWeek]}
-        </Text>
-        <Text className={cn(
-          'text-foreground',
-          isSelected && 'text-primary-foreground',
-          isSunday && 'text-red-500',
-        )}
-        >
-          {dayOfMonth}
-        </Text>
-      </Animated.View>
-    </TouchableOpacity>
-  )
-}
 
 export interface CalendarStripProps {
   selectedDate: Date
@@ -203,11 +104,11 @@ export function CalendarStrip({
     })
   }, [])
 
-  function handleDayItemPress(date: Date) {
+  const handleDayItemPress = useCallback((date: Date) => {
     onSelectedDateChange(date)
     setAnchorDate(date)
     setExpanded?.(false)
-  }
+  }, [onSelectedDateChange, setExpanded])
 
   const renderDayItem = useCallback(({ item }: { item: Date[] }) => {
     return (
@@ -218,24 +119,24 @@ export function CalendarStrip({
           const shown = expanded || (date >= week && date <= endWeek)
 
           return (
-            <DayItem
-              dayIndex={index}
+            <Collasper
               key={key}
-              style={{
-                opacity: date.getMonth() === anchorDate.getMonth() ? 1 : 0.5,
-              }}
-              item={date}
-              isSelected={isSelected}
+              delay={STAGGERING * index}
               hidden={!shown}
-              onPress={() => {
-                handleDayItemPress(date)
-              }}
+              render={() => (
+                <CalendarDay
+                  date={date}
+                  selected={isSelected}
+                  onSelectedChange={value => value && handleDayItemPress(date)}
+                  active={anchorDate.getMonth() === date.getMonth()}
+                />
+              )}
             />
           )
         })}
       </View>
     )
-  }, [anchorDate, expanded, onSelectedDateChange, selectedDateKey, weekOfMonth])
+  }, [anchorDate, endWeek, expanded, handleDayItemPress, selectedDateKey, week])
 
   const height = useDerivedValue(
     () => withTiming(expanded ? DAY_ITEM_HEIGHT * 6 : DAY_ITEM_HEIGHT, { duration: STAGGERING * 6 + 300, easing }),
@@ -254,7 +155,7 @@ export function CalendarStrip({
           <ChevronLeftIcon className="text-foreground" />
         </Button>
         <Text className="font-semibold text-muted-foreground">
-          {'W' + formatDate(anchorDate, 'w MMMM yyyy')}
+          {`W${formatDate(anchorDate, 'w MMMM yyyy')}`}
         </Text>
         <Button size="icon" variant="ghost" onPress={loadRight}>
           <ChevronRightIcon className="text-foreground" />
