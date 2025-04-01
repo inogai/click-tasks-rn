@@ -8,6 +8,7 @@ import { CalendarStrip } from '~/components/calendar-strip'
 import { ExpenseView } from '~/components/expense-view'
 import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -17,11 +18,15 @@ export default function Screen() {
       <View className="flex h-full flex-col items-stretch gap-5 bg-background">
         <AppHeader />
         <View className="grow flex-col justify-stretch gap-y-6 px-4">
-          <CalendarStrip
-            selectedDate={currentDate}
-            onSelectedDateChange={setCurrentDate}
-            expanded={false}
-          />
+
+          <View className="relative h-36">
+            <CalendarStrip
+              className="absolute z-10 rounded-xl border bg-background py-4"
+              selectedDate={currentDate}
+              onSelectedDateChange={setCurrentDate}
+              initialExpaned={true}
+            />
+          </View>
 
           <ExpenseView />
 

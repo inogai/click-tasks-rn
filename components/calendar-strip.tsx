@@ -1,43 +1,97 @@
 import type { Day } from 'date-fns'
-import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
+import type { NativeScrollEvent, NativeSyntheticEvent, ViewStyle } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
-import { addDays, formatDate, startOfWeek } from 'date-fns'
+import { addDays, addMonths, addWeeks, formatDate, getWeekOfMonth, nextDay, startOfMonth, startOfWeek } from 'date-fns'
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated'
 import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
 const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const INITIAL_SCROLL_INDEX = 7
 const SCROLL_THRESHOLD_NUM = 1
-const DAYS_TO_DISPLAY = 9 // -1 to 8
-
-interface DaylistItem {
-  date: Date
-  dayOfMonth: number
-  dayOfWeek: number
-  key: string
-}
+const DAY_ITEM_HEIGHT = 56
 
 interface DayItemProps {
-  item: DaylistItem
-  width: number
+  item: Date
   isSelected: boolean
   onPress: () => void
+  className?: string
+  style?: ViewStyle
+  hidden?: boolean
+  dayIndex: number
 }
 
-function DayItem({ item, width, isSelected, onPress }: DayItemProps) {
-  const isSunday = item.dayOfWeek === 0
+const STAGGERING = 50
+const duration = 300
+const easing = Easing.bezier(0.25, 0.1, 0.25, 1)
+
+function DayItem({
+  item,
+  isSelected,
+  onPress,
+  className,
+  style,
+  hidden = false,
+  dayIndex,
+}: DayItemProps) {
+  const dayOfMonth = item.getDate()
+  const dayOfWeek = item.getDay()
+  const isSunday = dayOfWeek === 0
+
+  // Create animated properties with initial values
+  const opacity = useSharedValue(hidden ? 0 : 1)
+  const height = useSharedValue(hidden ? 0 : DAY_ITEM_HEIGHT)
+  const scale = useSharedValue(1)
+
+  useEffect(() => {
+    if (isSelected) {
+      scale.value = withSequence(
+        withTiming(1.2, { duration: 100, easing }),
+        withTiming(1, { duration: 100, easing }),
+      )
+    }
+  }, [isSelected])
+
+  // Apply staggered animation effect based on dayIndex
+
+  // Update animated values when props change
+  useEffect(() => {
+    const animationDelay = hidden
+      ? (6 - dayIndex) * STAGGERING // Stagger effect
+      : dayIndex * STAGGERING // Stagger effect
+
+    opacity.value = withDelay(
+      animationDelay,
+      withTiming(hidden ? 0 : 1, { duration, easing }),
+    )
+
+    height.value = withDelay(
+      animationDelay,
+      withTiming(hidden ? 0 : DAY_ITEM_HEIGHT, { duration, easing }),
+    )
+  }, [hidden, isSelected, dayIndex, opacity, height])
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    height: height.value,
+    transform: [{ scale: scale.value }],
+  }))
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      <Animated.View
+        style={animatedStyle}
         className={cn(
-          `flex h-full flex-col items-center justify-center`,
+          `flex flex-col items-center justify-center overflow-hidden`,
           isSelected && 'rounded-full bg-primary',
+          className,
         )}
-        style={{ width }}
       >
         <Text className={cn(
           'text-sm font-semibold text-muted-foreground',
@@ -45,7 +99,7 @@ function DayItem({ item, width, isSelected, onPress }: DayItemProps) {
           isSunday && 'text-red-500',
         )}
         >
-          {DAYS_OF_WEEK[item.dayOfWeek]}
+          {DAYS_OF_WEEK[dayOfWeek]}
         </Text>
         <Text className={cn(
           'text-foreground',
@@ -53,62 +107,94 @@ function DayItem({ item, width, isSelected, onPress }: DayItemProps) {
           isSunday && 'text-red-500',
         )}
         >
-          {item.dayOfMonth}
+          {dayOfMonth}
         </Text>
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   )
-}
-
-function computeDaylist(anchorDate: Date): DaylistItem[] {
-  return R.range(-1, 8).map((i) => {
-    const date = addDays(anchorDate, i)
-    const key = formatDate(date, 'yyyy-MM-dd')
-    return {
-      date,
-      dayOfMonth: date.getDate(),
-      dayOfWeek: date.getDay(),
-      key,
-    }
-  })
 }
 
 export interface CalendarStripProps {
   selectedDate: Date
   onSelectedDateChange: (date: Date) => void
-  expanded?: boolean // Made optional since it's unused
+  expanded?: boolean
+  onExapndedChange?: (expanded: boolean) => void
+  initialExpaned?: boolean
   weekStartsOn?: Day
   className?: string
+}
+
+function getWeekColumn(rawMonth: Date, dayOfWeek: Day, weekStartsOn?: Day) {
+  const start = R.pipe(
+    rawMonth,
+    x => startOfMonth(x),
+    x => startOfWeek(x, { weekStartsOn }),
+    x => addDays(x, -1),
+    x => nextDay(x, dayOfWeek),
+  )
+
+  // const end = R.pipe(
+  //   rawMonth,
+  //   x => endOfMonth(x),
+  //   x => startOfWeek(x, { weekStartsOn }),
+  //   x => addDays(x, -1),
+  //   x => nextDay(x, dayOfWeek),
+  // )
+
+  return R.range(0, 6).map(weekNr => addWeeks(start, weekNr))
 }
 
 export function CalendarStrip({
   selectedDate,
   onSelectedDateChange,
-  weekStartsOn,
+  expanded,
+  onExapndedChange: setExpanded,
+  initialExpaned = false,
+  weekStartsOn = 0,
   className,
 }: CalendarStripProps) {
   // State setup
-  const [anchorDate, setAnchorDate] = useState(startOfWeek(selectedDate, { weekStartsOn }))
   const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
-  const [daylist, setDaylist] = useState(() => computeDaylist(anchorDate))
+  const [anchorDate, setAnchorDate] = useState(startOfWeek(selectedDate, { weekStartsOn }))
+
+  const month = useMemo(() => startOfMonth(anchorDate), [anchorDate])
+  const weekOfMonth = useMemo(() => getWeekOfMonth(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
+
+  const daylist = useMemo(() => R.pipe(
+    R.range(0, 7),
+    R.map(x => (x + weekStartsOn) % 7),
+    R.map(dayOfWeek => getWeekColumn(month, dayOfWeek as Day, weekStartsOn)),
+  ), [month, weekStartsOn])
+
   const [width, setWidth] = useState(20)
   const [scrollIndicator, setScrollIndicator] = useState<null | 'left' | 'right'>(null)
   const [scrolling, setScrolling] = useState(false)
 
+  const [controlledExpanded, setControlledExpanded] = useState(initialExpaned)
+
+  if (expanded === undefined) {
+    expanded = controlledExpanded
+    setExpanded = setControlledExpanded
+  }
+
   // Refs
   const wrapperRef = useRef<View>(null)
-  const listRef = useRef<FlashList<DaylistItem>>(null)
+  const listRef = useRef<FlashList<Date[]>>(null)
 
   // Navigation handlers
-  const navigateWeek = useCallback((direction: 'left' | 'right') => {
-    const daysToMove = direction === 'left' ? -7 : 7
-    const newAnchorDate = addDays(anchorDate, daysToMove)
-    setAnchorDate(newAnchorDate)
-    setDaylist(computeDaylist(newAnchorDate))
-  }, [anchorDate])
+  const navigateCalendar = useCallback((direction: 'left' | 'right') => {
+    const moveDirection = direction === 'left' ? -1 : 1
 
-  const loadLeft = useCallback(() => navigateWeek('left'), [navigateWeek])
-  const loadRight = useCallback(() => navigateWeek('right'), [navigateWeek])
+    if (expanded) {
+      setAnchorDate(addMonths(anchorDate, moveDirection))
+    }
+    else {
+      setAnchorDate(addWeeks(anchorDate, moveDirection))
+    }
+  }, [anchorDate, expanded])
+
+  const loadLeft = useCallback(() => navigateCalendar('left'), [navigateCalendar])
+  const loadRight = useCallback(() => navigateCalendar('right'), [navigateCalendar])
 
   // Scroll handlers
   const handleScrollBegin = useCallback(() => {
@@ -150,22 +236,47 @@ export function CalendarStrip({
     })
   }, [])
 
-  const renderDayItem = useCallback(({ item }: { item: DaylistItem }) => {
-    const isSelected = item.key === selectedDateKey
+  const renderDayItem = useCallback(({ item }: { item: Date[] }) => {
     return (
-      <DayItem
-        item={item}
-        width={width}
-        isSelected={isSelected}
-        onPress={() => onSelectedDateChange(item.date)}
-      />
+      <View className="h-96 w-16">
+        {item.map((date, index) => {
+          const key = formatDate(date, 'yyyy-MM-dd')
+          const isSelected = selectedDateKey === key
+          const hidden = !expanded && index !== 1
+
+          return (
+            <DayItem
+              dayIndex={index}
+              key={key}
+              className={cn(
+                date.getMonth() !== anchorDate.getMonth() && 'opacity-50',
+              )}
+              item={date}
+              isSelected={isSelected}
+              hidden={hidden}
+              onPress={() => {
+                onSelectedDateChange(date)
+              }}
+            />
+          )
+        })}
+      </View>
     )
-  }, [selectedDateKey, width, onSelectedDateChange])
+  }, [anchorDate, expanded, onSelectedDateChange, selectedDateKey])
+
+  const height = useDerivedValue(
+    () => withTiming(expanded ? 64 * 6 : 64, { duration: 1500, easing }),
+    [expanded],
+  )
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: height.value,
+  }))
 
   return (
-    <View className={cn('flex flex-col items-stretch gap-2', className)}>
+    <View className={cn('flex flex-col items-center gap-2', className)}>
       {/* Header with month display and navigation buttons */}
-      <View className="flex-row items-center justify-between px-2">
+      <View className="w-full flex-row items-center justify-between px-2">
         <Button size="icon" variant="ghost" onPress={loadLeft}>
           <ChevronLeftIcon className="text-foreground" />
         </Button>
@@ -178,14 +289,29 @@ export function CalendarStrip({
       </View>
 
       {/* Calendar strip */}
-      <View
+      <Animated.View
         ref={wrapperRef}
-        className={cn('relative h-16 w-full')}
+        className={cn(`w-full flex-col items-center`)}
+        style={animatedStyle}
       >
+        {/* Day list */}
+        <View>
+          <FlashList
+            ref={listRef}
+            data={daylist}
+            extraData={[selectedDateKey, expanded, weekOfMonth]}
+            horizontal
+            estimatedItemSize={width}
+            renderItem={renderDayItem}
+            onScrollEndDrag={handleScrollEnd}
+            onScrollBeginDrag={handleScrollBegin}
+            onScroll={handleScroll}
+          />
+        </View>
+
         {/* Scroll indicators */}
         <View className={`
-          pointer-events-none absolute flex h-full w-full flex-row items-center
-          justify-between
+          pointer-events-none absolute flex-row items-center justify-between
         `}
         >
           <ArrowLeftCircleIcon
@@ -199,22 +325,14 @@ export function CalendarStrip({
             `)}
           />
         </View>
+      </Animated.View>
 
-        {/* Day list */}
-        <FlashList
-          ref={listRef}
-          data={daylist}
-          extraData={selectedDateKey}
-          horizontal
-          initialScrollIndex={INITIAL_SCROLL_INDEX}
-          estimatedItemSize={width}
-          keyExtractor={item => item.key}
-          renderItem={renderDayItem}
-          onScrollEndDrag={handleScrollEnd}
-          onScrollBeginDrag={handleScrollBegin}
-          onScroll={handleScroll}
-        />
-      </View>
+      <TouchableOpacity
+        className="-mb-4 h-4 w-32"
+        onPress={() => { setExpanded?.(!expanded) }}
+      >
+        <View className="h-1 rounded-full bg-border" />
+      </TouchableOpacity>
     </View>
   )
 }
