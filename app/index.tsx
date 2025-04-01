@@ -20,7 +20,9 @@ export default function Screen() {
         <View className="grow flex-col justify-stretch gap-y-6 px-4">
           <View className="relative h-36">
             <CalendarStrip
-              className="absolute z-10 rounded-xl border border-border bg-background py-4"
+              className={`
+                absolute z-10 rounded-xl border border-border bg-background py-4
+              `}
               selectedDate={currentDate}
               onSelectedDateChange={setCurrentDate}
               initialExpaned={true}
@@ -35,13 +37,11 @@ export default function Screen() {
             <SmileIcon className="h-[198px] w-[198px] text-green-500" />
           </View>
 
-          <View className="sticky bottom-12 w-full flex-row px-16">
+          <View className="sticky bottom-12 w-full flex-row px-12">
             <Button
               variant="default"
               size="lg"
-              className={`
-                grow rounded-xl rounded-r-none border-r-4 border-background
-              `}
+              className="grow rounded-xl rounded-r-none"
             >
               <View className="flex flex-row items-center gap-2">
                 <MicIcon className="text-primary-foreground" />
@@ -50,6 +50,7 @@ export default function Screen() {
                 </Text>
               </View>
             </Button>
+            <View className="w-px bg-border py-2" />
             <Button
               size="lg"
               variant="default"
