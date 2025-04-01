@@ -1,6 +1,6 @@
 import type { FlashList } from '@shopify/flash-list'
 import type { Day } from 'date-fns'
-import { addDays, addMonths, addWeeks, endOfWeek, formatDate, getWeekOfMonth, startOfMonth, startOfWeek } from 'date-fns'
+import { addDays, addMonths, addWeeks, differenceInDays, differenceInWeeks, endOfMonth, endOfWeek, formatDate, getWeekOfMonth, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
@@ -61,8 +61,16 @@ function getWeekRows(monthDate: Date, weekStartsOn: Day = 0) {
   const firstDayOfMonth = startOfMonth(monthDate)
   const firstDayOfCalendar = startOfWeek(firstDayOfMonth, { weekStartsOn })
 
+  const dayFromPreviousMonth = differenceInDays(firstDayOfMonth, firstDayOfCalendar)
+
+  // if firstDayOfMonth is the left most day
+  // move it down to the next week
+  const weekOffsets = dayFromPreviousMonth !== 0
+    ? R.range(0, 6)
+    : R.range(-1, 5)
+
   // Generate a day for each week (6 weeks)
-  const weeks = R.range(0, 6).map(offset => addWeeks(firstDayOfCalendar, offset))
+  const weeks = weekOffsets.map(offset => addWeeks(firstDayOfCalendar, offset))
 
   // Map the weeks to their respective days
   return weeks.map(week => getWeekDays(week, weekStartsOn))
