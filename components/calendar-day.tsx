@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import { isHoliday } from '~/lib/holidays'
 
 const dayContainerVariants = cva(
-  'flex h-16 flex-col items-center justify-center overflow-hidden',
+  'flex h-16 w-16 flex-col items-center justify-center overflow-hidden',
   {
     variants: {
       selected: {
