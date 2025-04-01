@@ -1,10 +1,11 @@
+import type { ViewStyle } from 'react-native'
 import { cva } from 'class-variance-authority'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { isHoliday } from '~/lib/holidays'
 import { cn } from '~/lib/utils'
 
 const dayContainerVariants = cva(
-  'flex h-16 w-16 flex-col items-center justify-center overflow-hidden',
+  'flex flex-col items-center justify-center overflow-hidden',
   {
     variants: {
       selected: {
@@ -88,6 +89,7 @@ export interface CalendarDayProps {
   selected?: boolean
   active?: boolean
   onSelectedChange?: (selected: boolean) => void
+  style?: ViewStyle
   className?: string
 }
 
@@ -96,6 +98,7 @@ export function CalendarDay({
   selected,
   active = true,
   onSelectedChange,
+  style,
   className,
 }: CalendarDayProps) {
   const dayOfMonth = date.getDate()
@@ -111,6 +114,7 @@ export function CalendarDay({
       onPress={handlePress}
     >
       <View
+        style={style}
         className={cn(dayContainerVariants({ selected }), className)}
       >
         <Text

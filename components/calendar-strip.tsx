@@ -6,6 +6,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated'
 import { CalendarDay } from '~/components/calendar-day'
 import { Collasper } from '~/components/collasper'
+import { EvenList } from '~/components/even-list'
 import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
@@ -141,21 +142,26 @@ export function CalendarStrip({
         delay={STAGGERING * index}
         hidden={!shown}
         render={() => (
-          <View className="flex-row">
-            {item.map((date) => {
-              const key = formatDate(date, 'yyyy-MM-dd')
-              const isSelected = selectedDateKey === key
+          <View className="w-full">
+            <EvenList
+              data={item}
+              horizontal
+              renderItem={({ item: date, mainDim: width }) => {
+                const key = formatDate(date, 'yyyy-MM-dd')
+                const isSelected = selectedDateKey === key
 
-              return (
-                <CalendarDay
-                  key={key}
-                  date={date}
-                  selected={isSelected}
-                  onSelectedChange={value => value && handleDayItemPress(date)}
-                  active={anchorDate.getMonth() === date.getMonth()}
-                />
-              )
-            })}
+                return (
+                  <CalendarDay
+                    style={{ width }}
+                    className="h-full"
+                    date={date}
+                    selected={isSelected}
+                    onSelectedChange={value => value && handleDayItemPress(date)}
+                    active={anchorDate.getMonth() === date.getMonth()}
+                  />
+                )
+              }}
+            />
           </View>
         )}
       />
@@ -190,7 +196,7 @@ export function CalendarStrip({
       {/* TODO: add animation for left-right scrolling */}
       <Animated.View
         ref={wrapperRef}
-        className={cn(`w-full flex-col items-center overflow-hidden`)}
+        className={cn(`w-full items-stretch justify-stretch overflow-hidden`)}
         style={animatedStyle}
       >
         {/* Week rows */}
