@@ -1,9 +1,10 @@
 import type { Day } from 'date-fns'
 import { FlashList } from '@shopify/flash-list'
 import { addDays, formatDate, startOfWeek } from 'date-fns'
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-nativewind'
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import { Button } from '~/components/ui/button'
 import { cn, R } from '~/lib/utils'
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -75,11 +76,17 @@ export function CalendarStrip({
   })
 
   return (
-    <View className={cn('flex flex-col items-center gap-2', className)}>
-      <View>
+    <View className={cn('flex flex-col items-stretch gap-2', className)}>
+      <View className="flex-row items-center justify-between px-2">
+        <Button size="icon" variant="ghost" onPress={loadLeft}>
+          <ChevronLeftIcon className="text-foreground" />
+        </Button>
         <Text className="font-semibold text-muted-foreground">
           {formatDate(anchorDate, 'MMMM yyyy')}
         </Text>
+        <Button size="icon" variant="ghost" onPress={loadRight}>
+          <ChevronRightIcon className="text-foreground" />
+        </Button>
       </View>
       <View
         ref={wrapperRef}
