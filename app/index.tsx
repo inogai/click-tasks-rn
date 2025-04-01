@@ -1,14 +1,12 @@
 import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
-import { Agenda, CalendarProvider, ExpandableCalendar, TimelineList } from 'react-native-calendars'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppHeader } from '~/components/app-header'
 import { CalendarStrip } from '~/components/calendar-strip'
 import { ExpenseView } from '~/components/expense-view'
 import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
-import { Card, CardContent } from '~/components/ui/card'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -41,22 +39,22 @@ export default function Screen() {
             <Button
               variant="default"
               size="lg"
-              className="grow rounded-xl rounded-r-none"
+              className="bg-finance grow rounded-xl rounded-r-none"
             >
               <View className="flex flex-row items-center gap-2">
-                <MicIcon className="text-primary-foreground" />
-                <Text className="text-xl font-semibold text-primary-foreground">
+                <MicIcon className="text-finance-foreground" />
+                <Text className="text-finance-foreground text-xl font-semibold">
                   Voice Tasks
                 </Text>
               </View>
             </Button>
-            <View className="w-px bg-border py-2" />
+            <View className="border-finance w-px border-y-4 bg-border" />
             <Button
               size="lg"
               variant="default"
-              className="rounded-xl rounded-l-none px-4"
+              className="bg-finance rounded-xl rounded-l-none px-4"
             >
-              <PlusIcon className="text-primary-foreground" />
+              <PlusIcon className="text-finance-foreground" />
             </Button>
           </View>
         </View>
