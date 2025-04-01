@@ -142,7 +142,7 @@ export function CalendarStrip({
         delay={STAGGERING * index}
         hidden={!shown}
         render={() => (
-          <View className="w-full">
+          <View className="w-full px-2">
             <EvenList
               data={item}
               horizontal
