@@ -41,20 +41,20 @@ export default function Screen() {
             <Button
               variant="default"
               size="lg"
-              className="bg-finance grow rounded-xl rounded-r-none"
+              className="grow rounded-xl rounded-r-none bg-finance"
             >
               <View className="flex flex-row items-center gap-2">
                 <MicIcon className="text-finance-foreground" />
-                <Text className="text-finance-foreground text-xl font-semibold">
+                <Text className="text-xl font-semibold text-finance-foreground">
                   {t('voice_button')}
                 </Text>
               </View>
             </Button>
-            <View className="border-finance w-px border-y-4 bg-border" />
+            <View className="w-px border-y-4 border-finance bg-border" />
             <Button
               size="lg"
               variant="default"
-              className="bg-finance rounded-xl rounded-l-none px-4"
+              className="rounded-xl rounded-l-none bg-finance px-4"
             >
               <PlusIcon className="text-finance-foreground" />
             </Button>
