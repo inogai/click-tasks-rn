@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import { AmountDisplay } from '~/components/amount-display'
 import { Card, CardContent, CardTitle } from '~/components/ui/card'
 import { Label } from '~/components/ui/label'
+import { t } from '~/lib/i18n'
 
 export function ExpenseView() {
   const dailyBalance = -200
@@ -16,7 +17,7 @@ export function ExpenseView() {
       <CardContent>
         <View className="flex-row items-center justify-center">
           <View className="flex-col items-end">
-            <Label>Daily</Label>
+            <Label>{t('daily_balance')}</Label>
             <View className="flex-row gap-x-1">
               <DollarSignIcon className="text-foreground" />
               <AmountDisplay amount={dailyBalance} unit={unit} />
@@ -26,7 +27,7 @@ export function ExpenseView() {
           <View className="mx-4 h-full w-px bg-border" />
 
           <View className="flex-col items-start">
-            <Label>Monthly</Label>
+            <Label>{t('monthly_balance')}</Label>
             <View className="flex-row gap-x-1">
               {/* Blocked by lucide-nativewind update */}
               {/* {monthlyBalance > 0 */}

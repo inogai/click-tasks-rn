@@ -1,4 +1,5 @@
 import antfu from '@antfu/eslint-config'
+import i18next from 'eslint-plugin-i18next'
 import readableTailwind from 'eslint-plugin-readable-tailwind'
 import tailwind from 'eslint-plugin-tailwindcss'
 
@@ -27,4 +28,5 @@ export default antfu(
       'readable-tailwind/no-duplicate-classes': 'warn',
     },
   },
+  i18next.configs['flat/recommended'],
 )

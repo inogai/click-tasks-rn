@@ -8,6 +8,8 @@ import { ExpenseView } from '~/components/expense-view'
 import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 
+import { t } from '~/lib/i18n'
+
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
@@ -44,7 +46,7 @@ export default function Screen() {
               <View className="flex flex-row items-center gap-2">
                 <MicIcon className="text-finance-foreground" />
                 <Text className="text-finance-foreground text-xl font-semibold">
-                  Voice Tasks
+                  {t('voice_button')}
                 </Text>
               </View>
             </Button>
