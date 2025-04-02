@@ -2,5 +2,9 @@
   "lang": "English",
   "voice_button": "Speak",
   "daily_balance": "Daily Balance",
-  "monthly_balance": "Monthly Balance"
+  "monthly_balance": "Monthly Balance",
+
+  "intl_calendar_strip_title": "W{{ week}} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}",
+  "intl_day_of_week_short": "{{ val, datetime(weekday: 'short') }}",
+  "intl_day_of_week_narrow": "{{ val, datetime(weekday: 'narrow') }}"
 }

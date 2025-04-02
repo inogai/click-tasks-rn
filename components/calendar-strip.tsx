@@ -1,5 +1,5 @@
 import type { Day } from 'date-fns'
-import { addDays, addMonths, addWeeks, differenceInDays, formatDate, getWeekOfMonth, startOfMonth, startOfWeek } from 'date-fns'
+import { addDays, addMonths, addWeeks, differenceInDays, formatDate, getWeek, getWeekOfMonth, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
@@ -8,6 +8,7 @@ import { CalendarDay } from '~/components/calendar-day'
 import { Collasper } from '~/components/collasper'
 import { EvenList } from '~/components/even-list'
 import { Button } from '~/components/ui/button'
+import { t } from '~/lib/i18n'
 import { cn, R } from '~/lib/utils'
 
 const DAY_ITEM_HEIGHT = 56
@@ -185,7 +186,10 @@ export function CalendarStrip({
           <ChevronLeftIcon className="text-foreground" />
         </Button>
         <Text className="font-semibold text-muted-foreground">
-          {`W${formatDate(anchorDate, 'w MMMM yyyy')}`}
+          {t('intl_calendar_strip_title', {
+            val: anchorDate,
+            week: getWeek(anchorDate)
+          })}
         </Text>
         <Button size="icon" variant="ghost" onPress={loadRight}>
           <ChevronRightIcon className="text-foreground" />

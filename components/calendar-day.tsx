@@ -2,6 +2,7 @@ import type { ViewStyle } from 'react-native'
 import { cva } from 'class-variance-authority'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { isHoliday } from '~/lib/holidays'
+import { t } from '~/lib/i18n'
 import { cn } from '~/lib/utils'
 
 const dayContainerVariants = cva(
@@ -70,8 +71,6 @@ const dayNumberVariants = cva(
   },
 )
 
-const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
 function getDateVariant(date: Date) {
   if (isHoliday(date)) {
     return 'holiday'
@@ -102,7 +101,6 @@ export function CalendarDay({
   className,
 }: CalendarDayProps) {
   const dayOfMonth = date.getDate()
-  const dayOfWeek = date.getDay()
   const variant = getDateVariant(date)
 
   const handlePress = () => {
@@ -124,7 +122,9 @@ export function CalendarDay({
             active,
           }))}
         >
-          {DAYS_OF_WEEK[dayOfWeek]}
+          {t('intl_day_of_week_narrow', {
+            val: date,
+          })}
         </Text>
         <Text
           className={cn(dayNumberVariants({
