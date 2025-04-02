@@ -1,20 +1,13 @@
 import type { Day } from 'date-fns'
-import { addDays, addMonths, addWeeks, differenceInDays, formatDate, getWeek, getWeekOfMonth, startOfMonth, startOfWeek } from 'date-fns'
+import { addDays, addMonths, addWeeks, differenceInDays, differenceInWeeks, formatDate, getWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
-import Animated, { Easing, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated'
 import { CalendarDay } from '~/components/calendar-day'
-import { Collasper } from '~/components/collasper'
 import { EvenList } from '~/components/even-list'
 import { Button } from '~/components/ui/button'
 import { t } from '~/lib/i18n'
 import { cn, R } from '~/lib/utils'
-
-const DAY_ITEM_HEIGHT = 56
-
-const STAGGERING = 50
-const easing = Easing.bezier(0.25, 0.1, 0.25, 1)
 
 export interface CalendarStripProps {
   selectedDate: Date
@@ -77,6 +70,115 @@ function getWeekRows(monthDate: Date, weekStartsOn: Day = 0) {
   return weeks.map(week => getWeekDays(week, weekStartsOn))
 }
 
+function getWeekIndex(month: Date, weekStartsOn: Day, date: Date) {
+  const firstDayOfMonth = startOfMonth(month)
+  const firstDayOfCalendar = startOfWeek(firstDayOfMonth, { weekStartsOn })
+
+  const dayFromPreviousMonth = differenceInDays(firstDayOfMonth, firstDayOfCalendar)
+
+  const weekOffset = dayFromPreviousMonth !== 0
+    ? 0
+    : -1
+
+  return differenceInWeeks(date, firstDayOfCalendar) + weekOffset
+}
+
+interface CalendarWeekProps {
+  week: Date
+  selectedDate: Date
+  onDayItemPress: (date: Date) => void
+  weekStartsOn?: Day
+}
+
+function CalendarWeek({
+  week,
+  selectedDate,
+  onDayItemPress,
+  weekStartsOn = 0,
+}: CalendarWeekProps) {
+  const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
+
+  const weekStart = startOfWeek(week, { weekStartsOn })
+  const weekDays = R.range(0, 7)
+    .map(x => addDays(weekStart, x))
+    .map(date => ({ key: formatDate(date, 'yyyy-MM-dd'), date }))
+
+  return (
+    <EvenList
+      data={weekDays}
+      horizontal
+      keyExtractor={x => x.key}
+      renderItem={({ item: { date, key }, mainDim: width }) => {
+        return (
+          <CalendarDay
+            style={{ width }}
+            className="h-full"
+            date={date}
+            key="key"
+            selected={selectedDateKey === key}
+            onSelectedChange={value => value && onDayItemPress(date)}
+          />
+        )
+      }}
+    />
+  )
+}
+
+interface CalendarGridProps {
+  month: Date
+  selectedDate: Date
+  onDayItemPress: (date: Date) => void
+  weekStartsOn?: Day
+}
+
+function CalendarGrid({
+  month,
+  selectedDate,
+  onDayItemPress,
+  weekStartsOn = 0,
+}: CalendarGridProps) {
+  const monthNr = month.getMonth()
+  const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
+
+  const weeks = useMemo(() => getWeekRows(month, weekStartsOn), [month, weekStartsOn])
+
+  const renderWeekRow = useCallback(({ item }: { item: Date[], index: number }) => {
+    return (
+      <View
+        className="h-16 w-full"
+      >
+        <EvenList
+          data={item}
+          horizontal
+          renderItem={({ item: date, mainDim: width }) => {
+            const key = formatDate(date, 'yyyy-MM-dd')
+            const isSelected = selectedDateKey === key
+
+            return (
+              <CalendarDay
+                style={{ width }}
+                date={date}
+                className="h-full"
+                selected={isSelected}
+                onSelectedChange={value => value && onDayItemPress(date)}
+                active={date.getMonth() === monthNr}
+              />
+            )
+          }}
+        />
+      </View>
+    )
+  }, [monthNr, onDayItemPress, selectedDateKey])
+
+  return (
+    <FlatList
+      data={weeks}
+      renderItem={renderWeekRow}
+      scrollEnabled={false}
+    />
+  )
+}
+
 export function CalendarStrip({
   selectedDate,
   onSelectedDateChange,
@@ -87,15 +189,13 @@ export function CalendarStrip({
   className,
 }: CalendarStripProps) {
   // State setup
-  const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
   const [anchorDate, setAnchorDate] = useState(selectedDate)
 
   const month = useMemo(() => startOfMonth(anchorDate), [anchorDate])
-  const weekOfMonth = useMemo(() => getWeekOfMonth(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
-  const currentWeekStart = useMemo(() => startOfWeek(anchorDate, { weekStartsOn }), [anchorDate, weekStartsOn])
-
-  const weeks = useMemo(() =>
-    getWeekRows(month, weekStartsOn), [month, weekStartsOn])
+  const weekIndex = useMemo(
+    () => getWeekIndex(month, weekStartsOn, anchorDate),
+    [anchorDate, month, weekStartsOn],
+  )
 
   const [controlledExpanded, setControlledExpanded] = useState(initialExpaned)
 
@@ -103,9 +203,6 @@ export function CalendarStrip({
     expanded = controlledExpanded
     setExpanded = setControlledExpanded
   }
-
-  // Refs
-  const wrapperRef = useRef<View>(null)
 
   // Navigation handlers
   const navigateCalendar = useCallback((direction: 'left' | 'right') => {
@@ -128,56 +225,6 @@ export function CalendarStrip({
     setExpanded?.(false)
   }, [onSelectedDateChange, setExpanded])
 
-  const renderWeekRow = useCallback(({ item, index }: { item: Date[], index: number }) => {
-    const weekStartDate = item[0]
-    const isCurrentWeek
-      = !expanded
-        && weekStartDate.getTime() <= currentWeekStart.getTime()
-        && addDays(weekStartDate, 6).getTime() >= currentWeekStart.getTime()
-
-    const shown = expanded || isCurrentWeek
-
-    return (
-      <Collasper
-        key={`week-${index}`}
-        delay={STAGGERING * index}
-        hidden={!shown}
-        render={() => (
-          <View className="w-full px-2">
-            <EvenList
-              data={item}
-              horizontal
-              renderItem={({ item: date, mainDim: width }) => {
-                const key = formatDate(date, 'yyyy-MM-dd')
-                const isSelected = selectedDateKey === key
-
-                return (
-                  <CalendarDay
-                    style={{ width }}
-                    className="h-full"
-                    date={date}
-                    selected={isSelected}
-                    onSelectedChange={value => value && handleDayItemPress(date)}
-                    active={anchorDate.getMonth() === date.getMonth()}
-                  />
-                )
-              }}
-            />
-          </View>
-        )}
-      />
-    )
-  }, [anchorDate, currentWeekStart, expanded, handleDayItemPress, selectedDateKey])
-
-  const height = useDerivedValue(
-    () => withTiming(expanded ? DAY_ITEM_HEIGHT * 6 : DAY_ITEM_HEIGHT, { duration: STAGGERING * 6 + 300, easing }),
-    [expanded],
-  )
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: height.value,
-  }))
-
   return (
     <View className={cn('flex flex-col items-center gap-2', className)}>
       {/* Header with month display and navigation buttons */}
@@ -188,7 +235,7 @@ export function CalendarStrip({
         <Text className="font-semibold text-muted-foreground">
           {t('intl_calendar_strip_title', {
             val: anchorDate,
-            week: getWeek(anchorDate)
+            week: getWeek(anchorDate),
           })}
         </Text>
         <Button size="icon" variant="ghost" onPress={loadRight}>
@@ -198,19 +245,41 @@ export function CalendarStrip({
 
       {/* Calendar strip */}
       {/* TODO: add animation for left-right scrolling */}
-      <Animated.View
-        ref={wrapperRef}
-        className={cn(`w-full items-stretch justify-stretch overflow-hidden`)}
-        style={animatedStyle}
+      <View className={cn(
+        'relative h-96 w-full transition-[height] duration-1000',
+        !expanded && 'h-16',
+      )}
       >
-        {/* Week rows */}
-        <FlatList
-          data={weeks}
-          extraData={[selectedDateKey, expanded, weekOfMonth, anchorDate]}
-          renderItem={renderWeekRow}
-          scrollEnabled={false}
-        />
-      </Animated.View>
+        <View className={cn(
+          'w-full',
+        )}
+        >
+          <CalendarGrid
+            month={month}
+            selectedDate={selectedDate}
+            onDayItemPress={handleDayItemPress}
+            weekStartsOn={weekStartsOn}
+          />
+        </View>
+
+        <View
+          className={cn(
+            `absolute top-0 z-10 h-16 w-full bg-background`,
+            'opacity-100 transition-[top,opacity] duration-1000',
+            expanded && 'opacity-0',
+            expanded && ['top-0', 'top-16', 'top-32', 'top-48', 'top-64', `
+              top-80
+            `][weekIndex],
+          )}
+        >
+          <CalendarWeek
+            week={anchorDate}
+            selectedDate={selectedDate}
+            onDayItemPress={handleDayItemPress}
+            weekStartsOn={weekStartsOn}
+          />
+        </View>
+      </View>
 
       <TouchableOpacity
         className="-mb-4 h-4 w-32"
