@@ -1,3 +1,5 @@
+import { useQuery } from '@realm/react'
+import { Link } from 'expo-router'
 import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
@@ -9,9 +11,14 @@ import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
+import { TaskRecord } from '~/lib/realm'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
+
+  const tasks = useQuery(TaskRecord)
+
+  console.log('tasks', tasks)
 
   return (
     <SafeAreaView className="flex-1">
@@ -51,13 +58,15 @@ export default function Screen() {
               </View>
             </Button>
             <View className="w-px border-y-4 border-finance bg-border" />
-            <Button
-              size="lg"
-              variant="default"
-              className="rounded-xl rounded-l-none bg-finance px-4"
-            >
-              <PlusIcon className="text-finance-foreground" />
-            </Button>
+            <Link href="/taskadd" asChild>
+              <Button
+                size="lg"
+                variant="default"
+                className="rounded-xl rounded-l-none bg-finance px-4"
+              >
+                <PlusIcon className="text-finance-foreground" />
+              </Button>
+            </Link>
           </View>
         </View>
       </View>

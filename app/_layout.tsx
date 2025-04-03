@@ -1,6 +1,7 @@
 import type { Theme } from '@react-navigation/native'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 
+import { RealmProvider } from '@realm/react'
 import { PortalHost } from '@rn-primitives/portal'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -8,8 +9,9 @@ import * as React from 'react'
 import { Platform } from 'react-native'
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar'
 import { NAV_THEME } from '~/lib/constants'
-import { useColorScheme } from '~/lib/useColorScheme'
 
+import { TaskRecord } from '~/lib/realm'
+import { useColorScheme } from '~/lib/useColorScheme'
 import '~/global.css'
 
 const LIGHT_THEME: Theme = {
@@ -51,16 +53,18 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            header: () => null,
-          }}
-        />
-      </Stack>
-      <PortalHost />
+      <RealmProvider schema={[TaskRecord]}>
+        <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              header: () => null,
+            }}
+          />
+        </Stack>
+        <PortalHost />
+      </RealmProvider>
     </ThemeProvider>
   )
 }
