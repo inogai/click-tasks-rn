@@ -1,29 +1,50 @@
+import type { TaskRecord } from '~/lib/realm'
+import { formatDate } from 'date-fns'
+import { MapPinIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
+import { cn } from '~/lib/utils'
 
-const tasks = [
-  { title: 'Task 1', time: 8 },
-  { title: 'Task 2', time: 9 },
-  { title: 'Task 3', time: 13 },
-]
+interface TasksViewProps {
+  tasks: TaskRecord[]
+  className?: string
+}
 
-export function TasksView() {
+export function TasksView({
+  tasks,
+  className,
+}: TasksViewProps) {
   return (
-    <View className="flex-col gap-y-2">
-      {tasks.map(task => (
-        <View
-          key={task.title}
-          className="flex flex-row items-start gap-x-2"
-        >
-          <Text className="w-12 pt-2.5 text-muted-foreground">
-            {task.time.toString().padStart(2, '0')}
-            :00
-          </Text>
-          <View className="grow rounded-xl bg-blue-300 px-4 py-2">
-            <Text>{task.title}</Text>
-          </View>
-        </View>
-      ))}
+    <View className={cn(
+      `flex-col items-center justify-start gap-y-2`,
+      className,
+    )}
+    >
+      {tasks.length
+        ? tasks.map(task => (
+            <View
+              key={task._id.toString()}
+              className="flex flex-row items-start gap-x-2"
+            >
+              {task.due && (
+                <Text className="w-12 pt-2.5 text-muted-foreground">
+                  {formatDate(task.due, 'HH:mm')}
+                </Text>
+              )}
+              <View className="grow rounded-xl bg-primary px-4 py-2">
+                <Text className="font-semibold text-primary-foreground">{task.summary}</Text>
+                {task.venue && (
+                  <View className="flex flex-row items-center gap-x-1">
+                    <MapPinIcon className="h-4 w-4 text-primary-foreground" />
+                    <Text className="text-sm text-primary-foreground">
+                      {task.venue}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          ))
+        : <Text>No Tasks Today.</Text>}
     </View>
   )
 }

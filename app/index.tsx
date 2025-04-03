@@ -1,4 +1,5 @@
 import { useQuery } from '@realm/react'
+import { endOfDay, startOfDay } from 'date-fns'
 import { Link } from 'expo-router'
 import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
@@ -16,7 +17,16 @@ import { TaskRecord } from '~/lib/realm'
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
-  const tasks = useQuery(TaskRecord)
+  const tasks = useQuery({
+    type: TaskRecord,
+    query: collection => collection
+      .filtered(
+        'due >= $0 && due <= $1',
+        startOfDay(currentDate),
+        endOfDay(currentDate),
+      )
+      .sorted('due'),
+  })
 
   console.log('tasks', tasks)
 
@@ -24,7 +34,7 @@ export default function Screen() {
     <SafeAreaView className="flex-1">
       <View className="flex h-full flex-col items-stretch gap-5 bg-background">
         <AppHeader />
-        <View className="grow flex-col justify-stretch gap-y-6 px-4">
+        <View className="grow flex-col justify-stretch gap-y-2 px-4">
           <View className="relative h-36">
             <CalendarStrip
               className={`
@@ -38,7 +48,7 @@ export default function Screen() {
 
           <ExpenseView />
 
-          <TasksView />
+          <TasksView className="h-36 p-2" tasks={tasks as unknown as TaskRecord[]} />
 
           <View className="h-[198px] flex-1 items-center justify-center">
             <SmileIcon className="h-[198px] w-[198px] text-green-500" />
