@@ -1,8 +1,9 @@
 import { useQuery } from '@realm/react'
-import { endOfDay, startOfDay } from 'date-fns'
+import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link } from 'expo-router'
 import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
+import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppHeader } from '~/components/app-header'
@@ -12,7 +13,7 @@ import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
-import { TaskRecord } from '~/lib/realm'
+import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -28,7 +29,34 @@ export default function Screen() {
       .sorted('due'),
   })
 
-  console.log('tasks', tasks)
+  const tasksInMonth = useQuery({
+    type: TaskRecord,
+    query: collection => collection
+      .filtered(
+        'due >= $0 && due <= $1 && status == $2',
+        startOfMonth(currentDate),
+        endOfMonth(currentDate),
+        TaskStatus.PENDING,
+      )
+      .sorted('due'),
+  })
+
+  const dots = useMemo(
+    () => {
+      const result: Record<string, number> = {}
+
+      for (const task of tasksInMonth) {
+        if (!task.due)
+          continue
+
+        const date = formatDate(task.due, 'yyyy-MM-dd')
+        result[date] = (result[date] ?? 0) + 1
+      }
+
+      return result
+    },
+    [tasksInMonth],
+  )
 
   return (
     <SafeAreaView className="flex-1">
@@ -42,6 +70,7 @@ export default function Screen() {
               `}
               selectedDate={currentDate}
               onSelectedDateChange={setCurrentDate}
+              dots={dots}
             />
           </View>
 

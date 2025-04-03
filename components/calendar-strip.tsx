@@ -10,6 +10,36 @@ import { Button } from '~/components/ui/button'
 import { t } from '~/lib/i18n'
 import { cn, R } from '~/lib/utils'
 
+interface DotsProps {
+  count?: number
+  selected?: boolean
+}
+
+function Dots({
+  count = 1,
+  selected = false,
+}: DotsProps) {
+  if (count === 0)
+    return null
+
+  return (
+    <View className={`
+      absolute bottom-1 flex-row items-center justify-center gap-1
+    `}
+    >
+      {R.range(0, count).map(x => (
+        <View
+          className={cn(
+            'h-1 w-1 rounded-full bg-primary',
+            selected && 'bg-primary-foreground',
+          )}
+          key={x}
+        />
+      ))}
+    </View>
+  )
+}
+
 export interface CalendarStripProps {
   selectedDate: Date
   onSelectedDateChange: (date: Date) => void
@@ -18,6 +48,7 @@ export interface CalendarStripProps {
   initialExpanded?: boolean
   weekStartsOn?: Day
   className?: string
+  dots: Record<string, number>
 }
 
 /**
@@ -89,6 +120,7 @@ interface CalendarWeekProps {
   selectedDate: Date
   onDayItemPress: (date: Date) => void
   weekStartsOn?: Day
+  dots?: Record<string, number>
 }
 
 function CalendarWeek({
@@ -96,6 +128,7 @@ function CalendarWeek({
   selectedDate,
   onDayItemPress,
   weekStartsOn = 0,
+  dots,
 }: CalendarWeekProps) {
   const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
 
@@ -110,14 +143,19 @@ function CalendarWeek({
       horizontal
       keyExtractor={x => x.key}
       renderItem={({ item: { date, key }, mainDim: width }) => {
+        const selected = selectedDateKey === key
+        const count = dots?.[key] ?? 0
         return (
           <CalendarDay
             style={{ width }}
             className="h-full"
             date={date}
             key="key"
-            selected={selectedDateKey === key}
+            selected={selected}
             onSelectedChange={value => value && onDayItemPress(date)}
+            renderDots={() => (
+              <Dots count={count} selected={selected} />
+            )}
           />
         )
       }}
@@ -130,6 +168,7 @@ interface CalendarGridProps {
   selectedDate: Date
   onDayItemPress: (date: Date) => void
   weekStartsOn?: Day
+  dots?: Record<string, number>
 }
 
 function CalendarGrid({
@@ -137,6 +176,7 @@ function CalendarGrid({
   selectedDate,
   onDayItemPress,
   weekStartsOn = 0,
+  dots,
 }: CalendarGridProps) {
   const monthNr = month.getMonth()
   const selectedDateKey = formatDate(selectedDate, 'yyyy-MM-dd')
@@ -155,6 +195,8 @@ function CalendarGrid({
             const key = formatDate(date, 'yyyy-MM-dd')
             const isSelected = selectedDateKey === key
 
+            const dotsCount = dots?.[key] ?? 0
+
             return (
               <CalendarDay
                 style={{ width }}
@@ -163,13 +205,16 @@ function CalendarGrid({
                 selected={isSelected}
                 onSelectedChange={value => value && onDayItemPress(date)}
                 active={date.getMonth() === monthNr}
+                renderDots={() => (
+                  <Dots count={dotsCount} selected={isSelected} />
+                )}
               />
             )
           }}
         />
       </View>
     )
-  }, [monthNr, onDayItemPress, selectedDateKey])
+  }, [dots, monthNr, onDayItemPress, selectedDateKey])
 
   return (
     <FlatList
@@ -187,6 +232,7 @@ export function CalendarStrip({
   onExpandedChange: onExpandedChangeProp,
   weekStartsOn = 0,
   className,
+  dots,
 }: CalendarStripProps) {
   // State setup
   const [anchorDate, setAnchorDate] = useState(selectedDate)
@@ -258,6 +304,7 @@ export function CalendarStrip({
             selectedDate={selectedDate}
             onDayItemPress={handleDayItemPress}
             weekStartsOn={weekStartsOn}
+            dots={dots}
           />
         </View>
 
@@ -276,6 +323,7 @@ export function CalendarStrip({
             selectedDate={selectedDate}
             onDayItemPress={handleDayItemPress}
             weekStartsOn={weekStartsOn}
+            dots={dots}
           />
         </View>
       </View>

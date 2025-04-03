@@ -90,6 +90,7 @@ export interface CalendarDayProps {
   onSelectedChange?: (selected: boolean) => void
   style?: ViewStyle
   className?: string
+  renderDots?: () => React.ReactNode
 }
 
 export function CalendarDay({
@@ -99,6 +100,7 @@ export function CalendarDay({
   onSelectedChange,
   style,
   className,
+  renderDots,
 }: CalendarDayProps) {
   const dayOfMonth = date.getDate()
   const variant = getDateVariant(date)
@@ -135,6 +137,7 @@ export function CalendarDay({
         >
           { dayOfMonth }
         </Text>
+        {renderDots?.()}
       </View>
     </TouchableOpacity>
   )
