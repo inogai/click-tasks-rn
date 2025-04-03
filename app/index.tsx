@@ -42,7 +42,6 @@ export default function Screen() {
               `}
               selectedDate={currentDate}
               onSelectedDateChange={setCurrentDate}
-              initialExpaned={true}
             />
           </View>
 

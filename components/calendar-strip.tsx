@@ -1,4 +1,5 @@
 import type { Day } from 'date-fns'
+import { useControllableState } from '@rn-primitives/hooks'
 import { addDays, addMonths, addWeeks, differenceInDays, differenceInWeeks, formatDate, getWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
 import { useCallback, useMemo, useState } from 'react'
@@ -13,8 +14,8 @@ export interface CalendarStripProps {
   selectedDate: Date
   onSelectedDateChange: (date: Date) => void
   expanded?: boolean
-  onExapndedChange?: (expanded: boolean) => void
-  initialExpaned?: boolean
+  onExpandedChange?: (expanded: boolean) => void
+  initialExpanded?: boolean
   weekStartsOn?: Day
   className?: string
 }
@@ -182,9 +183,8 @@ function CalendarGrid({
 export function CalendarStrip({
   selectedDate,
   onSelectedDateChange,
-  expanded,
-  onExapndedChange: setExpanded,
-  initialExpaned = false,
+  expanded: expandedProp,
+  onExpandedChange: onExpandedChangeProp,
   weekStartsOn = 0,
   className,
 }: CalendarStripProps) {
@@ -197,12 +197,11 @@ export function CalendarStrip({
     [anchorDate, month, weekStartsOn],
   )
 
-  const [controlledExpanded, setControlledExpanded] = useState(initialExpaned)
-
-  if (expanded === undefined) {
-    expanded = controlledExpanded
-    setExpanded = setControlledExpanded
-  }
+  const [expanded, setExpanded] = useControllableState({
+    prop: expandedProp,
+    onChange: onExpandedChangeProp,
+    defaultProp: false,
+  })
 
   // Navigation handlers
   const navigateCalendar = useCallback((direction: 'left' | 'right') => {
