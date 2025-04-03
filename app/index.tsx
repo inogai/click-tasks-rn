@@ -27,7 +27,7 @@ export default function Screen() {
         endOfDay(currentDate),
       )
       .sorted('due'),
-  })
+  }, [currentDate])
 
   const tasksInMonth = useQuery({
     type: TaskRecord,
@@ -39,7 +39,9 @@ export default function Screen() {
         TaskStatus.PENDING,
       )
       .sorted('due'),
-  })
+    // I think this might have performance issues
+    // Let's see if we can optimize it later
+  }, [currentDate])
 
   const dots = useMemo(
     () => {
