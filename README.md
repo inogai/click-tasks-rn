@@ -5,7 +5,7 @@
 This project uses pnpm to manage its dependencies
 
 ```sh
-pnpm i
+pnpm expo install
 ```
 
 Run the development server:
