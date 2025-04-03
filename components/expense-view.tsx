@@ -12,33 +12,28 @@ export function ExpenseView() {
   const unit = 'HKD'
 
   return (
-    <Card>
-      <CardTitle />
-      <CardContent>
-        <View className="flex-row items-center justify-center">
-          <View className="flex-col items-end">
-            <Label>{t('daily_balance')}</Label>
-            <View className="flex-row gap-x-1">
-              <DollarSignIcon className="text-foreground" />
-              <AmountDisplay amount={dailyBalance} unit={unit} />
-            </View>
-          </View>
-
-          <View className="mx-4 h-full w-px bg-border" />
-
-          <View className="flex-col items-start">
-            <Label>{t('monthly_balance')}</Label>
-            <View className="flex-row gap-x-1">
-              {/* Blocked by lucide-nativewind update */}
-              {/* {monthlyBalance > 0 */}
-              {/*   ? <BanknoteArrowUpIcon /> */}
-              {/*   : <BanknoteArrowDownIcon />} */}
-              <BanknoteIcon className="text-foreground" />
-              <AmountDisplay amount={monthlyBalance} unit={unit} />
-            </View>
-          </View>
+    <View className="flex-row items-center justify-center">
+      <View className="flex-col items-end">
+        <Label>{t('daily_balance')}</Label>
+        <View className="flex-row gap-x-1">
+          <DollarSignIcon className="text-foreground" />
+          <AmountDisplay amount={dailyBalance} unit={unit} />
         </View>
-      </CardContent>
-    </Card>
+      </View>
+
+      <View className="mx-4 h-full w-px bg-border" />
+
+      <View className="flex-col items-start">
+        <Label>{t('monthly_balance')}</Label>
+        <View className="flex-row gap-x-1">
+          {/* Blocked by lucide-nativewind update */}
+          {/* {monthlyBalance > 0 */}
+          {/*   ? <BanknoteArrowUpIcon /> */}
+          {/*   : <BanknoteArrowDownIcon />} */}
+          <BanknoteIcon className="text-foreground" />
+          <AmountDisplay amount={monthlyBalance} unit={unit} />
+        </View>
+      </View>
+    </View>
   )
 }

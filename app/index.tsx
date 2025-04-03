@@ -11,6 +11,8 @@ import { CalendarStrip } from '~/components/calendar-strip'
 import { ExpenseView } from '~/components/expense-view'
 import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
+import { Separator } from '~/components/ui/separator'
+import { H2, H3 } from '~/components/ui/typography'
 
 import { t } from '~/lib/i18n'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
@@ -62,10 +64,10 @@ export default function Screen() {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex h-full flex-col items-stretch gap-5 bg-background">
+      <View className="flex h-full flex-col items-stretch gap-2 bg-background">
         <AppHeader />
-        <View className="grow flex-col justify-stretch gap-y-2 px-4">
-          <View className="relative h-36">
+        <View className="grow flex-col justify-stretch gap-y-4 px-4">
+          <View className="relative mb-2 h-36">
             <CalendarStrip
               className={`
                 absolute z-10 rounded-xl border border-border bg-background py-4
@@ -76,9 +78,18 @@ export default function Screen() {
             />
           </View>
 
+          <Separator />
+
+          <View>
+            <H3 className="pl-14">Tasks Due</H3>
+            <TasksView className="h-36 pt-2" tasks={tasks as unknown as TaskRecord[]} />
+          </View>
+
+          <Separator />
+
           <ExpenseView />
 
-          <TasksView className="h-36 p-2" tasks={tasks as unknown as TaskRecord[]} />
+          <Separator />
 
           <View className="h-[198px] flex-1 items-center justify-center">
             <SmileIcon className="h-[198px] w-[198px] text-green-500" />
