@@ -88,6 +88,7 @@ export default function Screen() {
             nativeID="due"
             value={value}
             onValueChange={onChange}
+            mode='datetime'
           />
         )}
       />

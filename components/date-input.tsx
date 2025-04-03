@@ -1,55 +1,72 @@
 import type { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { useControllableState } from '@rn-primitives/hooks'
+import { View } from '@rn-primitives/slot'
 import { formatDate } from 'date-fns'
-import { CalendarIcon } from 'lucide-nativewind'
+import { CalendarIcon, ClockIcon } from 'lucide-nativewind'
 import React, { useState } from 'react'
 import { SafeAreaView, Text } from 'react-native'
 import { Button } from '~/components/ui/button'
 
-interface DateInputProps {
+interface BaseDateInputProps {
   value: Date | undefined
   onValueChange: (date: Date | undefined) => void
-  placeholder?: string
+  show?: boolean
+  onShowChange?: (show: boolean) => void
   nativeID?: string
+  mode: 'date' | 'time'
 }
 
-export function DateInput({
+function BaseDateInput({
   value,
   onValueChange,
-  placeholder = 'Select date',
+  show: showProp,
+  onShowChange,
   nativeID,
-}: DateInputProps) {
+  mode,
+}: BaseDateInputProps) {
   const [date, setDate] = [value, onValueChange]
-  const [show, setShow] = useState(false)
+
+  const [show, setShow] = useControllableState({
+    prop: showProp,
+    onChange: onShowChange,
+    defaultProp: false,
+  })
+
+  function handleButtonPress() {
+    setShow(true)
+  }
 
   function handleChange(event: DateTimePickerEvent, selectedDate?: Date) {
     setShow(false)
-    if (event.type !== 'set') {
-      return
+
+    if (event.type === 'set') {
+      onValueChange(selectedDate)
     }
-    setDate(selectedDate ?? undefined)
   }
 
   return (
-    <SafeAreaView>
+    <>
       <Button
         className={`
           native:py-0 native:gap-3
           flex-row items-center justify-start gap-4 py-0 leading-none
         `}
         variant="outline"
-        onPress={() => setShow(true)}
+        onPress={handleButtonPress}
       >
         <CalendarIcon className="h-6 text-muted-foreground" />
         {date
           ? (
               <Text className="text-foreground">
-                {formatDate(date, 'yyyy-MM-dd')}
+                {formatDate(date,  mode === 'date' 
+                ?'yyyy-MM-dd'
+                : 'HH:mm')}
               </Text>
             )
           : (
               <Text className="text-lg text-muted-foreground">
-                {placeholder}
+                {mode === 'date' ? 'YYYY-MM-DD' : 'HH:mm'}
               </Text>
             )}
       </Button>
@@ -57,10 +74,79 @@ export function DateInput({
         <DateTimePicker
           nativeID={nativeID}
           value={date ?? new Date()}
-          mode="date"
+          mode={mode}
           onChange={handleChange}
         />
       )}
-    </SafeAreaView>
+    </>
+  )
+}
+
+interface DateInputProps {
+  value: Date | undefined
+  onValueChange: (date: Date | undefined) => void
+  nativeID?: string
+  mode: 'date' | 'datetime' | 'time'
+}
+
+export function DateInput({
+  value,
+  onValueChange,
+  nativeID,
+  mode,
+}: DateInputProps) {
+  const [date, setDate] = useState<Date | undefined>(value)
+  const [time, setTime] = useState<Date | undefined>(value)
+
+  function mutateValue(newValue: Date, prop: 'date' | 'time') {
+    // if no value is set, just set the new value
+    if (!value) {
+      onValueChange(newValue)
+      return
+    }
+
+    // if prop is 'date', only replace the date part of the current value
+    // if prop is 'time', only replace the time part of the current value
+    const [dateValue, timeValue] = prop === 'date' 
+      ? [newValue, value] 
+      : [value, newValue]
+
+    const year = dateValue.getFullYear()
+    const month = dateValue.getMonth()
+    const day = dateValue.getDate()
+
+    const hours = timeValue.getHours()
+    const minutes = timeValue.getMinutes()
+
+    // don't bother with seconds and milliseconds
+    const mutatedValue = new Date(year, month, day, hours, minutes)
+    onValueChange(mutatedValue)
+  }
+
+  function handleDateChange(newDate: Date | undefined) {
+    setDate(newDate)
+    if (newDate) {
+      mutateValue(newDate, 'date')
+
+      if (!time) {
+        handleTimeChange(new Date(1900, 1, 1, 23,59))
+      }
+    }
+  }
+
+  function handleTimeChange(newTime: Date | undefined) {
+    setTime(newTime)
+
+    if (newTime) {
+      mutateValue(newTime, 'time')
+    }
+  }
+
+  // TODO: figure out how to use nativeID to make this accessible
+  return (
+    <>
+      {mode !== 'time' && (<BaseDateInput value={date} onValueChange={handleDateChange} mode="date" />)}
+      {mode !== 'date' && (<BaseDateInput value={time} onValueChange={handleTimeChange} mode="time" />)}
+    </>
   )
 }
