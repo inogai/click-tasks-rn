@@ -7,12 +7,22 @@ import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as React from 'react'
 import { Platform } from 'react-native'
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated'
+
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar'
 import { NAV_THEME } from '~/lib/constants'
-
 import { TaskRecord } from '~/lib/realm'
 import { useColorScheme } from '~/lib/useColorScheme'
 import '~/global.css'
+
+// This is the default configuration
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+})
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
