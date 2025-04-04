@@ -1,11 +1,10 @@
 import type { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useControllableState } from '@rn-primitives/hooks'
-import { View } from '@rn-primitives/slot'
 import { formatDate } from 'date-fns'
 import { CalendarIcon, ClockIcon } from 'lucide-nativewind'
 import React, { useState } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 import { Button } from '~/components/ui/button'
 
 interface BaseDateInputProps {
@@ -46,7 +45,7 @@ function BaseDateInput({
   }
 
   return (
-    <>
+    <View className="flex-1">
       <Button
         className={`
           native:py-0 native:gap-3
@@ -55,13 +54,19 @@ function BaseDateInput({
         variant="outline"
         onPress={handleButtonPress}
       >
-        <CalendarIcon className="h-6 text-muted-foreground" />
+        {mode === 'date'
+          ? (
+              <CalendarIcon className="h-5 w-5 text-muted-foreground" />
+            )
+          : (
+              <ClockIcon className="h-5 w-5 text-muted-foreground" />
+            )}
         {date
           ? (
               <Text className="text-foreground">
-                {formatDate(date,  mode === 'date' 
-                ?'yyyy-MM-dd'
-                : 'HH:mm')}
+                {formatDate(date, mode === 'date'
+                  ? 'yyyy-MM-dd'
+                  : 'HH:mm')}
               </Text>
             )
           : (
@@ -70,6 +75,7 @@ function BaseDateInput({
               </Text>
             )}
       </Button>
+
       {show && (
         <DateTimePicker
           nativeID={nativeID}
@@ -78,7 +84,7 @@ function BaseDateInput({
           onChange={handleChange}
         />
       )}
-    </>
+    </View>
   )
 }
 
@@ -107,8 +113,8 @@ export function DateInput({
 
     // if prop is 'date', only replace the date part of the current value
     // if prop is 'time', only replace the time part of the current value
-    const [dateValue, timeValue] = prop === 'date' 
-      ? [newValue, value] 
+    const [dateValue, timeValue] = prop === 'date'
+      ? [newValue, value]
       : [value, newValue]
 
     const year = dateValue.getFullYear()
@@ -129,7 +135,7 @@ export function DateInput({
       mutateValue(newDate, 'date')
 
       if (!time) {
-        handleTimeChange(new Date(1900, 1, 1, 23,59))
+        handleTimeChange(new Date(1900, 1, 1, 23, 59))
       }
     }
   }
@@ -144,9 +150,9 @@ export function DateInput({
 
   // TODO: figure out how to use nativeID to make this accessible
   return (
-    <>
+    <View className="flex-row justify-stretch gap-4">
       {mode !== 'time' && (<BaseDateInput value={date} onValueChange={handleDateChange} mode="date" />)}
       {mode !== 'date' && (<BaseDateInput value={time} onValueChange={handleTimeChange} mode="time" />)}
-    </>
+    </View>
   )
 }
