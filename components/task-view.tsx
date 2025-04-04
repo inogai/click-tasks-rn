@@ -3,6 +3,7 @@ import { formatDate } from 'date-fns'
 import { MapPinIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
+import { Muted } from '~/components/ui/typography'
 import { cn } from '~/lib/utils'
 
 interface TasksViewProps {
@@ -44,7 +45,7 @@ export function TasksView({
               </View>
             </View>
           ))
-        : <Text>No Tasks Today.</Text>}
+        : <Muted>No Tasks Today.</Muted>}
     </View>
   )
 }
