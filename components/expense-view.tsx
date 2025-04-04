@@ -2,7 +2,6 @@ import { BanknoteIcon, DollarSignIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { View } from 'react-native'
 import { AmountDisplay } from '~/components/amount-display'
-import { Card, CardContent, CardTitle } from '~/components/ui/card'
 import { Label } from '~/components/ui/label'
 import { t } from '~/lib/i18n'
 
