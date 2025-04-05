@@ -2,9 +2,9 @@ import type { DateTimePickerEvent } from '@react-native-community/datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useControllableState } from '@rn-primitives/hooks'
 import { formatDate } from 'date-fns'
-import { CalendarIcon, ClockIcon } from 'lucide-nativewind'
-import React, { useState } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { CalendarIcon, ClockIcon, TrashIcon } from 'lucide-nativewind'
+import React, { } from 'react'
+import { Text, View } from 'react-native'
 import { Button } from '~/components/ui/button'
 
 interface BaseDateInputProps {
@@ -101,14 +101,17 @@ export function DateInput({
   nativeID,
   mode,
 }: DateInputProps) {
-  const [date, setDate] = useState<Date | undefined>(value)
-  const [time, setTime] = useState<Date | undefined>(value)
-
   function mutateValue(newValue: Date, prop: 'date' | 'time') {
-    // if no value is set, just set the new value
+    // if no value is set, use date = today and time = 2359
     if (!value) {
-      onValueChange(newValue)
-      return
+      const today = new Date()
+      value = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        23,
+        59,
+      )
     }
 
     // if prop is 'date', only replace the date part of the current value
@@ -130,29 +133,33 @@ export function DateInput({
   }
 
   function handleDateChange(newDate: Date | undefined) {
-    setDate(newDate)
     if (newDate) {
       mutateValue(newDate, 'date')
-
-      if (!time) {
-        handleTimeChange(new Date(1900, 1, 1, 23, 59))
-      }
     }
   }
 
   function handleTimeChange(newTime: Date | undefined) {
-    setTime(newTime)
-
     if (newTime) {
       mutateValue(newTime, 'time')
     }
   }
 
+  function handleClear() {
+    onValueChange(undefined)
+  }
+
   // TODO: figure out how to use nativeID to make this accessible
   return (
     <View className="flex-row justify-stretch gap-4">
-      {mode !== 'time' && (<BaseDateInput value={date} onValueChange={handleDateChange} mode="date" />)}
-      {mode !== 'date' && (<BaseDateInput value={time} onValueChange={handleTimeChange} mode="time" />)}
+      {mode !== 'time' && (<BaseDateInput value={value} onValueChange={handleDateChange} mode="date" />)}
+      {mode !== 'date' && (<BaseDateInput value={value} onValueChange={handleTimeChange} mode="time" />)}
+      <Button
+        size="icon"
+        variant="destructive"
+        className="h-12 w-12"
+      >
+        <TrashIcon className="h-6 w-6 text-destructive-foreground" onPress={handleClear} />
+      </Button>
     </View>
   )
 }
