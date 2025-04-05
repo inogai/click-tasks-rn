@@ -18,6 +18,29 @@ export const taskZod = z.object({
 
   due: z.date().optional(),
   venue: z.string().optional(),
+  plannedBegin: z.date().optional(),
+  plannedEnd: z.date().optional(),
+}).superRefine((val, ctx) => {
+  // Ensure plannedBegin and plannedEnd are either
+  // 1. both defined; or
+  // 2. both undefined.
+  if ((val.plannedBegin && !val.plannedEnd)
+    || (!val.plannedBegin && val.plannedEnd)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Planned begin and end dates must be both defined or both undefined',
+      path: ['plannedEnd'],
+    })
+  }
+
+  // Ensure plannedBegin is before plannedEnd when both are defined
+  if (val.plannedBegin && val.plannedEnd && val.plannedBegin > val.plannedEnd) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Planned end date must be after planned begin date',
+      path: ['plannedEnd'],
+    })
+  }
 })
 
 export type ITaskRecord = z.infer<typeof taskZod>
@@ -68,6 +91,8 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       // optional fields
       due: { type: 'date', optional: true },
       venue: { type: 'string', optional: true },
+      plannedBegin: { type: 'date', optional: true },
+      plannedEnd: { type: 'date', optional: true },
     },
   }
 }
