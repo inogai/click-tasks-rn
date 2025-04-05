@@ -4,13 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRealm } from '@realm/react'
 import { router } from 'expo-router'
 import { CheckIcon } from 'lucide-nativewind'
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
+
 import {
   SafeAreaView,
   Text,
 } from 'react-native'
-
 import { FormField } from '~/components/form/form-field'
 import { Button } from '~/components/ui/button'
 import { TaskRecord, TaskStatus, taskZod } from '~/lib/realm'
@@ -23,7 +23,8 @@ export default function Screen() {
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting },
+    trigger,
   } = useForm<FormData>({
     resolver: zodResolver(taskZod),
     defaultValues: {
@@ -41,6 +42,12 @@ export default function Screen() {
     // Navigate back after successful submission
     router.back()
   }
+
+  // trigger validation on every field change
+  const watched = useWatch({ control })
+  useEffect(() => {
+    trigger()
+  }, [trigger, watched])
 
   return (
     <SafeAreaView>
@@ -67,6 +74,26 @@ export default function Screen() {
         type="datetime"
         className="mb-4"
       />
+
+      <FormField
+        control={control}
+        name="plannedBegin"
+        label="Planned Begin Date"
+        type="datetime"
+        className="mb-4"
+      />
+
+      <FormField
+        name="plannedEnd"
+        label="Planned End Date"
+        type="datetime"
+        control={control}
+        className="mb-4"
+      />
+
+      <Text className="text-destructive">
+        { errors.root?.message }
+      </Text>
 
       <Button
         className="mt-4 flex-row gap-4"
