@@ -1,11 +1,12 @@
 import { useQuery } from '@realm/react'
-import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
+import { addMinutes, addSeconds, endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link } from 'expo-router'
-import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
+import { AlarmClockIcon, MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { AppHeader } from '~/components/app-header'
 import { CalendarStrip } from '~/components/calendar-strip'
 import { ExpenseView } from '~/components/expense-view'
@@ -13,6 +14,7 @@ import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
 import { H2, H3 } from '~/components/ui/typography'
+import { setAlarm } from '~/lib/alarm'
 
 import { t } from '~/lib/i18n'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
@@ -107,6 +109,20 @@ export default function Screen() {
                   {t('voice_button')}
                 </Text>
               </View>
+            </Button>
+            <View className="w-px border-y-4 border-finance bg-border" />
+            <Button
+              size="lg"
+              variant="default"
+              className="rounded-none bg-finance px-4"
+              onPress={() => {
+                let date = new Date()
+                date = addSeconds(date, 1)
+
+                setAlarm('Test', 'hello', date)
+              }}
+            >
+              <AlarmClockIcon className="text-finance-foreground" />
             </Button>
             <View className="w-px border-y-4 border-finance bg-border" />
             <Link href="/taskadd" asChild>
