@@ -36,7 +36,7 @@ export async function setAlarm(
     importance: AndroidImportance.HIGH,
   })
 
-  await notifee.createTriggerNotification({
+  const id = await notifee.createTriggerNotification({
     title,
     body: message,
     android: {
@@ -44,5 +44,12 @@ export async function setAlarm(
     },
   }, trigger)
 
-  console.log('Alarm set for', date)
+  console.log('Alarm set with ID:', id, { title, message, date })
+
+  return id
+}
+
+export function clearAlarm(id: string) {
+  console.log('Alarm cleared with ID:', id)
+  return notifee.cancelTriggerNotification(id)
 }

@@ -1,5 +1,5 @@
 import { useQuery } from '@realm/react'
-import { addMinutes, addSeconds, endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
+import { addSeconds, endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link } from 'expo-router'
 import { AlarmClockIcon, MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
@@ -13,14 +13,16 @@ import { ExpenseView } from '~/components/expense-view'
 import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
-import { H2, H3 } from '~/components/ui/typography'
+import { H3 } from '~/components/ui/typography'
 import { setAlarm } from '~/lib/alarm'
 
 import { t } from '~/lib/i18n'
-import { TaskRecord, TaskStatus } from '~/lib/realm'
+import { TaskRecord, TaskStatus, useTaskRecordListeners } from '~/lib/realm'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
+
+  useTaskRecordListeners()
 
   const tasks = useQuery({
     type: TaskRecord,
@@ -117,9 +119,13 @@ export default function Screen() {
               className="rounded-none bg-finance px-4"
               onPress={() => {
                 let date = new Date()
-                date = addSeconds(date, 1)
+                date = addSeconds(date, 20)
 
-                setAlarm('Test', 'hello', date)
+                setAlarm(
+                  'Test',
+                  `Alarm at ${formatDate(date, 'HH:mm:SS')}`,
+                  date,
+                )
               }}
             >
               <AlarmClockIcon className="text-finance-foreground" />
