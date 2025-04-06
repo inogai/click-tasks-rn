@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.github.inogai.clicktasks"
     },
     "android": {
       "package": "io.github.inogai.clicktasks",
