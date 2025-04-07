@@ -68,8 +68,7 @@ export default function Screen() {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex h-full flex-col items-stretch gap-2 bg-background">
-        <AppHeader />
+      <View className="flex-1 flex-col items-stretch gap-2 bg-background">
         <View className="grow flex-col justify-stretch gap-y-4 px-4">
           <View className="relative mb-2 h-36">
             <CalendarStrip

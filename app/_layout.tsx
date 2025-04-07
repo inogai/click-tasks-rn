@@ -1,12 +1,14 @@
 import { PortalHost } from '@rn-primitives/portal'
-import { Stack } from 'expo-router'
+import { Drawer } from 'expo-router/drawer'
 import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
+import { AppHeader, AppLogo } from '~/components/app-header'
 import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
-import { useColorScheme } from '~/lib/useColorScheme'
 
+import { useColorScheme } from '~/lib/useColorScheme'
 import '~/components/layouts/side-effects'
 import '~/global.css'
 
@@ -15,6 +17,26 @@ export {
   ErrorBoundary,
 } from 'expo-router'
 
+function Layout() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer
+        screenOptions={{
+          header: props => <AppHeader {...props} />,
+        }}
+      >
+        <Drawer.Screen
+          name="index" // This is the name of the page and must match the url from root
+          options={{
+            drawerLabel: 'Home',
+            headerTitle: () => <AppLogo />,
+          }}
+        />
+      </Drawer>
+    </GestureHandlerRootView>
+  )
+}
+
 export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme()
 
@@ -22,14 +44,7 @@ export default function RootLayout() {
     <NestedProviders providers={[ThemeProvider, RealmProvider]}>
       <>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              header: () => null,
-            }}
-          />
-        </Stack>
+        <Layout />
         <PortalHost />
       </>
     </NestedProviders>
