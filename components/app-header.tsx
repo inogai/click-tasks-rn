@@ -48,7 +48,7 @@ export function AppHeader({
 
       {render(options?.headerTitle, {
         children: titleString,
-      }) ?? <Text>{titleString}</Text>}
+      }) ?? <Text className="text-foreground">{titleString}</Text>}
 
       <View>
         <ThemeToggle />
