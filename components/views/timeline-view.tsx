@@ -9,15 +9,15 @@ import { Muted } from '~/components/ui/typography'
 import { TaskStatus } from '~/lib/realm'
 import { cn } from '~/lib/utils'
 
-interface TasksViewProps {
+interface TimelineViewProps {
   tasks: TaskRecord[]
   className?: string
 }
 
-export function TasksView({
+export function TimelineView({
   tasks,
   className,
-}: TasksViewProps) {
+}: TimelineViewProps) {
   const realm = useRealm()
 
   return (

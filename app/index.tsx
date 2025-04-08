@@ -7,13 +7,12 @@ import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { AppHeader } from '~/components/app-header'
 import { CalendarStrip } from '~/components/calendar-strip'
-import { ExpenseView } from '~/components/expense-view'
-import { TasksView } from '~/components/task-view'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
 import { H3 } from '~/components/ui/typography'
+import { ExpenseView } from '~/components/views/expense-view'
+import { TimelineView } from '~/components/views/timeline-view'
 import { setAlarm } from '~/lib/alarm'
 
 import { t } from '~/lib/i18n'
@@ -85,7 +84,7 @@ export default function Screen() {
 
           <View>
             <H3 className="pl-14">Tasks Due</H3>
-            <TasksView className="h-36 pt-2" tasks={tasks as unknown as TaskRecord[]} />
+            <TimelineView className="h-36 pt-2" tasks={tasks as unknown as TaskRecord[]} />
           </View>
 
           <Separator />
