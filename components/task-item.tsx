@@ -1,12 +1,38 @@
+import type { VariantProps } from 'class-variance-authority'
 import type { TaskRecord } from '~/lib/realm'
+
+import { cva } from 'class-variance-authority'
 import { formatDate } from 'date-fns'
 import { CalendarClockIcon, MapPinIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { View } from 'react-native'
+
 import { Checkbox } from '~/components/ui/checkbox'
 import { Text } from '~/components/ui/text'
+
 import { TaskStatus } from '~/lib/realm'
 import { cn } from '~/lib/utils'
+
+const taskItemDueVariants = cva(
+  'text-sm text-muted-foreground',
+  {
+    variants: {
+      isOverdue: {
+        true: 'text-destructive',
+        false: 'text-muted-foreground',
+      },
+      icon: {
+        true: 'h-4 w-4',
+      },
+    },
+    defaultVariants: {
+      isOverdue: false,
+      icon: false,
+    },
+  },
+)
+
+export type TaskItemDateVariantsProps = VariantProps<typeof taskItemDueVariants>
 
 export interface TaskItemProps {
   task: TaskRecord
@@ -19,6 +45,9 @@ export function TaskItem({
   onCheckedChange,
   className,
 }: TaskItemProps) {
+  const now = new Date()
+  const isOverdue = task.due ? task.due < now : false
+
   return (
     <View className={cn('h-20 flex-row items-center gap-4', className)}>
       <Checkbox
@@ -32,10 +61,8 @@ export function TaskItem({
         </Text>
         {task.due && (
           <View className="flex-row items-center gap-x-1">
-            <CalendarClockIcon className="h-4 w-4 text-muted-foreground" />
-            <Text className="text-sm text-muted-foreground">
-              Due:
-              {' '}
+            <CalendarClockIcon className={cn(taskItemDueVariants({ isOverdue, icon: true }))} />
+            <Text className={cn(taskItemDueVariants({ isOverdue }))}>
               {formatDate(task.due, 'dd MMM HH:mm')}
             </Text>
           </View>
@@ -48,9 +75,7 @@ export function TaskItem({
             </Text>
           </View>
         )}
-
       </View>
-
     </View>
   )
 }
