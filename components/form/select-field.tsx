@@ -1,0 +1,50 @@
+import type { Control, FieldValues, Path } from 'react-hook-form'
+import type { SelectOption } from '~/components/ui/select'
+import React from 'react'
+import { Controller } from 'react-hook-form'
+
+import { Text, View } from 'react-native'
+import { Label } from '~/components/ui/label'
+import { Select } from '~/components/ui/select'
+
+interface SelectFieldProps<T extends FieldValues> {
+  control: Control<T>
+  name: Path<T>
+  label: string
+  placeholder?: string
+  className?: string
+  options: SelectOption[]
+}
+
+export function SelectField<T extends FieldValues>({
+  control,
+  name,
+  label,
+  placeholder,
+  className,
+  options,
+}: SelectFieldProps<T>) {
+  return (
+    <View className={className}>
+      <Label nativeID={name}>{label}</Label>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, onBlur, value }, fieldState }) => (
+          <>
+            <Select
+              value={value}
+              onChange={onChange}
+              options={options}
+              placeholder={placeholder || label}
+            />
+
+            {fieldState?.error && (
+              <Text className="text-destructive">{fieldState.error?.message || ''}</Text>
+            )}
+          </>
+        )}
+      />
+    </View>
+  )
+}
