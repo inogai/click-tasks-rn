@@ -49,7 +49,7 @@ export function TaskItem({
   const isOverdue = task.due ? task.due < now : false
 
   return (
-    <View className={cn('h-20 flex-row items-center gap-4', className)}>
+    <View className={cn('flex-row items-center gap-4', className)}>
       <Checkbox
         checked={task.status === TaskStatus.COMPLETED}
         onCheckedChange={onCheckedChange ?? (() => {})}

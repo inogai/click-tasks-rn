@@ -18,6 +18,9 @@ export default function Screen() {
       <TaskView
         tasks={Array.from(tasks)}
         onCheckedChange={handleCheckedChange}
+        onItemPress={(task) => {
+          console.log('Task pressed:', task.summary)
+        }}
       />
     </SafeAreaView>
   )
