@@ -31,7 +31,7 @@ export function TaskView({
           />
         )}
         keyExtractor={item => item._id.toString()}
-        // estimatedItemSize={50}
+        estimatedItemSize={70}
       />
     </View>
   )
