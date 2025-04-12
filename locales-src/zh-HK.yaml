@@ -1,0 +1,41 @@
+# Components
+button:
+  submit: 提交
+
+calendar:
+  weekday:
+    narrow: "{{ val, datetime(weekday: 'narrow') }}"
+
+  strip:
+    title: "第{{ week}}週 {{ val, datetime(year: 'numeric') }}{{ val, datetime(month: 'long') }}"
+
+timeline_view:
+  title: 時間軸
+  placeholder: 今天沒有任務。
+
+expenses_view:
+  daily_balance:
+    title: 本日收支
+
+  monthly_balance:
+    title: 本月收支
+
+# Pages
+home:
+  voice_button: 語音輸入
+
+preference:
+  theme:
+    label: 主題
+    values:
+      light: 淺色
+      dark: 深色
+      system: 跟隨系統
+
+  language:
+    label: 語言
+    values:
+      en: 英語
+      zh-Hans: 簡體中文
+      zh-Hant: 繁體中文
+      system: 跟隨系統

@@ -1,10 +1,47 @@
 {
-  "lang": "English",
-  "voice_button": "Speak",
-  "daily_balance": "Daily Balance",
-  "monthly_balance": "Monthly Balance",
-
-  "intl_calendar_strip_title": "W{{ week}} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}",
-  "intl_day_of_week_short": "{{ val, datetime(weekday: 'short') }}",
-  "intl_day_of_week_narrow": "{{ val, datetime(weekday: 'narrow') }}"
+  "button": {
+    "submit": "Submit"
+  },
+  "calendar": {
+    "weekday": {
+      "narrow": "{{ val, datetime(weekday: 'narrow') }}"
+    },
+    "strip": {
+      "title": "W{{ week}} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+    }
+  },
+  "timeline_view": {
+    "title": "Timeline",
+    "placeholder": "No tasks today."
+  },
+  "expenses_view": {
+    "daily_balance": {
+      "title": "Daily"
+    },
+    "monthly_balance": {
+      "title": "Monthly"
+    }
+  },
+  "home": {
+    "voice_button": "Speak"
+  },
+  "preference": {
+    "theme": {
+      "label": "Theme",
+      "values": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "Follow System"
+      }
+    },
+    "language": {
+      "label": "Langauge",
+      "values": {
+        "en": "English",
+        "zh-Hans": "Chinese (Simplified)",
+        "zh-Hant": "Chinese (Traditional)",
+        "system": "Follow System"
+      }
+    }
+  }
 }
