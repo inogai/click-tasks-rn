@@ -18,6 +18,7 @@ const _routes = [
   { name: 'task/list', label: 'Tasks' },
   { name: 'task/create', label: 'Create Task' },
   { name: 'task/update', label: 'Update Task', props: z.object({ taskId: z.string() }) },
+  { name: 'preference', label: 'Preferences' },
 ] as const satisfies RouteDefinition[]
 
 type Routes = typeof _routes

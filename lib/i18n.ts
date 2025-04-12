@@ -1,6 +1,8 @@
 import { getLocales } from 'expo-localization'
 import i18n from 'i18next'
+import { useEffect } from 'react'
 import { initReactI18next } from 'react-i18next'
+import { z } from 'zod'
 
 import enUS from '~/locales/en-US.json'
 import zhCN from '~/locales/zh-CN.json'
@@ -32,9 +34,17 @@ i18n
     },
   })
 
-const locales = getLocales()
+export const languageSchema = z.enum(['en', 'zh-Hant', 'zh', 'system'])
+export type Language = z.infer<typeof languageSchema>
 
-i18n.changeLanguage(locales[0].languageTag)
+export function changeAppLanguage(lang: Language) {
+  if (lang === 'system') {
+    const locales = getLocales()
+    i18n.changeLanguage(locales[0].languageTag)
+  } else {
+    i18n.changeLanguage(lang)
+  }
+}
 
 export default i18n
 

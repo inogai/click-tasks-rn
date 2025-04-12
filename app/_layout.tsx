@@ -8,6 +8,7 @@ import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
+import { useAppPreference } from '~/lib/preference'
 import { routes } from '~/lib/routes'
 import { useColorScheme } from '~/lib/useColorScheme'
 
@@ -20,6 +21,8 @@ export {
 } from 'expo-router'
 
 function Layout() {
+  useAppPreference()
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer

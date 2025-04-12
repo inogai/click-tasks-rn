@@ -1,18 +1,20 @@
+import { SunMoonIcon } from 'lucide-nativewind'
 import { Pressable, View } from 'react-native'
 
-import { setAndroidNavigationBar } from '~/lib/android-navigation-bar'
 import { MoonStar } from '~/lib/icons/MoonStar'
 import { Sun } from '~/lib/icons/Sun'
-import { useColorScheme } from '~/lib/useColorScheme'
+import { usePreferenceStore } from '~/lib/preference'
 import { cn } from '~/lib/utils'
 
+const themes = ['light', 'dark', 'system'] as const
+
 export function ThemeToggle() {
-  const { isDarkColorScheme, setColorScheme } = useColorScheme()
+  const [theme, setTheme] = usePreferenceStore(s => [s.theme, s.setTheme])
+
+  const nextTheme = themes[themes.indexOf(theme) + 1] ?? themes[0]
 
   function toggleColorScheme() {
-    const newTheme = isDarkColorScheme ? 'light' : 'dark'
-    setColorScheme(newTheme)
-    setAndroidNavigationBar(newTheme)
+    setTheme(nextTheme)
   }
 
   return (
@@ -34,13 +36,14 @@ export function ThemeToggle() {
             pressed && 'opacity-70',
           )}
         >
-          {isDarkColorScheme
-            ? (
-                <MoonStar className="text-foreground" size={23} strokeWidth={1.25} />
-              )
-            : (
-                <Sun className="text-foreground" size={24} strokeWidth={1.25} />
-              )}
+          {nextTheme === 'dark' && (
+            <MoonStar className="text-foreground" size={23} strokeWidth={1.25} />
+          )}
+          {nextTheme === 'light' && (
+            <Sun className="text-foreground" size={24} strokeWidth={1.25} />
+          )}
+          {nextTheme === 'system' && (
+            <SunMoonIcon className="text-foreground" size={23} strokeWidth={1.25} />)}
         </View>
       )}
     </Pressable>
