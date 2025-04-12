@@ -67,4 +67,10 @@ export default antfu(
   ...tailwindRules,
   ...importSortRules,
   i18next.configs['flat/recommended'],
+  {
+    ignores: [
+      'android/**/*',
+      'ios/**/*',
+    ],
+  },
 )
