@@ -9,6 +9,7 @@ import { Text, View } from 'react-native'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Muted } from '~/components/ui/typography'
 
+import { t } from '~/lib/i18n'
 import { TaskStatus } from '~/lib/realm'
 import { cn } from '~/lib/utils'
 
@@ -67,7 +68,7 @@ export function TimelineView({
               </View>
             </View>
           ))
-        : <Muted>No Tasks Today.</Muted>}
+        : <Muted>{t('timeline_view.placeholder')}</Muted>}
     </View>
   )
 }

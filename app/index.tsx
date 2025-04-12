@@ -83,7 +83,7 @@ export default function Screen() {
           <Separator />
 
           <View>
-            <H3 className="pl-14">Tasks Due</H3>
+            <H3 className="pl-14">{t('timeline_view.title')}</H3>
             <TimelineView className="h-36 pt-2" tasks={tasks as unknown as TaskRecord[]} />
           </View>
 
@@ -106,29 +106,29 @@ export default function Screen() {
               <View className="flex flex-row items-center gap-2">
                 <MicIcon className="text-finance-foreground" />
                 <Text className="text-xl font-semibold text-finance-foreground">
-                  {t('voice_button')}
+                  {t('home.voice_button')}
                 </Text>
               </View>
             </Button>
             <View className="w-px border-y-4 border-finance bg-border" />
-            <Button
-              size="lg"
-              variant="default"
-              className="rounded-none bg-finance px-4"
-              onPress={() => {
-                let date = new Date()
-                date = addSeconds(date, 20)
-
-                setAlarm(
-                  'Test',
-                  `Alarm at ${formatDate(date, 'HH:mm:SS')}`,
-                  date,
-                )
-              }}
-            >
-              <AlarmClockIcon className="text-finance-foreground" />
-            </Button>
-            <View className="w-px border-y-4 border-finance bg-border" />
+            {/* <Button */}
+            {/*   size="lg" */}
+            {/*   variant="default" */}
+            {/*   className="rounded-none bg-finance px-4" */}
+            {/*   onPress={() => { */}
+            {/*     let date = new Date() */}
+            {/*     date = addSeconds(date, 20) */}
+            {/**/}
+            {/*     setAlarm( */}
+            {/*       'Test', */}
+            {/*       `Alarm at ${formatDate(date, 'HH:mm:SS')}`, */}
+            {/*       date, */}
+            {/*     ) */}
+            {/*   }} */}
+            {/* > */}
+            {/*   <AlarmClockIcon className="text-finance-foreground" /> */}
+            {/* </Button> */}
+            {/* <View className="w-px border-y-4 border-finance bg-border" /> */}
             <Link href="/task/create" asChild>
               <Button
                 size="lg"

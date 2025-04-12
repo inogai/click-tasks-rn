@@ -126,7 +126,7 @@ export function CalendarDay({
             active,
           }))}
         >
-          {t('intl_day_of_week_narrow', {
+          {t('calendar.weekday.narrow', {
             val: date,
           })}
         </Text>

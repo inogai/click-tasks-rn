@@ -15,7 +15,7 @@ export function ExpenseView() {
   return (
     <View className="flex-row items-center justify-center">
       <View className="flex-col items-end">
-        <Label>{t('daily_balance')}</Label>
+        <Label>{t('expenses_view.daily_balance.title')}</Label>
         <View className="flex-row gap-x-1">
           <DollarSignIcon className="text-foreground" />
           <AmountDisplay amount={dailyBalance} unit={unit} />
@@ -25,7 +25,7 @@ export function ExpenseView() {
       <View className="mx-4 h-full w-px bg-border" />
 
       <View className="flex-col items-start">
-        <Label>{t('monthly_balance')}</Label>
+        <Label>{t('expenses_view.monthly_balance.title')}</Label>
         <View className="flex-row gap-x-1">
           {/* Blocked by lucide-nativewind update */}
           {/* {monthlyBalance > 0 */}

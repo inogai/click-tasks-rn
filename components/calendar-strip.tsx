@@ -281,7 +281,7 @@ export function CalendarStrip({
           <ChevronLeftIcon className="text-foreground" />
         </Button>
         <Text className="font-semibold text-muted-foreground">
-          {t('intl_calendar_strip_title', {
+          {t('calendar.strip.title', {
             val: anchorDate,
             week: getWeek(anchorDate),
           })}

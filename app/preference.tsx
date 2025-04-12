@@ -10,6 +10,7 @@ import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
 
+import { t } from '~/lib/i18n'
 import { preferenceSchema, usePreferenceStore } from '~/lib/preference'
 
 export function PreferenceScreen() {
@@ -45,11 +46,11 @@ export function PreferenceScreen() {
       <SelectField
         control={control}
         name="theme"
-        label="Theme"
+        label={t('preference.theme.label')}
         options={[
-          { label: 'Light', value: 'light' },
-          { label: 'Dark', value: 'dark' },
-          { label: 'Follow System', value: 'system' },
+          { label: t('preference.theme.values.light'), value: 'light' },
+          { label: t('preference.theme.values.dark'), value: 'dark' },
+          { label: t('preference.theme.values.system'), value: 'system' },
         ]}
         className="mb-4"
       />
@@ -57,12 +58,12 @@ export function PreferenceScreen() {
       <SelectField
         control={control}
         name="language"
-        label="Language"
+        label={t('preference.language.label')}
         options={[
-          { label: 'English (US)', value: 'en' },
-          { label: '中文 (简体)', value: 'zh' },
-          { label: '中文 (繁體)', value: 'zh-Hant' },
-          { label: 'Follow System', value: 'system' },
+          { label: t('preference.language.values.en'), value: 'en' },
+          { label: t('preference.language.values.zh-Hans'), value: 'zh-Hans' },
+          { label: t('preference.language.values.zh-Hant'), value: 'zh-Hant' },
+          { label: t('preference.language.values.system'), value: 'system' },
         ]}
       />
 
@@ -76,7 +77,7 @@ export function PreferenceScreen() {
         disabled={!isValid || isSubmitting}
       >
         <CheckIcon className="text-primary-foreground" />
-        <Text className="text-primary-foreground">Submit</Text>
+        <Text className="text-primary-foreground">{t('button.submit')}</Text>
       </Button>
     </SafeAreaView>
   )
