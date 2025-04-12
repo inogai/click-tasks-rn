@@ -129,7 +129,7 @@ export default function Screen() {
               <AlarmClockIcon className="text-finance-foreground" />
             </Button>
             <View className="w-px border-y-4 border-finance bg-border" />
-            <Link href="/taskadd" asChild>
+            <Link href="/task/create" asChild>
               <Button
                 size="lg"
                 variant="default"
