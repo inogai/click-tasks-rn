@@ -1,10 +1,10 @@
 import type { SubmitHandler } from 'react-hook-form'
 import type { z } from 'zod'
 import type { taskZod } from '~/lib/realm'
+
 import { useRealm } from '@realm/react'
-
 import { router, useNavigation } from 'expo-router'
-
+import { useMemo } from 'react'
 import { SafeAreaView } from 'react-native'
 import { BSON } from 'realm'
 
@@ -23,6 +23,8 @@ export function TaskUpdateScreen() {
   const realm = useRealm()
 
   const task = realm.objectForPrimaryKey(TaskRecord, new BSON.ObjectId(taskId))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const defaultValues = useMemo(() => ({ ...task }), [])
 
   if (!task) {
     return (
@@ -42,7 +44,7 @@ export function TaskUpdateScreen() {
   return (
     <SafeAreaView>
       <TaskForm
-        defaultValues={{ ...task }}
+        defaultValues={defaultValues}
         onSubmit={onSubmit}
       />
     </SafeAreaView>
