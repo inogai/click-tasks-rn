@@ -1,12 +1,10 @@
 import antfu from '@antfu/eslint-config'
 import i18next from 'eslint-plugin-i18next'
 import readableTailwind from 'eslint-plugin-readable-tailwind'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tailwind from 'eslint-plugin-tailwindcss'
 
-export default antfu(
-  {
-    react: true,
-  },
+const tailwindRules = [
   {
     plugins: {
       'tailwindcss': tailwind,
@@ -28,5 +26,45 @@ export default antfu(
       'readable-tailwind/no-duplicate-classes': 'warn',
     },
   },
+]
+
+const importSortRules = [
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'perfectionist/sort-imports': 'off',
+      'simple-import-sort/imports': ['error', {
+        groups: [
+          // Type imports
+          ['^.+\\u0000$', '^~/components/.+\\u0000$'],
+
+          // Packages.
+          // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+          ['^@?\\w'],
+
+          // Components
+          ['^~/components/.+$'],
+
+          // Other source files.
+          ['^~/lib/.+$'],
+
+          // Side effect imports.
+          ['^\\u0000'],
+
+          // Others.
+        ],
+      }],
+    },
+  },
+]
+
+export default antfu(
+  {
+    react: true,
+  },
+  ...tailwindRules,
+  ...importSortRules,
   i18next.configs['flat/recommended'],
 )
