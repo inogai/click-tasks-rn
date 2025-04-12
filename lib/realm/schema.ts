@@ -13,10 +13,10 @@ export const taskZod = z.object({
   summary: z.string().nonempty(),
   status: z.nativeEnum(TaskStatus),
 
-  due: z.date().optional(),
-  venue: z.string().optional(),
-  plannedBegin: z.date().optional(),
-  plannedEnd: z.date().optional(),
+  due: z.date().optional().nullable(),
+  venue: z.string().optional().nullable(),
+  plannedBegin: z.date().optional().nullable(),
+  plannedEnd: z.date().optional().nullable(),
 }).superRefine((val, ctx) => {
   // Ensure plannedBegin and plannedEnd are either
   // 1. both defined; or
