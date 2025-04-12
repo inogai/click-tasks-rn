@@ -13,8 +13,8 @@ import { Separator } from '~/components/ui/separator'
 import { H3 } from '~/components/ui/typography'
 import { ExpenseView } from '~/components/views/expense-view'
 import { TimelineView } from '~/components/views/timeline-view'
-import { setAlarm } from '~/lib/alarm'
 
+import { setAlarm } from '~/lib/alarm'
 import { t } from '~/lib/i18n'
 import { TaskRecord, TaskStatus, useTaskRecordListeners } from '~/lib/realm'
 

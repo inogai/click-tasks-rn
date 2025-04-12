@@ -1,5 +1,6 @@
 import type { RouteProp } from '@react-navigation/native'
 import type { AnyZodObject } from 'zod'
+
 import { useRoute as useNavRoute } from '@react-navigation/native'
 import { z } from 'zod'
 

@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 import type { View } from 'react-native-reanimated/lib/typescript/Animated'
+
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Animated, {
   Easing,

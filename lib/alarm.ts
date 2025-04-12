@@ -1,4 +1,5 @@
 import type { TimestampTrigger } from '@notifee/react-native'
+
 import notifee, { AndroidImportance, AndroidNotificationSetting, AndroidVisibility, TriggerType } from '@notifee/react-native'
 
 async function requestAlarmPermission() {

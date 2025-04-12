@@ -1,5 +1,5 @@
-import type { VariantProps } from 'class-variance-authority'
 import type { TaskRecord } from '~/lib/realm'
+import type { VariantProps } from 'class-variance-authority'
 
 import { cva } from 'class-variance-authority'
 import { formatDate } from 'date-fns'

@@ -1,9 +1,12 @@
 import type { TaskRecord } from '~/lib/realm'
+
 import { FlashList } from '@shopify/flash-list'
 import { View } from 'react-native'
+
 import { TaskItem } from '~/components/task-item'
 import { Pressable } from '~/components/ui/pressable'
 import { Separator } from '~/components/ui/separator'
+
 import { cn } from '~/lib/utils'
 
 interface TaskViewProps {

@@ -1,11 +1,14 @@
 import type { TaskRecord } from '~/lib/realm'
+
 import { useRealm } from '@realm/react'
 import { formatDate } from 'date-fns'
 import { MapPinIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { Text, View } from 'react-native'
+
 import { Checkbox } from '~/components/ui/checkbox'
 import { Muted } from '~/components/ui/typography'
+
 import { TaskStatus } from '~/lib/realm'
 import { cn } from '~/lib/utils'
 

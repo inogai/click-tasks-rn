@@ -1,13 +1,15 @@
+import type { taskZod } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 import type { z } from 'zod'
-import type { taskZod } from '~/lib/realm'
-import { useRealm } from '@realm/react'
 
+import { useRealm } from '@realm/react'
 import { router } from 'expo-router'
 import {
   SafeAreaView,
 } from 'react-native'
+
 import { TaskForm } from '~/components/task-form'
+
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 type FormData = z.infer<typeof taskZod>

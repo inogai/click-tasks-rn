@@ -4,6 +4,5 @@
   "daily_balance": "日账单",
   "monthly_balance": "月账单",
 
-
-  "intl_calendar_strip_title": "{{ val, datetime(year: 'numeric') }}{{ val, datetime(month: 'long') }} 第{{week}}周",
+  "intl_calendar_strip_title": "{{ val, datetime(year: 'numeric') }}{{ val, datetime(month: 'long') }} 第{{week}}周"
 }

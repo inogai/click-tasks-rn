@@ -1,6 +1,6 @@
+import type { taskZod } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 import type { z } from 'zod'
-import type { taskZod } from '~/lib/realm'
 
 import { useRealm } from '@realm/react'
 import { router, useNavigation } from 'expo-router'
@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native'
 import { BSON } from 'realm'
 
 import { TaskForm } from '~/components/task-form'
+
 import { TaskRecord } from '~/lib/realm'
 import { useRoute } from '~/lib/routes'
 

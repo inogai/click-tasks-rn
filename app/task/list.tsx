@@ -1,7 +1,9 @@
 import { useQuery, useRealm } from '@realm/react'
 import { useNavigation } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { TaskView } from '~/components/views/task-view'
+
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export function TaskListScreen() {

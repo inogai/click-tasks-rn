@@ -1,4 +1,5 @@
 import type { z } from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckIcon } from 'lucide-nativewind'
 import { useEffect } from 'react'
@@ -8,6 +9,7 @@ import { Text, View } from 'react-native'
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
+
 import { TaskStatus, taskZod } from '~/lib/realm'
 
 type FormData = z.infer<typeof taskZod>
