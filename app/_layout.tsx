@@ -4,11 +4,11 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { AppHeader } from '~/components/app-header'
-import { AppLogo } from '~/components/app-logo'
 import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
+import { routes } from '~/lib/routes'
 import { useColorScheme } from '~/lib/useColorScheme'
 
 import '~/components/layouts/side-effects'
@@ -27,13 +27,16 @@ function Layout() {
           header: props => <AppHeader {...props} />,
         }}
       >
-        <Drawer.Screen
-          name="index" // This is the name of the page and must match the url from root
-          options={{
-            drawerLabel: 'Home',
-            headerTitle: () => <AppLogo />,
-          }}
-        />
+        {routes.map(route => (
+          <Drawer.Screen
+            key={route.name}
+            name={route.name}
+            options={{
+              drawerLabel: route.label,
+              headerTitle: route.title,
+            }}
+          />
+        ))}
       </Drawer>
     </GestureHandlerRootView>
   )
