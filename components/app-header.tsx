@@ -1,24 +1,20 @@
 import type { DrawerHeaderProps } from '@react-navigation/drawer'
 import { MenuIcon } from 'lucide-nativewind'
 import * as React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { ThemeToggle } from '~/components/theme-toggle'
-
 import { Button } from '~/components/ui/button'
-
-export function AppLogo() {
-  return (
-    // eslint-disable-next-line i18next/no-literal-string
-    <Text className="text-3xl font-extrabold text-[#75ca00]">
-      Better
-    </Text>
-  )
-}
+import { Text } from '~/components/ui/text'
 
 function render<Props>(obj: undefined | string | React.FC<Props>, props: Props) {
-  if (typeof obj === 'string' || obj === undefined) {
+  if (obj === undefined) {
     return obj
+  }
+
+  if (typeof obj === 'string') {
+    return <Text>{obj}</Text>
   }
 
   return obj(props)

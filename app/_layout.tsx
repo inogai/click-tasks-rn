@@ -3,12 +3,14 @@ import { Drawer } from 'expo-router/drawer'
 import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
-import { AppHeader, AppLogo } from '~/components/app-header'
+import { AppHeader } from '~/components/app-header'
+import { AppLogo } from '~/components/app-logo'
 import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
 import { useColorScheme } from '~/lib/useColorScheme'
+
 import '~/components/layouts/side-effects'
 import '~/global.css'
 
