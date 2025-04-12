@@ -66,7 +66,17 @@ export default antfu(
   },
   ...tailwindRules,
   ...importSortRules,
-  i18next.configs['flat/recommended'],
+  {
+    plugins: {
+      i18next,
+    },
+    rules: {
+      'i18next/no-literal-string': ['warn', {
+        'mode': 'all',
+        'object-properties': { include: ['label'] },
+      }],
+    },
+  },
   {
     ignores: [
       'android/**/*',
