@@ -37,6 +37,12 @@ export interface PreferenceStore extends Preference {
   setTheme: (newTheme: Preference['theme']) => void
 }
 
+/**
+ * A zustand store for user preferences.
+ *
+ * If you change the store structure, remember to update the `useAppPreference`
+ * hook which reactively applies the preference.
+ */
 export const usePreferenceStore = create(
   persist<PreferenceStore>(
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -57,6 +63,11 @@ export const usePreferenceStore = create(
   ),
 )
 
+/**
+ * A hook to apply the user preferences.
+ *
+ * Should only be called once near the root of the application.
+ */
 export function useAppPreference() {
   const { theme, language } = usePreferenceStore()
 
