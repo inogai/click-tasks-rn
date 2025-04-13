@@ -73,16 +73,22 @@ const dayNumberVariants = cva(
   },
 )
 
+enum DateVariant {
+  HOLIDAY = 'holiday',
+  SATURDAY = 'saturday',
+  DEFAULT = 'default',
+}
+
 function getDateVariant(date: Date) {
   if (isHoliday(date)) {
-    return 'holiday'
+    return DateVariant.HOLIDAY
   }
 
   if (date.getDay() === 6) {
-    return 'saturday'
+    return DateVariant.SATURDAY
   }
 
-  return 'default'
+  return DateVariant.DEFAULT
 }
 
 export interface CalendarDayProps {
