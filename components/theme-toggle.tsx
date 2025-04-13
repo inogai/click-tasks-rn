@@ -3,10 +3,10 @@ import { Pressable, View } from 'react-native'
 
 import { MoonStar } from '~/lib/icons/MoonStar'
 import { Sun } from '~/lib/icons/Sun'
-import { usePreferenceStore } from '~/lib/preference'
+import { preferenceSchema, usePreferenceStore } from '~/lib/preference'
 import { cn } from '~/lib/utils'
 
-const themes = ['light', 'dark', 'system'] as const
+const themes = preferenceSchema.shape.theme.options
 
 export function ThemeToggle() {
   const [theme, setTheme] = usePreferenceStore(s => [s.theme, s.setTheme])
