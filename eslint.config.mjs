@@ -73,6 +73,7 @@ export default antfu(
     rules: {
       'i18next/no-literal-string': ['warn', {
         'mode': 'all',
+        'callees': { include: ['^$'] },
         'object-properties': { include: ['label'] },
       }],
     },
