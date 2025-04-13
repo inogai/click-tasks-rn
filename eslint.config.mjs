@@ -1,5 +1,6 @@
 import antfu from '@antfu/eslint-config'
 import i18next from 'eslint-plugin-i18next'
+import i18nextDefaultOpts from 'eslint-plugin-i18next/lib/options/defaults.js'
 import readableTailwind from 'eslint-plugin-readable-tailwind'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tailwind from 'eslint-plugin-tailwindcss'
@@ -78,7 +79,10 @@ export default antfu(
     },
     rules: {
       'i18next/no-literal-string': ['warn', {
+        ...i18nextDefaultOpts,
+        // see: https://github.com/edvardchen/eslint-plugin-i18next/blob/main/docs/rules/no-literal-string.md
         'mode': 'all',
+        'jsx-attributes': { include: ['label'] },
         'callees': { include: ['^$'] },
         'object-properties': { include: ['label'] },
       }],
