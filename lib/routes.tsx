@@ -6,6 +6,8 @@ import { z } from 'zod'
 
 import { AppLogo } from '~/components/app-logo'
 
+import { t } from '~/lib/i18n'
+
 interface RouteDefinition {
   name: string
   label: string
@@ -13,13 +15,16 @@ interface RouteDefinition {
   props?: AnyZodObject
 }
 
+/* eslint-disable style/no-multi-spaces, style/comma-spacing */
+// @keep-aligned* ,
 const _routes = [
-  { name: 'index', label: 'Home', title: () => <AppLogo /> },
-  { name: 'task/list', label: 'Tasks' },
-  { name: 'task/create', label: 'Create Task' },
-  { name: 'task/update', label: 'Update Task', props: z.object({ taskId: z.string() }) },
-  { name: 'preference', label: 'Preferences' },
+  { name: 'index'      , label: t('routes.index')         , title: () => <AppLogo /> }               ,
+  { name: 'task/list'  , label: t('routes.task.list') }   ,
+  { name: 'task/create', label: t('routes.task.create') } ,
+  { name: 'task/update', label: t('routes.task.update')   , props: z.object({ taskId: z.string() }) },
+  { name: 'preference' , label: t('routes.preference') }  ,
 ] as const satisfies RouteDefinition[]
+/* eslint-enable style/no-multi-spaces, style/comma-spacing */
 
 type Routes = typeof _routes
 

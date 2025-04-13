@@ -22,6 +22,15 @@
       "title": "Monthly"
     }
   },
+  "routes": {
+    "index": "Home",
+    "task": {
+      "list": "Tasks",
+      "create": "Create Tasks",
+      "update": "Update Tasks"
+    },
+    "preference": "Preferences"
+  },
   "home": {
     "voice_button": "Speak"
   },

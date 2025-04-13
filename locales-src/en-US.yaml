@@ -20,6 +20,15 @@ expenses_view:
   monthly_balance:
     title: Monthly
 
+# Routes
+routes:
+  index: Home
+  task:
+    list: Tasks
+    create: Create Tasks
+    update: Update Tasks
+  preference: Preferences
+
 # Pages
 home:
   voice_button: Speak
