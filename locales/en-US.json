@@ -2,6 +2,32 @@
   "button": {
     "submit": "Submit"
   },
+  "task_form": {
+    "summary": {
+      "label": "Task Summary",
+      "placeholder": "Enter task summary"
+    },
+    "venue": {
+      "label": "Venue",
+      "placeholder": "Enter venue (optional)"
+    },
+    "due": {
+      "label": "Due Date"
+    },
+    "planned_begin": {
+      "label": "Planned Begin Date"
+    },
+    "planned_end": {
+      "label": "Planned End Date"
+    },
+    "status": {
+      "label": "Status",
+      "values": {
+        "pending": "Pending",
+        "completed": "Completed"
+      }
+    }
+  },
   "calendar": {
     "weekday": {
       "narrow": "{{ val, datetime(weekday: 'narrow') }}"

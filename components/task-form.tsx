@@ -10,6 +10,7 @@ import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
 
+import { t } from '~/lib/i18n'
 import { TaskStatus, taskZod } from '~/lib/realm'
 
 type FormData = z.infer<typeof taskZod>
@@ -44,7 +45,7 @@ export function TaskForm({
       <FormField
         control={control}
         name="summary"
-        label="Task Summary"
+        label={t('task_form.summary.label')}
         placeholder="Enter task summary"
         className="mb-4"
       />
@@ -52,7 +53,7 @@ export function TaskForm({
       <FormField
         control={control}
         name="venue"
-        label="Venue"
+        label={t('task_form.venue.label')}
         placeholder="Enter venue (optional)"
         className="mb-4"
       />
@@ -60,7 +61,7 @@ export function TaskForm({
       <FormField
         control={control}
         name="due"
-        label="Due Date"
+        label={t('task_form.due.label')}
         type="datetime"
         className="mb-4"
       />
@@ -68,14 +69,14 @@ export function TaskForm({
       <FormField
         control={control}
         name="plannedBegin"
-        label="Planned Begin Date"
+        label={t('task_form.planned_begin.label')}
         type="datetime"
         className="mb-4"
       />
 
       <FormField
         name="plannedEnd"
-        label="Planned End Date"
+        label={t('task_form.planned_end.label')}
         type="datetime"
         control={control}
         className="mb-4"
@@ -83,12 +84,12 @@ export function TaskForm({
 
       <SelectField
         name="status"
-        label="Status"
+        label={t('task_form.status.label')}
         control={control}
         className="mb-4"
         options={[
-          { label: 'Pending', value: TaskStatus.PENDING },
-          { label: 'Completed', value: TaskStatus.COMPLETED },
+          { label: t('task_form.status.values.pending'), value: TaskStatus.PENDING },
+          { label: t('task_form.status.values.completed'), value: TaskStatus.COMPLETED },
         ]}
       />
 
@@ -102,7 +103,9 @@ export function TaskForm({
         disabled={!isValid || isSubmitting}
       >
         <CheckIcon className="text-primary-foreground" />
-        <Text className="text-primary-foreground">Submit</Text>
+        <Text className="text-primary-foreground">
+          {t('button.submit')}
+        </Text>
       </Button>
 
     </View>
