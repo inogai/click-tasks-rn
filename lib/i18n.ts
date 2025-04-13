@@ -1,5 +1,5 @@
 import { getLocales } from 'expo-localization'
-import i18n from 'i18next'
+import i18n, { t as i18nextT } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { z } from 'zod'
 
@@ -48,4 +48,4 @@ export function changeAppLanguage(lang: Language) {
 
 export default i18n
 
-export { t } from 'i18next'
+export const t = i18nextT as (k: string, opts?: Record<string, any>) => string
