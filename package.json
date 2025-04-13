@@ -12,7 +12,8 @@
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
     "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
-    "lint": "eslint .",
+    "lint": "eslint . --quiet",
+    "lint:verbose": "eslint .",
     "lint:fix": "eslint --fix .",
     "locales": "node ./locales.build.cjs",
     "dev:locales": "node ./locales.build.cjs --watch"

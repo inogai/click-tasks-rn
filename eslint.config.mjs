@@ -64,6 +64,12 @@ export default antfu(
   {
     react: true,
   },
+  {
+    rules: {
+      'no-console': 'warn',
+      'unused-imports/no-unused-vars': 'warn',
+    },
+  },
   ...tailwindRules,
   ...importSortRules,
   {
