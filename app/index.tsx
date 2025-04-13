@@ -26,7 +26,7 @@ export default function Screen() {
     type: TaskRecord,
     query: collection => collection
       .filtered(
-        'due >= $0 && due <= $1',
+        'plannedEnd <= $1 && plannedBegin >= $0',
         startOfDay(currentDate),
         endOfDay(currentDate),
       )
@@ -82,8 +82,12 @@ export default function Screen() {
           <Separator />
 
           <View>
-            <H3 className="pl-14">{t('timeline_view.title')}</H3>
-            <TimelineView className="h-36 pt-2" tasks={tasks as unknown as TaskRecord[]} />
+            <H3 className="pl-2">{t('timeline_view.title')}</H3>
+            <TimelineView
+              className="h-36 pt-2"
+              tasks={tasks as unknown as TaskRecord[]}
+              date={currentDate}
+            />
           </View>
 
           <Separator />
