@@ -35,7 +35,8 @@ function convertFile(srcFile) {
   const objectContent = yaml.load(yamlContent)
 
   // Write JSON file
-  fs.writeFileSync(destFile, JSON.stringify(objectContent, null, 2))
+  // eslint-disable-next-line prefer-template
+  fs.writeFileSync(destFile, JSON.stringify(objectContent, null, 2) + '\n')
 
   console.log(`Converted: ${relativePath} -> ${path.relative(__dirname, destFile)}`)
 }
