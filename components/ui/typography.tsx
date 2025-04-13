@@ -124,7 +124,7 @@ const BlockQuote = React.forwardRef<TextRef, SlottableTextProps>(
     const Component = asChild ? Slot.Text : RNText
     return (
       <Component
-        // @ts-ignore - role of blockquote renders blockquote element on the web
+        // @ts-expect-error - role of blockquote renders blockquote element on the web
         role={Platform.OS === 'web' ? 'blockquote' : undefined}
         className={cn(
           `
@@ -148,7 +148,7 @@ const Code = React.forwardRef<TextRef, SlottableTextProps>(
     const Component = asChild ? Slot.Text : RNText
     return (
       <Component
-        // @ts-ignore - role of code renders code element on the web
+        // @ts-expect-error - role of code renders code element on the web
         role={Platform.OS === 'web' ? 'code' : undefined}
         className={cn(
           `

@@ -1,7 +1,7 @@
 import { useQuery } from '@realm/react'
-import { addSeconds, endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
+import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link } from 'expo-router'
-import { AlarmClockIcon, MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
+import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { Text, View } from 'react-native'
@@ -14,7 +14,6 @@ import { H3 } from '~/components/ui/typography'
 import { ExpenseView } from '~/components/views/expense-view'
 import { TimelineView } from '~/components/views/timeline-view'
 
-import { setAlarm } from '~/lib/alarm'
 import { t } from '~/lib/i18n'
 import { TaskRecord, TaskStatus, useTaskRecordListeners } from '~/lib/realm'
 

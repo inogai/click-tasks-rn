@@ -39,6 +39,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.add('bg-background')
     }
     setAndroidNavigationBar(colorScheme)
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setIsColorSchemeLoaded(true)
     hasMounted.current = true
   }, [])
