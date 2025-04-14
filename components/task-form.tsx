@@ -1,3 +1,4 @@
+import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,10 +19,18 @@ type FormData = z.infer<typeof taskZod>
 interface TaskFormProps {
   defaultValues?: Partial<FormData>
   onSubmit: (data: FormData) => void
+  form: UseFormReturn<FormData>
+}
+
+export function useTaskForm(defaultValues?: Partial<FormData>) {
+  return useForm<FormData>({
+    resolver: zodResolver(taskZod),
+    defaultValues,
+  })
 }
 
 export function TaskForm({
-  defaultValues,
+  form,
   onSubmit,
 }: TaskFormProps) {
   const {
@@ -29,10 +38,7 @@ export function TaskForm({
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     trigger,
-  } = useForm<FormData>({
-    resolver: zodResolver(taskZod),
-    defaultValues,
-  })
+  } = form
 
   // trigger validation on every field change
   const watched = useWatch({ control })

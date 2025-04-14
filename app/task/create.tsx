@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 
-import { TaskForm } from '~/components/task-form'
+import { TaskForm, useTaskForm } from '~/components/task-form'
 
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
@@ -17,6 +17,10 @@ type FormData = z.infer<typeof taskZod>
 export default function Screen() {
   const realm = useRealm()
 
+  const form = useTaskForm({
+    status: TaskStatus.PENDING,
+  })
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const task = TaskRecord.create(data)
 
@@ -24,6 +28,7 @@ export default function Screen() {
       realm.create('Task', task)
     })
 
+    form.reset()
     // Navigate back after successful submission
     router.back()
   }
@@ -31,9 +36,7 @@ export default function Screen() {
   return (
     <SafeAreaView>
       <TaskForm
-        defaultValues={{
-          status: TaskStatus.PENDING,
-        }}
+        form={form}
         onSubmit={onSubmit}
       />
     </SafeAreaView>
