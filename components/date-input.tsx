@@ -3,8 +3,8 @@ import type { DateTimePickerEvent } from '@react-native-community/datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useControllableState } from '@rn-primitives/hooks'
 import { formatDate } from 'date-fns'
-import { CalendarIcon, ClockIcon, TrashIcon } from 'lucide-nativewind'
-import React, { } from 'react'
+import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from 'lucide-nativewind'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { Button } from '~/components/ui/button'
@@ -103,17 +103,12 @@ export function DateInput({
   nativeID,
   mode,
 }: DateInputProps) {
+  const [timeShow, setTimeShow] = useState(false)
+
   function mutateValue(newValue: Date, prop: 'date' | 'time') {
-    // if no value is set, use date = today and time = 2359
+    // if no value is set, use date = today
     if (!value) {
-      const today = new Date()
-      value = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate(),
-        23,
-        59,
-      )
+      value = new Date()
     }
 
     // if prop is 'date', only replace the date part of the current value
@@ -137,6 +132,7 @@ export function DateInput({
   function handleDateChange(newDate: Date | undefined) {
     if (newDate) {
       mutateValue(newDate, 'date')
+      setTimeShow(true)
     }
   }
 
@@ -153,14 +149,31 @@ export function DateInput({
   // TODO: figure out how to use nativeID to make this accessible
   return (
     <View className="flex-row justify-stretch gap-4">
-      {mode !== 'time' && (<BaseDateInput value={value} onValueChange={handleDateChange} mode="date" />)}
-      {mode !== 'date' && (<BaseDateInput value={value} onValueChange={handleTimeChange} mode="time" />)}
+      {mode !== 'time' && (
+        <BaseDateInput
+          value={value}
+          onValueChange={handleDateChange}
+          mode="date"
+        />
+      )}
+      {mode !== 'date' && (
+        <BaseDateInput
+          show={timeShow}
+          onShowChange={setTimeShow}
+          value={value}
+          onValueChange={handleTimeChange}
+          mode="time"
+        />
+      )}
       <Button
         size="icon"
         variant="destructive"
         className="h-12 w-12"
       >
-        <TrashIcon className="h-6 w-6 text-destructive-foreground" onPress={handleClear} />
+        <TrashIcon
+          className="h-6 w-6 text-destructive-foreground"
+          onPress={handleClear}
+        />
       </Button>
     </View>
   )
