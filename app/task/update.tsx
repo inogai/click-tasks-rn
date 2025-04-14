@@ -29,7 +29,7 @@ export function TaskUpdateScreen() {
   })
   const defaultValues = useMemo(() => ({ ...task }), [task])
 
-  const form = useTaskForm(defaultValues)
+  const form = useTaskForm()
 
   // trigger reset when task changes
   useEffect(() => {
