@@ -103,42 +103,34 @@ export function DateInput({
   nativeID,
   mode,
 }: DateInputProps) {
+  const [tempValue, setTempValue] = useState<Date | null>(null)
   const [timeShow, setTimeShow] = useState(false)
-
-  function mutateValue(newValue: Date, prop: 'date' | 'time') {
-    // if no value is set, use date = today
-    if (!value) {
-      value = new Date()
-    }
-
-    // if prop is 'date', only replace the date part of the current value
-    // if prop is 'time', only replace the time part of the current value
-    const [dateValue, timeValue] = prop === 'date'
-      ? [newValue, value]
-      : [value, newValue]
-
-    const year = dateValue.getFullYear()
-    const month = dateValue.getMonth()
-    const day = dateValue.getDate()
-
-    const hours = timeValue.getHours()
-    const minutes = timeValue.getMinutes()
-
-    // don't bother with seconds and milliseconds
-    const mutatedValue = new Date(year, month, day, hours, minutes)
-    onValueChange(mutatedValue)
-  }
 
   function handleDateChange(newDate: Date | undefined) {
     if (newDate) {
-      mutateValue(newDate, 'date')
-      setTimeShow(true)
+      if (mode === 'datetime') {
+        setTempValue(newDate)
+        setTimeShow(true)
+      }
+      else {
+        onValueChange(newDate)
+      }
+    }
+  }
+
+  function handleTimeShowChange(newShow: boolean) {
+    setTimeShow(newShow)
+    if (!newShow && tempValue) {
+      onValueChange(tempValue)
+      setTempValue(null)
     }
   }
 
   function handleTimeChange(newTime: Date | undefined) {
     if (newTime) {
-      mutateValue(newTime, 'time')
+      const dateValue = tempValue || value || new Date()
+      dateValue.setHours(newTime.getHours(), newTime.getMinutes(), 0, 0)
+      onValueChange(dateValue)
     }
   }
 
@@ -159,7 +151,7 @@ export function DateInput({
       {mode !== 'date' && (
         <BaseDateInput
           show={timeShow}
-          onShowChange={setTimeShow}
+          onShowChange={handleTimeShowChange}
           value={value}
           onValueChange={handleTimeChange}
           mode="time"

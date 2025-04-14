@@ -2,6 +2,7 @@ import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
 import { CheckIcon } from 'lucide-nativewind'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -13,6 +14,7 @@ import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
 import { TaskStatus, taskZod } from '~/lib/realm'
+import { usePrevious } from '~/lib/use-previous'
 
 type FormData = z.infer<typeof taskZod>
 
@@ -29,6 +31,26 @@ export function useTaskForm(defaultValues?: Partial<FormData>) {
   })
 }
 
+function getNewEnd(
+  oldBegin: Date | null | undefined,
+  oldEnd: Date | null | undefined,
+  newBegin: Date | null | undefined,
+) {
+  if (!newBegin)
+    return null
+
+  if (!oldEnd)
+    return addHours(newBegin, 1)
+
+  if (oldBegin) {
+    const duration = differenceInMilliseconds(
+      oldEnd,
+      oldBegin,
+    )
+    return addMilliseconds(newBegin, duration)
+  }
+}
+
 export function TaskForm({
   form,
   onSubmit,
@@ -36,8 +58,9 @@ export function TaskForm({
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, isValidating },
     trigger,
+    setValue,
   } = form
 
   // trigger validation on every field change
@@ -45,6 +68,23 @@ export function TaskForm({
   useEffect(() => {
     trigger()
   }, [trigger, watched])
+
+  // BEGIN automatically set plannedEnd based on plannedBegin
+  const plannedBegin = useWatch({ control, name: 'plannedBegin' })
+  const plannedEnd = useWatch({ control, name: 'plannedEnd' })
+  const oldPlannedBegin = usePrevious(plannedBegin)
+  useEffect(() => {
+    if (isValidating)
+      return
+    console.log('plannedBegin changed', plannedBegin)
+    setValue('plannedEnd', getNewEnd(
+      oldPlannedBegin,
+      plannedEnd,
+      plannedBegin,
+    ))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plannedBegin])
+  // END
 
   return (
     <View>
