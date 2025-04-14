@@ -1,185 +1,124 @@
-import { addDays, differenceInDays, endOfDay, startOfDay } from 'date-fns'
+import { R, TimeDelta } from '~/lib/utils'
 
-import { R } from '~/lib/utils'
+class CrossAxisBuilder {
+  length = 0
+  occupance: Record<number, number[]> = {}
 
-interface TimeTableItem {
-  label: string
-  from: Date
-  to: Date
-}
-
-interface TimeTableItemRender extends TimeTableItem {
-  /** position the across the main axis (time) */
-  beginTime: number
-  endTime: number
-  beginCross: number
-  endCross: number
-}
-
-interface DayModel {
-  items: readonly TimeTableItemRender[]
-  minTime: number
-  maxTime: number
-  minCross: number
-  maxCross: number
-}
-
-interface DayModelOpts {
-  step?: `${number}min`
-  beginDt: Date
-  endDt: Date
-}
-
-function getCoreModel(
-  data: readonly TimeTableItem[],
-  {
-    step = '1min',
-    beginDt,
-    endDt,
-  }: DayModelOpts,
-): DayModel {
-  const items: TimeTableItemRender [] = []
-
-  const stepMinutes = Number.parseInt(
-    step.match(/(\d+)min/)?.[1] ?? '1',
-    10,
-  )
-  const stepMS = stepMinutes * 60 * 1000
-
-  function time2Pos(time: Date) {
-    return R.pipe(
-      time.getTime(),
-      x => x - beginDt.getTime(),
-      x => x / stepMS,
-      x => Math.floor(x),
-    )
+  bumpAxis() {
+    this.length += 1
   }
 
-  let lengthCross = 0
-  const occupance: Record<number, number[]> = {}
+  allocate(startPos: number, lengthPos: number) {
+    const endPos = startPos + lengthPos
 
-  function allocateOccupance(startPos: number, endPos: number) {
-    /** already occupied crossIdxes */
-    let availCross: number[] = []
+    let availCross: number[] = R.range(0, this.length)
 
     R.range(startPos, endPos).forEach((i) => {
-      const occupiedCross = occupance[i] ?? []
+      const occupiedCross = this.occupance[i] ?? []
       availCross = R.difference(availCross, occupiedCross)
     })
 
     if (availCross.length === 0) {
-      lengthCross += 1
-      availCross.push(lengthCross - 1)
+      this.bumpAxis()
+      availCross.push(this.length - 1)
     }
 
     const newCross = availCross[0]
 
     R.range(startPos, endPos).forEach((i) => {
-      const tmp = occupance[i] ?? []
-      occupance[i] = [...tmp, newCross]
+      const tmp = this.occupance[i] ?? []
+      this.occupance[i] = [...tmp, newCross]
     })
 
     return newCross
   }
-
-  for (const it of data) {
-    const beginTime = time2Pos(it.from)
-    const endTime = time2Pos(it.to)
-
-    const cross = allocateOccupance(beginTime, endTime)
-
-    items.push({
-      ...it,
-      beginTime,
-      endTime,
-      beginCross: cross,
-      endCross: cross + 1,
-    })
-  }
-
-  return {
-    items,
-    minTime: time2Pos(beginDt),
-    maxTime: time2Pos(endDt),
-    minCross: 0,
-    maxCross: lengthCross,
-  }
 }
 
-interface GetScaledModelOpts extends DayModelOpts {
+interface TimeTableItem<T> {
+  item: T
+  from: Date
+  to: Date
+}
+
+interface CreateTimeTableOpts<T> {
+  data: readonly TimeTableItem<T>[]
   orientation: 'horizontal' | 'vertical'
-  timeSize: number
-  crossSize: number
+  timeStep?: TimeDelta
+  beginDt: Date
+  endDt: Date
 }
 
-function getScaledModel(
-  data: TimeTableItem[],
-  {
-    orientation,
-    timeSize,
-    crossSize,
-    ...opts
-  }: GetScaledModelOpts,
+interface Style {
+  left: number
+  top: number
+  width: number
+  height: number
+}
+
+interface ScaleOpts {
+  x: (value: number) => number
+  y: (value: number) => number
+  mx?: number
+  my?: number
+}
+
+export function scaleBy(
+  style: Style,
+  { x, y, mx = 0, my = 0 }: ScaleOpts,
 ) {
-  const { items, minTime, maxTime, minCross, maxCross } = getCoreModel(data, opts)
-
-  const scaled = items.map(it => ({
-    ...it,
-    style: {
-      left: it.beginTime * timeSize,
-      top: it.beginCross * crossSize,
-      width: (it.endTime - it.beginTime) * timeSize,
-      height: (it.endCross - it.beginCross) * crossSize,
-    },
-  }))
-
   return {
-    items: orientation === 'horizontal'
-      ? scaled
-      : scaled.map(it => ({
-          ...it,
-          style: {
-            left: it.style.top,
-            top: it.style.left,
-            width: it.style.height,
-            height: it.style.width,
-          },
-        })),
+    left: x(style.left) + mx,
+    top: y(style.top) + my,
+    width: x(style.width) - x(0) - 2 * mx,
+    height: y(style.height) - y(0) - 2 * my,
   }
 }
 
-interface createTimeTableOpts {
-  data: TimeTableItem[]
-}
-
-export function createTimeTable({
+export function createTimeTable<T>({
   data: dataProp,
-}: createTimeTableOpts) {
+  orientation,
+  timeStep = TimeDelta.MINUTE(1),
+  beginDt,
+  endDt,
+}: CreateTimeTableOpts<T>) {
   const data = R.sortBy(dataProp, x => x.from.getTime())
 
-  function _getCoreModel(opts: DayModelOpts) {
-    return getCoreModel(data, opts)
+  function date2Pos(dt: Date) {
+    return R.pipe(
+      dt.getTime(),
+      x => x - beginDt.getTime(),
+      x => x / timeStep,
+      x => Math.floor(x),
+    )
   }
 
-  function _getScaledModel(opts: GetScaledModelOpts) {
-    return getScaledModel(data, opts)
-  }
+  const crossAxis = new CrossAxisBuilder()
 
-  function getDayModel(day: Date): DayModel {
-    const startDt = startOfDay(day)
-    const endDt = endOfDay(day)
+  function getModel() {
+    const items = data.map((it) => {
+      const timeBegin = date2Pos(it.from)
+      const timeEnd = date2Pos(it.to) + 1
+      const timeLength = timeEnd - timeBegin
 
-    const filteredData = data.filter(x => x.to >= startDt && x.from <= endDt)
+      const crossBegin = crossAxis.allocate(timeBegin, timeLength)
+      const crossEnd = crossBegin + 1
+      const crossLength = crossEnd - crossBegin
 
-    return getCoreModel(filteredData, {
-      beginDt: startDt,
-      endDt,
+      const style = orientation === 'horizontal'
+        ? { left: timeBegin, top: crossBegin, width: timeLength, height: crossLength }
+        : { left: crossBegin, top: timeBegin, width: crossLength, height: timeLength }
+
+      return {
+        key: `${timeBegin}-${crossBegin}`,
+        value: it.item,
+        style,
+      }
     })
+
+    return { items }
   }
 
   return {
-    getCoreModel: _getCoreModel,
-    getScaledModel: _getScaledModel,
-    getDayModel,
+    getModel,
   }
 }

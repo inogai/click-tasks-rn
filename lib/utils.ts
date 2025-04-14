@@ -1,7 +1,8 @@
 import type { ClassValue } from 'clsx'
 
 import { clsx } from 'clsx'
-import { addDays } from 'date-fns'
+import { addMilliseconds } from 'date-fns'
+import * as R from 'remeda'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -28,18 +29,28 @@ export function maxBy<T>(data: T[], by: (x: T) => number) {
   return minBy(data, x => -by(x))
 }
 
+/** Tagged type for milliseconds */
+export type TimeDelta = number & { __tag: 'TimeDelta' }
+
+// eslint-disable-next-line ts/no-redeclare
+export const TimeDelta = {
+  HOUR: (n: number) => n * 60 * 60 * 1000 as TimeDelta,
+  MINUTE: (n: number) => n * 60 * 1000 as TimeDelta,
+  SECONDS: (n: number) => n * 1000 as TimeDelta,
+  MILLISECONDS: (n: number) => n as TimeDelta,
+} as const
+
 export function dateRange(
   start: Date,
   end: Date,
-  step: (x: Date) => Date = x => addDays(x, 1),
+  step: TimeDelta = TimeDelta.MINUTE(1),
 ) {
-  const result: Date[] = []
+  const diffMS = end.getTime() - start.getTime()
+  const numSteps = Math.ceil(diffMS / step)
 
-  for (let dt = start; dt <= end; dt = step(dt)) {
-    result.push(dt)
-  }
-
-  return result
+  return R.range(0, numSteps).map(i =>
+    addMilliseconds(start, i * step),
+  )
 }
 
 export * as R from 'remeda'
