@@ -27,9 +27,14 @@ export function useMeasure(
 
   useLayoutEffect(() => {
     ref.current?.measure((x, y, w, h) => {
-      setMeasure({ x, y, width: w, height: h })
+      if (
+        x !== measure.x || y !== measure.y
+        || w !== measure.width || h !== measure.height
+      ) {
+        setMeasure({ x, y, width: w, height: h })
+      }
     })
-  }, [ref])
+  })
 
   return measure
 }
