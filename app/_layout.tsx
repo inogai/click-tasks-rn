@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { AppHeader } from '~/components/app-header'
+import { AppSidebar } from '~/components/app-sidebar'
 import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
@@ -28,6 +29,9 @@ function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
+        drawerContent={
+          props => <AppSidebar {...props} />
+        }
         screenOptions={{
           header: props => <AppHeader {...props} />,
         }}
