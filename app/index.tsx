@@ -15,12 +15,10 @@ import { ExpenseView } from '~/components/views/expense-view'
 import { TimelineView } from '~/components/views/timeline-view'
 
 import { t } from '~/lib/i18n'
-import { TaskRecord, TaskStatus, useTaskRecordListeners } from '~/lib/realm'
+import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
-
-  useTaskRecordListeners()
 
   const tasks = useQuery({
     type: TaskRecord,
