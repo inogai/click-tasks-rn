@@ -4,6 +4,7 @@ import i18nextDefaultOpts from 'eslint-plugin-i18next/lib/options/defaults.js'
 import readableTailwind from 'eslint-plugin-readable-tailwind'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tailwind from 'eslint-plugin-tailwindcss'
+import noAutoFix from 'eslint-plugin-no-autofix'
 
 const tailwindRules = [
   {
@@ -70,6 +71,15 @@ export default antfu(
       'no-console': 'warn',
       'unused-imports/no-unused-vars': 'warn',
     },
+  },
+  {
+    plugins: {
+      'no-autofix': noAutoFix,
+    },
+    rules: {
+      'eslint-comments/no-unused-enable': 'off',
+      'no-autofix/eslint-comments/no-unused-enable': 'warn',
+    }
   },
   ...tailwindRules,
   ...importSortRules,
