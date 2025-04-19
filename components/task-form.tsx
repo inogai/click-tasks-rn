@@ -1,5 +1,5 @@
+import type { ITaskRecord } from '~/lib/realm'
 import type { UseFormReturn } from 'react-hook-form'
-import type { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
@@ -13,10 +13,10 @@ import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
-import { TaskStatus, taskZod } from '~/lib/realm'
+import { TaskRecord, TaskStatus } from '~/lib/realm'
 import { usePrevious } from '~/lib/use-previous'
 
-type FormData = z.infer<typeof taskZod>
+type FormData = ITaskRecord
 
 interface TaskFormProps {
   defaultValues?: Partial<FormData>
@@ -26,7 +26,7 @@ interface TaskFormProps {
 
 export function useTaskForm(defaultValues?: Partial<FormData>) {
   return useForm<FormData>({
-    resolver: zodResolver(taskZod),
+    resolver: zodResolver(TaskRecord.zodSchema),
     defaultValues,
   })
 }

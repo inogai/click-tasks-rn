@@ -1,6 +1,5 @@
-import type { taskZod } from '~/lib/realm'
+import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
-import type { z } from 'zod'
 
 import { useRealm } from '@realm/react'
 import { router } from 'expo-router'
@@ -12,7 +11,7 @@ import { TaskForm, useTaskForm } from '~/components/task-form'
 
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
-type FormData = z.infer<typeof taskZod>
+type FormData = ITaskRecord
 
 export default function Screen() {
   const realm = useRealm()

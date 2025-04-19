@@ -6,7 +6,7 @@ import { clearAlarm, setAlarm } from '~/lib/alarm'
 
 import { TaskStatus } from './lib'
 
-export const taskZod = z.object({
+const zodSchema = z.object({
   summary: z.string().nonempty(),
   status: z.nativeEnum(TaskStatus),
 
@@ -37,7 +37,7 @@ export const taskZod = z.object({
   }
 })
 
-export type ITaskRecord = z.infer<typeof taskZod>
+export type ITaskRecord = z.infer<typeof zodSchema>
 
 export class TaskRecord extends Realm.Object<TaskRecord> {
   _id!: Realm.BSON.ObjectId
@@ -73,6 +73,8 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       plannedEnd: { type: 'date', optional: true },
     },
   }
+
+  static zodSchema = zodSchema
 
   static create(props: ITaskRecord) {
     const now = new Date()
