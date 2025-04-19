@@ -1,13 +1,10 @@
-import { Realm } from '@realm/react'
+import { Realm, useRealm } from '@realm/react'
+import { useEffect } from 'react'
 import { z } from 'zod'
 
-import { TaskStatus } from './lib'
+import { clearAlarm, setAlarm } from '~/lib/alarm'
 
-export interface SystemFields {
-  _id: Realm.BSON.ObjectId
-  created: Date
-  updated: Date
-}
+import { TaskStatus } from './lib'
 
 export const taskZod = z.object({
   summary: z.string().nonempty(),
@@ -56,22 +53,6 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   plannedEnd!: Date | null
   alarmId!: string | null
 
-  static create(props: ITaskRecord) {
-    const now = new Date()
-
-    return {
-      ...props,
-      _id: new Realm.BSON.ObjectId(),
-      created: now,
-      updated: now,
-    }
-  }
-
-  update(props: Partial<ITaskRecord>) {
-    this.updated = new Date()
-    Object.assign(this, props)
-  }
-
   static schema: Realm.ObjectSchema = {
     name: 'Task',
     primaryKey: '_id',
@@ -92,4 +73,76 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       plannedEnd: { type: 'date', optional: true },
     },
   }
+
+  static create(props: ITaskRecord) {
+    const now = new Date()
+
+    return {
+      ...props,
+      _id: new Realm.BSON.ObjectId(),
+      created: now,
+      updated: now,
+    }
+  }
+
+  update(props: Partial<ITaskRecord>) {
+    this.updated = new Date()
+    Object.assign(this, props)
+  }
+
+  async syncAlarm(this: TaskRecord) {
+    if (this.alarmId) {
+      try {
+        await clearAlarm(this.alarmId)
+      }
+      catch {}
+    }
+
+    if (this.status === TaskStatus.COMPLETED) {
+      return
+    }
+
+    if (this.plannedBegin) {
+      const alarmId = await setAlarm(
+        'Alarm',
+        this.summary,
+        this.plannedBegin,
+      )
+
+      this.alarmId = alarmId
+    }
+  }
+}
+
+function attachTaskRecordListeners(realm: Realm) {
+  const objects = realm.objects(TaskRecord)
+
+  objects.addListener((collection, changes) => {
+    // changes.deletions.forEach((index) => {
+    // })
+
+    changes.newModifications.forEach((index) => {
+      const task = collection[index]
+      task.syncAlarm()
+    })
+
+    changes.insertions.forEach((index) => {
+      const task = collection[index]
+      task.syncAlarm()
+    })
+  })
+}
+
+let attached = false
+
+export function useTaskRecordListeners() {
+  const realm = useRealm()
+
+  useEffect(() => {
+    if (attached)
+      return
+
+    attachTaskRecordListeners(realm)
+    attached = true
+  }, [realm])
 }
