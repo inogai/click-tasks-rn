@@ -13,9 +13,11 @@ import { Separator } from '~/components/ui/separator'
 import { H3 } from '~/components/ui/typography'
 import { ExpenseView } from '~/components/views/expense-view'
 import { TimelineView } from '~/components/views/timeline-view'
+import { VoiceButton } from '~/components/voice-button'
 
 import { t } from '~/lib/i18n'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
+import { useVoiceRecognition } from '~/lib/voice'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -62,6 +64,10 @@ export default function Screen() {
     [tasksInMonth],
   )
 
+  const voice = useVoiceRecognition({
+    onSpeechResults: (e) => { console.log(e) },
+  })
+
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1 flex-col items-stretch gap-2 bg-background">
@@ -98,19 +104,11 @@ export default function Screen() {
             <SmileIcon className="h-[198px] w-[198px] text-green-500" />
           </View>
 
-          <View className="sticky bottom-12 w-full flex-row px-12">
-            <Button
-              variant="default"
-              size="lg"
-              className="grow rounded-xl rounded-r-none bg-finance"
-            >
-              <View className="flex flex-row items-center gap-2">
-                <MicIcon className="text-finance-foreground" />
-                <Text className="text-xl font-semibold text-finance-foreground">
-                  {t('home.voice_button')}
-                </Text>
-              </View>
-            </Button>
+          <View className="sticky bottom-12 h-14 w-full flex-row px-12">
+            <VoiceButton
+              {...voice}
+              className="h-full grow rounded-xl rounded-r-none bg-finance"
+            />
             <View className="w-px border-y-4 border-finance bg-border" />
             {/* <Button */}
             {/*   size="lg" */}
