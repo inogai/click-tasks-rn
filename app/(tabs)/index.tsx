@@ -80,76 +80,72 @@ export default function Screen() {
 
   return (
     <View className="flex-1 gap-y-4 px-4 py-6">
-      <View className="flex-1 flex-col items-stretch gap-2 bg-background">
-        <View className="grow flex-col justify-stretch gap-y-4 px-4">
-          <View className="relative mb-2 h-36">
-            <CalendarStrip
-              className={`
-                absolute z-10 rounded-xl border border-border bg-background py-4
-              `}
-              selectedDate={currentDate}
-              onSelectedDateChange={setCurrentDate}
-              dots={dots}
-            />
-          </View>
+      <View className="relative mb-2 h-36">
+        <CalendarStrip
+          className={`
+            absolute z-10 rounded-xl border border-border bg-background py-4
+          `}
+          selectedDate={currentDate}
+          onSelectedDateChange={setCurrentDate}
+          dots={dots}
+        />
+      </View>
 
-          <Separator />
+      <Separator />
 
-          <View>
-            <H3 className="pl-2">{t('timeline_view.title')}</H3>
-            <TimelineView
-              className="h-36 pt-2"
-              tasks={tasks as unknown as TaskRecord[]}
-              date={currentDate}
-            />
-          </View>
+      <View>
+        <H3 className="pl-2">{t('timeline_view.title')}</H3>
+        <TimelineView
+          className="h-36 pt-2"
+          tasks={tasks as unknown as TaskRecord[]}
+          date={currentDate}
+        />
+      </View>
 
-          <Separator />
+      <Separator />
 
-          <ExpenseView />
+      <ExpenseView />
 
-          <Separator />
+      <Separator />
 
-          <View className="h-[198px] flex-1 items-center justify-center">
-            <SmileIcon className="h-[198px] w-[198px] text-green-500" />
-          </View>
+      <View className="h-[198px] flex-1 items-center justify-center">
+        <SmileIcon className="h-[198px] w-[198px] text-green-500" />
+      </View>
 
-          <View className="sticky bottom-12 h-14 w-full flex-row px-12">
-            <VoiceButton
-              onAccept={handleVoiceAccept}
-              className="rounded-xl rounded-r-none bg-finance"
-              iconClass="text-finance-foreground"
-            />
-            <View className="w-px border-y-4 border-finance bg-border" />
-            {/* <Button */}
-            {/*   size="lg" */}
-            {/*   variant="default" */}
-            {/*   className="rounded-none bg-finance px-4" */}
-            {/*   onPress={() => { */}
-            {/*     let date = new Date() */}
-            {/*     date = addSeconds(date, 20) */}
-            {/**/}
-            {/*     setAlarm( */}
-            {/*       'Test', */}
-            {/*       `Alarm at ${formatDate(date, 'HH:mm:SS')}`, */}
-            {/*       date, */}
-            {/*     ) */}
-            {/*   }} */}
-            {/* > */}
-            {/*   <AlarmClockIcon className="text-finance-foreground" /> */}
-            {/* </Button> */}
-            {/* <View className="w-px border-y-4 border-finance bg-border" /> */}
-            <Link href="/task/create" asChild>
-              <Button
-                size="lg"
-                variant="default"
-                className="rounded-xl rounded-l-none bg-finance px-4"
-              >
-                <PlusIcon className="text-finance-foreground" />
-              </Button>
-            </Link>
-          </View>
-        </View>
+      <View className="sticky bottom-12 h-14 w-full flex-row px-12">
+        <VoiceButton
+          onAccept={handleVoiceAccept}
+          className="rounded-xl rounded-r-none bg-finance"
+          iconClass="text-finance-foreground"
+        />
+        <View className="w-px border-y-4 border-finance bg-border" />
+        {/* <Button */}
+        {/*   size="lg" */}
+        {/*   variant="default" */}
+        {/*   className="rounded-none bg-finance px-4" */}
+        {/*   onPress={() => { */}
+        {/*     let date = new Date() */}
+        {/*     date = addSeconds(date, 20) */}
+        {/**/}
+        {/*     setAlarm( */}
+        {/*       'Test', */}
+        {/*       `Alarm at ${formatDate(date, 'HH:mm:SS')}`, */}
+        {/*       date, */}
+        {/*     ) */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <AlarmClockIcon className="text-finance-foreground" /> */}
+        {/* </Button> */}
+        {/* <View className="w-px border-y-4 border-finance bg-border" /> */}
+        <Link href="/task/create" asChild>
+          <Button
+            size="lg"
+            variant="default"
+            className="rounded-xl rounded-l-none bg-finance px-4"
+          >
+            <PlusIcon className="text-finance-foreground" />
+          </Button>
+        </Link>
       </View>
     </View>
   )
