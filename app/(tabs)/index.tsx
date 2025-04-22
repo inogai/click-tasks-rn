@@ -1,7 +1,6 @@
 import { useQuery } from '@realm/react'
 import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link, useNavigation } from 'expo-router'
-import { MicIcon, PlusIcon, SmileIcon } from '~/lib/icons'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { Text, View } from 'react-native'
@@ -16,6 +15,7 @@ import { TimelineView } from '~/components/views/timeline-view'
 import { VoiceButton } from '~/components/voice-button'
 
 import { t } from '~/lib/i18n'
+import { MicIcon, PlusIcon, SmileIcon } from '~/lib/icons'
 import { intentionRecognition } from '~/lib/intention-recognition'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
@@ -66,18 +66,6 @@ export default function Screen() {
 
   const navigation = useNavigation()
 
-  async function handleVoiceAccept(message: string) {
-    const results = await intentionRecognition(message)
-
-    console.log('Intention recognition results', results)
-
-    // TODO: we will have a dedicated UI to tell the user what items will be created
-    // for now we just take the first 1 and send to task/create
-    navigation.navigate('task/create', {
-      initialValues: results.tasks?.[0],
-    })
-  }
-
   return (
     <View className="flex-1 gap-y-4 px-4 py-6">
       <View className="relative mb-2 h-36">
@@ -110,24 +98,6 @@ export default function Screen() {
 
       <View className="h-[198px] flex-1 items-center justify-center">
         <SmileIcon className="h-[198px] w-[198px] text-green-500" />
-      </View>
-
-      <View className="sticky bottom-12 h-14 w-full flex-row px-12">
-        <VoiceButton
-          onAccept={handleVoiceAccept}
-          className="rounded-xl rounded-r-none bg-finance"
-          iconClass="text-finance-foreground"
-        />
-        <View className="w-px border-y-4 border-finance bg-border" />
-        <Link href="/task/create" asChild>
-          <Button
-            size="lg"
-            variant="default"
-            className="rounded-xl rounded-l-none bg-finance px-4"
-          >
-            <PlusIcon className="text-finance-foreground" />
-          </Button>
-        </Link>
       </View>
     </View>
   )
