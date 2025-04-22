@@ -119,24 +119,6 @@ export default function Screen() {
           iconClass="text-finance-foreground"
         />
         <View className="w-px border-y-4 border-finance bg-border" />
-        {/* <Button */}
-        {/*   size="lg" */}
-        {/*   variant="default" */}
-        {/*   className="rounded-none bg-finance px-4" */}
-        {/*   onPress={() => { */}
-        {/*     let date = new Date() */}
-        {/*     date = addSeconds(date, 20) */}
-        {/**/}
-        {/*     setAlarm( */}
-        {/*       'Test', */}
-        {/*       `Alarm at ${formatDate(date, 'HH:mm:SS')}`, */}
-        {/*       date, */}
-        {/*     ) */}
-        {/*   }} */}
-        {/* > */}
-        {/*   <AlarmClockIcon className="text-finance-foreground" /> */}
-        {/* </Button> */}
-        {/* <View className="w-px border-y-4 border-finance bg-border" /> */}
         <Link href="/task/create" asChild>
           <Button
             size="lg"
