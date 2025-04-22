@@ -1,4 +1,3 @@
-import { BanknoteIcon, DollarSignIcon } from '~/lib/icons'
 import * as React from 'react'
 import { View } from 'react-native'
 
@@ -6,6 +5,7 @@ import { AmountDisplay } from '~/components/amount-display'
 import { Label } from '~/components/ui/label'
 
 import { t } from '~/lib/i18n'
+import { BanknoteArrowDownIcon, BanknoteArrowUpIcon, DollarSignIcon } from '~/lib/icons'
 
 export function ExpenseView() {
   const dailyBalance = -200
@@ -27,11 +27,9 @@ export function ExpenseView() {
       <View className="flex-col items-start">
         <Label>{t('expenses_view.monthly_balance.title')}</Label>
         <View className="flex-row gap-x-1">
-          {/* Blocked by lucide-nativewind update */}
-          {/* {monthlyBalance > 0 */}
-          {/*   ? <BanknoteArrowUpIcon /> */}
-          {/*   : <BanknoteArrowDownIcon />} */}
-          <BanknoteIcon className="text-foreground" />
+          {monthlyBalance > 0
+            ? <BanknoteArrowUpIcon />
+            : <BanknoteArrowDownIcon />}
           <AmountDisplay amount={monthlyBalance} unit={unit} />
         </View>
       </View>

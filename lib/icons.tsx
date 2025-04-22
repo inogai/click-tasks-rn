@@ -6,7 +6,8 @@ import type {
 import type { FC } from 'react'
 
 import {
-  Banknote,
+  BanknoteArrowDown,
+  BanknoteArrowUp,
   Calendar,
   CalendarClock,
   Check,
@@ -64,7 +65,8 @@ function createIcon(OriginalIcon: LucideIcon): FC<LucideProps> {
   return Comp
 }
 
-export const BanknoteIcon = createIcon(Banknote)
+export const BanknoteArrowDownIcon = createIcon(BanknoteArrowDown)
+export const BanknoteArrowUpIcon = createIcon(BanknoteArrowUp)
 export const CalendarIcon = createIcon(Calendar)
 export const CalendarClockIcon = createIcon(CalendarClock)
 export const CheckIcon = createIcon(Check)

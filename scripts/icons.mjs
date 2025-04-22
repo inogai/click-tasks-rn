@@ -68,7 +68,7 @@ function createIcon(OriginalIcon: LucideIcon): FC<LucideProps> {
 
   function Comp({ className, ...props }: LucideProps) {
     const textClass = useContext(TextClassContext)
-    return <OriginalIcon {...props} className={cn(textClass, className)} />
+    return <OriginalIcon {...props} className={cn('text-foreground', textClass, className)} />
   }
 
   Comp.displayName = OriginalIcon.displayName
