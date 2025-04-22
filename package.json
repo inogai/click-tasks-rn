@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
+    "@langchain/deepseek": "^0.0.1",
+    "@langchain/openai": "^0.5.6",
     "@notifee/react-native": "^9.1.8",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-voice/voice": "github:bonesyblue/react-native-voice#55a58924534e168d26c9da17db43eecc983630fc",

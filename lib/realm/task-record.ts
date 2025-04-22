@@ -7,13 +7,13 @@ import { clearAlarm, setAlarm } from '~/lib/alarm'
 import { TaskStatus } from './lib'
 
 const zodSchema = z.object({
-  summary: z.string().nonempty(),
-  status: z.nativeEnum(TaskStatus),
+  summary: z.string().nonempty().describe('The summary of the task'),
+  status: z.nativeEnum(TaskStatus).describe('The status of the task, 0 for PENDING, 1 for COMPLETED'),
 
-  due: z.date().optional().nullable(),
-  venue: z.string().optional().nullable(),
-  plannedBegin: z.date().optional().nullable(),
-  plannedEnd: z.date().optional().nullable(),
+  due: z.coerce.date().optional().nullable().describe('The due date of the task'),
+  venue: z.string().optional().nullable().describe('The venue of the task'),
+  plannedBegin: z.coerce.date().optional().nullable().describe('The planned begin date of the task'),
+  plannedEnd: z.coerce.date().optional().nullable().describe('The planned end date of the task'),
 }).superRefine((val, ctx) => {
   // Ensure plannedBegin and plannedEnd are either
   // 1. both defined; or
