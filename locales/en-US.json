@@ -2,6 +2,11 @@
   "button": {
     "submit": "Submit"
   },
+  "voice_button": {
+    "title": "Please speak now...",
+    "cancel": "Cancel",
+    "accept": "Accept"
+  },
   "task_form": {
     "summary": {
       "label": "Task Summary",
@@ -56,9 +61,6 @@
       "update": "Update Tasks"
     },
     "preference": "Preferences"
-  },
-  "home": {
-    "voice_button": "Speak"
   },
   "preference": {
     "theme": {

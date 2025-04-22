@@ -2,6 +2,11 @@
 button:
   submit: Submit
 
+voice_button:
+  title: "Please speak now..."
+  cancel: "Cancel"
+  accept: "Accept"
+
 task_form:
   summary:
     label: Task Summary
@@ -49,9 +54,6 @@ routes:
   preference: Preferences
 
 # Pages
-home:
-  voice_button: Speak
-
 preference:
   theme:
     label: Theme

@@ -1,34 +1,41 @@
-import type { SpeechResultsEvent } from '@react-native-voice/voice'
-
 import Voice from '@react-native-voice/voice'
+import { setParams } from 'expo-router/build/global-state/routing'
 import { useEffect, useState } from 'react'
-
-export interface UseVoiceRecognitionOpts {
-  onSpeechResults: (e: SpeechResultsEvent) => void
-}
 
 export interface UseVoiceRecognitionReturn {
   isRecording: boolean
-  record: () => void
+  partialResult: string
+  result: string | null
+  startRecord: () => void
+  stopRecord: () => void
 }
 
-export function useVoiceRecognition({
-  onSpeechResults: onSpeechResultsProps,
-}: UseVoiceRecognitionOpts) {
+export function useVoiceRecognition() {
   const [isRecording, setIsRecording] = useState(false)
   const [partialResult, setPartialResult] = useState('')
+  const [result, setResult] = useState<string | null>(null)
+
+  const [storedResult, setStoredResult] = useState<string>('')
+  const [isDeliberatelyStopped, setIsDeliberatelyStopped] = useState(false)
+
+  // eslint-disable-next-line i18next/no-literal-string
+  const locale = 'en-US' // TODO: add language option
 
   // ensurePermission()
 
-  async function record() {
-    if (isRecording) {
-      const b = await Voice.stop()
-    }
-    else {
-      setIsRecording(true)
-      Voice.start('zh-HK')
-      setPartialResult('')
-    }
+  function startRecord() {
+    setIsRecording(true)
+    setPartialResult('')
+    setResult(null)
+    setStoredResult('')
+    setIsDeliberatelyStopped(false)
+    Voice.start(locale)
+  }
+
+  function stopRecord() {
+    setIsRecording(false)
+    setResult(partialResult)
+    Voice.stop()
   }
 
   useEffect(() => {
@@ -38,42 +45,45 @@ export function useVoiceRecognition({
       const ok = await Voice.getSpeechRecognitionServices()
     })()
 
-    Voice.onSpeechStart = (e) => {
-      if (e.error) {
-        console.error('onSpeechStart', e.error)
-      }
+    Voice.onSpeechStart = () => {
+      console.log('speechStart')
     }
 
-    Voice.onSpeechEnd = (e) => {
-      setIsRecording(false)
-      if (e.error) {
-        console.error('onSpeechEnd', e.error)
-      }
+    Voice.onSpeechEnd = (_e) => {
+      setIsDeliberatelyStopped(true)
     }
 
     Voice.onSpeechError = (e) => {
-      setIsRecording(false)
-      if (e.error) {
-        console.error('onSpeechError', e.error)
-      }
+      console.warn('speechError', e)
+      setIsDeliberatelyStopped(true)
     }
 
     Voice.onSpeechPartialResults = (e) => {
-      if (e.value) {
+      if (e.value && e.value.length > 0) {
         setPartialResult(e.value[0])
-        console.log('onSpeechPartialResults', e.value[0])
       }
     }
 
     Voice.onSpeechResults = (e) => {
-      console.log('onSpeechResults', e)
-      onSpeechResultsProps(e)
+      setIsDeliberatelyStopped(true)
+      if (e.value && e.value.length > 0) {
+        setPartialResult(e.value[0])
+      }
     }
   }, [])
 
+  if (isDeliberatelyStopped && isRecording) {
+    setIsDeliberatelyStopped(false)
+    setStoredResult(prev => `${prev} ${partialResult} //\n`)
+    setPartialResult('')
+    Voice.start(locale)
+  }
+
   return {
     isRecording,
-    record,
-    partialResult,
+    partialResult: `${storedResult} ${partialResult}`,
+    results: result,
+    startRecord,
+    stopRecord,
   }
 }
