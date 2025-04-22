@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
-import { Text } from '~/components/ui/text'
+import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { preferenceSchema, usePreferenceStore } from '~/lib/preference'
@@ -16,14 +16,9 @@ import { preferenceSchema, usePreferenceStore } from '~/lib/preference'
 export function PreferenceScreen() {
   const { setPreference, ...preference } = usePreferenceStore()
 
-  function onSubmit(data: Preference) {
-    setPreference(data)
-  }
-
   const {
     control,
-    handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors },
     trigger,
   } = useForm<Preference>({
     resolver: zodResolver(preferenceSchema),
@@ -42,7 +37,7 @@ export function PreferenceScreen() {
   }, [formValues, setPreference, trigger])
 
   return (
-    <SafeAreaView>
+    <View className="gap-y-4 px-4 py-6">
       <SelectField
         control={control}
         name="theme"
@@ -52,7 +47,6 @@ export function PreferenceScreen() {
           { label: t('preference.theme.values.dark'), value: 'dark' },
           { label: t('preference.theme.values.system'), value: 'system' },
         ]}
-        className="mb-4"
       />
 
       <SelectField
@@ -72,8 +66,8 @@ export function PreferenceScreen() {
         name="speechLanguage"
         label={t('preference.speech_language.label')}
         options={[
-          { label: t('preference.speech_language.values.en-US'), value: 'en' },
-          { label: t('preference.speech_language.values.zh-CN'), value: 'zh-CM' },
+          { label: t('preference.speech_language.values.en-US'), value: 'en-US' },
+          { label: t('preference.speech_language.values.zh-CN'), value: 'zh-CN' },
           { label: t('preference.speech_language.values.zh-HK'), value: 'zh-HK' },
         ]}
       />
@@ -81,16 +75,7 @@ export function PreferenceScreen() {
       <Text className="text-destructive">
         { errors.root?.message }
       </Text>
-
-      <Button
-        className="mt-4 flex-row gap-4"
-        onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || isSubmitting}
-      >
-        <CheckIcon className="text-primary-foreground" />
-        <Text className="text-primary-foreground">{t('button.submit')}</Text>
-      </Button>
-    </SafeAreaView>
+    </View>
   )
 }
 

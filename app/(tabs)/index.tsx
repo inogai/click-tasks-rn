@@ -18,7 +18,6 @@ import { VoiceButton } from '~/components/voice-button'
 import { t } from '~/lib/i18n'
 import { intentionRecognition } from '~/lib/intention-recognition'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
-import { useVoiceRecognition } from '~/lib/voice'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -65,6 +64,8 @@ export default function Screen() {
     [tasksInMonth],
   )
 
+  const navigation = useNavigation()
+
   async function handleVoiceAccept(message: string) {
     const results = await intentionRecognition(message)
 
@@ -78,7 +79,7 @@ export default function Screen() {
   }
 
   return (
-    <SafeAreaView className="flex-1">
+    <View className="flex-1 gap-y-4 px-4 py-6">
       <View className="flex-1 flex-col items-stretch gap-2 bg-background">
         <View className="grow flex-col justify-stretch gap-y-4 px-4">
           <View className="relative mb-2 h-36">
@@ -150,6 +151,6 @@ export default function Screen() {
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
