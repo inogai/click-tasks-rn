@@ -1,10 +1,10 @@
 import antfu from '@antfu/eslint-config'
 import i18next from 'eslint-plugin-i18next'
 import i18nextDefaultOpts from 'eslint-plugin-i18next/lib/options/defaults.js'
+import noAutoFix from 'eslint-plugin-no-autofix'
 import readableTailwind from 'eslint-plugin-readable-tailwind'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tailwind from 'eslint-plugin-tailwindcss'
-import noAutoFix from 'eslint-plugin-no-autofix'
 
 const tailwindRules = [
   {
@@ -52,8 +52,8 @@ const importSortRules = [
           // Other source files.
           ['^~/lib/.+$'],
 
-          // Side effect imports.
-          ['^\\u0000'],
+          // Side effect imports and polyfills.
+          ['^\\u0000', '^web-streams-polyfill'],
 
           // Others.
         ],
@@ -79,7 +79,7 @@ export default antfu(
     rules: {
       'eslint-comments/no-unused-enable': 'off',
       'no-autofix/eslint-comments/no-unused-enable': 'warn',
-    }
+    },
   },
   ...tailwindRules,
   ...importSortRules,
