@@ -1,4 +1,4 @@
-import { SunMoonIcon } from 'lucide-nativewind'
+import { SunMoonIcon } from '~/lib/icons'
 import { Pressable, View } from 'react-native'
 
 import { MoonStar } from '~/lib/icons/MoonStar'

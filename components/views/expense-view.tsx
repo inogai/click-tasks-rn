@@ -1,4 +1,4 @@
-import { BanknoteIcon, DollarSignIcon } from 'lucide-nativewind'
+import { BanknoteIcon, DollarSignIcon } from '~/lib/icons'
 import * as React from 'react'
 import { View } from 'react-native'
 

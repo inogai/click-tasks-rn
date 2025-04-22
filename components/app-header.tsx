@@ -1,6 +1,6 @@
 import type { DrawerHeaderProps } from '@react-navigation/drawer'
 
-import { MenuIcon } from 'lucide-nativewind'
+import { MenuIcon } from '~/lib/icons'
 import * as React from 'react'
 import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

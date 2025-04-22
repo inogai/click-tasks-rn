@@ -1,9 +1,9 @@
 import type { RouteProp } from '@react-navigation/native'
-import type { LucideProps } from 'lucide-nativewind'
+import type { LucideProps } from '~/lib/icons'
 import type { AnyZodObject } from 'zod'
 
 import { useRoute as useNavRoute } from '@react-navigation/native'
-import { HomeIcon, ListTodoIcon, SettingsIcon } from 'lucide-nativewind'
+import { HomeIcon, ListTodoIcon, SettingsIcon } from '~/lib/icons'
 import { z } from 'zod'
 
 import { AppLogo } from '~/components/app-logo'

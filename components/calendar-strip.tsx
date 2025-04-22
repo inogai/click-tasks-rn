@@ -2,7 +2,7 @@ import type { Day } from 'date-fns'
 
 import { useControllableState } from '@rn-primitives/hooks'
 import { addDays, addMonths, addWeeks, differenceInDays, differenceInWeeks, formatDate, getWeek, startOfMonth, startOfWeek } from 'date-fns'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-nativewind'
+import { ChevronLeftIcon, ChevronRightIcon } from '~/lib/icons'
 import { useCallback, useMemo, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 

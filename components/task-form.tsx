@@ -3,7 +3,7 @@ import type { UseFormReturn } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
-import { CheckIcon } from 'lucide-nativewind'
+import { CheckIcon } from '~/lib/icons'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Text, View } from 'react-native'

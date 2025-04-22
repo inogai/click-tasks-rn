@@ -4,7 +4,7 @@ import type { ComponentRef } from 'react'
 import { useControllableState } from '@rn-primitives/hooks'
 import { FlashList } from '@shopify/flash-list'
 import { cva } from 'class-variance-authority'
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-nativewind'
+import { CheckIcon, ChevronsUpDownIcon } from '~/lib/icons'
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import { Button } from '~/components/ui/button'

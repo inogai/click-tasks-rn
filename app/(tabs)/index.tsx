@@ -1,7 +1,7 @@
 import { useQuery } from '@realm/react'
 import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
 import { Link, useNavigation } from 'expo-router'
-import { MicIcon, PlusIcon, SmileIcon } from 'lucide-nativewind'
+import { MicIcon, PlusIcon, SmileIcon } from '~/lib/icons'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { Text, View } from 'react-native'

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router'
-import { SquareDashedIcon } from 'lucide-nativewind'
+import { SquareDashedIcon } from '~/lib/icons'
 
 import { AppHeader } from '~/components/app-header'
 

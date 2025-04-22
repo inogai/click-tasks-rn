@@ -3,7 +3,7 @@ import type { VariantProps } from 'class-variance-authority'
 
 import { cva } from 'class-variance-authority'
 import { formatDate } from 'date-fns'
-import { CalendarClockIcon, MapPinIcon } from 'lucide-nativewind'
+import { CalendarClockIcon, MapPinIcon } from '~/lib/icons'
 import * as React from 'react'
 import { View } from 'react-native'
 

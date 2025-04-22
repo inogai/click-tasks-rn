@@ -1,7 +1,7 @@
 import type { Preference } from '~/lib/preference'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckIcon } from 'lucide-nativewind'
+import { CheckIcon } from '~/lib/icons'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'

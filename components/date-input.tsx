@@ -3,7 +3,7 @@ import type { DateTimePickerEvent } from '@react-native-community/datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useControllableState } from '@rn-primitives/hooks'
 import { formatDate } from 'date-fns'
-import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from 'lucide-nativewind'
+import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from '~/lib/icons'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 

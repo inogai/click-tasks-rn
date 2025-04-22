@@ -1,4 +1,4 @@
-import { MicIcon, SquareIcon } from 'lucide-nativewind'
+import { MicIcon, SquareIcon } from '~/lib/icons'
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
