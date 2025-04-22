@@ -28,6 +28,7 @@
     "@realm/react": "^0.11.0",
     "@rn-primitives/avatar": "~1.1.0",
     "@rn-primitives/checkbox": "^1.1.0",
+    "@rn-primitives/dialog": "^1.1.0",
     "@rn-primitives/dropdown-menu": "^1.1.0",
     "@rn-primitives/hooks": "^1.1.0",
     "@rn-primitives/label": "^1.1.0",
