@@ -67,6 +67,17 @@ export function PreferenceScreen() {
         ]}
       />
 
+      <SelectField
+        control={control}
+        name="speechLanguage"
+        label={t('preference.speech_language.label')}
+        options={[
+          { label: t('preference.speech_language.values.en-US'), value: 'en' },
+          { label: t('preference.speech_language.values.zh-CN'), value: 'zh-CM' },
+          { label: t('preference.speech_language.values.zh-HK'), value: 'zh-HK' },
+        ]}
+      />
+
       <Text className="text-destructive">
         { errors.root?.message }
       </Text>

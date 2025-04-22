@@ -13,6 +13,7 @@ import { changeAppLanguage, languageSchema } from '~/lib/i18n'
 export const preferenceSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),
   language: languageSchema,
+  speechLanguage: z.enum(['en-US', 'zh-CN', 'zh-HK']),
 })
 
 export type Preference = z.infer<typeof preferenceSchema>
@@ -49,6 +50,7 @@ export const usePreferenceStore = create(
     (set, get) => ({
       theme: 'system',
       language: 'system',
+      speechLanguage: 'en-US',
       setTheme: (newTheme: Preference['theme']) => {
         set(_ => ({ theme: newTheme }))
       },

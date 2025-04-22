@@ -1,6 +1,7 @@
 import Voice from '@react-native-voice/voice'
-import { setParams } from 'expo-router/build/global-state/routing'
 import { useEffect, useState } from 'react'
+
+import { usePreferenceStore } from '~/lib/preference'
 
 export interface UseVoiceRecognitionReturn {
   isRecording: boolean
@@ -18,10 +19,7 @@ export function useVoiceRecognition() {
   const [storedResult, setStoredResult] = useState<string>('')
   const [isDeliberatelyStopped, setIsDeliberatelyStopped] = useState(false)
 
-  // eslint-disable-next-line i18next/no-literal-string
-  const locale = 'en-US' // TODO: add language option
-
-  // ensurePermission()
+  const locale = usePreferenceStore(store => store.speechLanguage)
 
   function startRecord() {
     setIsRecording(true)

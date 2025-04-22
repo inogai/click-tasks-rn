@@ -3,9 +3,9 @@ button:
   submit: Submit
 
 voice_button:
-  title: "Please speak now..."
-  cancel: "Cancel"
-  accept: "Accept"
+  title: Please speak now...
+  cancel: Cancel
+  accept: Accept
 
 task_form:
   summary:
@@ -69,3 +69,10 @@ preference:
       zh-Hans: Chinese (Simplified)
       zh-Hant: Chinese (Traditional)
       system: Follow System
+
+  speech_language:
+    label: Speech Language
+    values:
+      en-US: English
+      zh-CN: Chinese (Mandarin)
+      zh-HK: Chinese (Cantonese)

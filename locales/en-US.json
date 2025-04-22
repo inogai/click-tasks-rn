@@ -79,6 +79,14 @@
         "zh-Hant": "Chinese (Traditional)",
         "system": "Follow System"
       }
+    },
+    "speech_language": {
+      "label": "Speech Language",
+      "values": {
+        "en-US": "English",
+        "zh-CN": "Chinese (Mandarin)",
+        "zh-HK": "Chinese (Cantonese)"
+      }
     }
   }
 }
