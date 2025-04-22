@@ -1,17 +1,14 @@
 import { PortalHost } from '@rn-primitives/portal'
-import { Drawer } from 'expo-router/drawer'
+import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
-import { AppHeader } from '~/components/app-header'
-import { AppSidebar } from '~/components/app-sidebar'
 import { NestedProviders } from '~/components/layouts/nested-providers'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
 import { useAppPreference } from '~/lib/preference'
 import { useTaskRecordListeners } from '~/lib/realm'
-import { routes } from '~/lib/routes'
 import { useColorScheme } from '~/lib/useColorScheme'
 
 import '~/components/layouts/side-effects'
@@ -28,25 +25,9 @@ function Layout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer
-        drawerContent={
-          props => <AppSidebar {...props} />
-        }
-        screenOptions={{
-          header: props => <AppHeader {...props} />,
-        }}
-      >
-        {routes.map(route => (
-          <Drawer.Screen
-            key={route.name}
-            name={route.name}
-            options={{
-              drawerLabel: route.label,
-              headerTitle: route.title,
-            }}
-          />
-        ))}
-      </Drawer>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
     </GestureHandlerRootView>
   )
 }
@@ -59,6 +40,7 @@ export default function RootLayout() {
       <>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
         <Layout />
+
         <PortalHost />
       </>
     </NestedProviders>

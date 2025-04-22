@@ -5,6 +5,7 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { AppLogo } from '~/components/app-logo'
 import { ThemeToggle } from '~/components/theme-toggle'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
@@ -21,31 +22,16 @@ function render<Props>(obj: undefined | string | React.FC<Props>, props: Props) 
   return obj(props)
 }
 
-export function AppHeader({
-  options,
-  route,
-  navigation,
-}: DrawerHeaderProps) {
-  const titleString = options?.title ?? route.name
-
+export function AppHeader() {
   return (
     <SafeAreaView className={`
       flex h-28 flex-row items-center justify-between border-b border-border p-4
     `}
     >
       <View>
-        <Button
-          size="icon"
-          variant="ghost"
-          onPress={() => navigation.toggleDrawer()}
-        >
-          <MenuIcon className="text-foreground" />
-        </Button>
       </View>
 
-      {render(options?.headerTitle, {
-        children: titleString,
-      }) ?? <Text className="text-foreground">{titleString}</Text>}
+      <AppLogo className="-my-4" />
 
       <View>
         <ThemeToggle />
