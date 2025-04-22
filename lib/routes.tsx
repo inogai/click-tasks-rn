@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { AppLogo } from '~/components/app-logo'
 
 import { t } from '~/lib/i18n'
+import { TaskRecord } from '~/lib/realm'
 
 interface RouteDefinition {
   name: string
@@ -22,10 +23,10 @@ interface RouteDefinition {
 /* eslint-disable style/no-multi-spaces, style/comma-spacing */
 // @keep-aligned* ,
 const _routes = [
-  { name: 'index'      , label: t('routes.index')      , icon: HomeIcon      , title: () => <AppLogo /> }                ,
+  { name: 'index'      , label: t('routes.index')      , icon: HomeIcon      , title: () => <AppLogo /> }                                           ,
   { name: 'task/list'  , label: t('routes.task.list')  , icon: ListTodoIcon },
-  { name: 'task/create', label: t('routes.task.create'), navigation: 'hide' },
-  { name: 'task/update', label: t('routes.task.update'), navigation: 'hide'  , props: z.object({ taskId: z.string() }) } ,
+  { name: 'task/create', label: t('routes.task.create'), navigation: 'hide'  , props: z.object({ initialValues: TaskRecord.zodSchema.optional() }) },
+  { name: 'task/update', label: t('routes.task.update'), navigation: 'hide'  , props: z.object({ taskId: z.string() }) }                            ,
   { name: 'preference' , label: t('routes.preference') , icon: SettingsIcon },
 ] as const satisfies RouteDefinition[]
 /* eslint-enable style/comma-spacing */
