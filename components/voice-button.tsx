@@ -14,8 +14,8 @@ import {
 import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
+import { useVoiceRecognition } from '~/lib/use-voice-recognition'
 import { cn } from '~/lib/utils'
-import { useVoiceRecognition } from '~/lib/voice'
 
 export interface VoiceButtonProps {
   className?: string
