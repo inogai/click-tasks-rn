@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { PlatformPressable } from '@react-navigation/elements'
 import { useLinkBuilder } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Text, View } from '~/components/ui/text'
 import { VoiceButton } from '~/components/voice-button'
@@ -145,16 +146,20 @@ function FunctionalVoiceButton() {
 
 export function AppTabBar(props: BottomTabBarProps) {
   return (
-    <View className="h-20 flex-row border-t border-border">
-      <TabBarNotch>
-        <FunctionalVoiceButton />
-      </TabBarNotch>
+    <SafeAreaView
+      edges={['bottom']}
+    >
+      <View className="h-20 flex-row border-t border-border">
+        <TabBarNotch>
+          <FunctionalVoiceButton />
+        </TabBarNotch>
 
-      <TabBarItem {...props} name="index" />
-      <TabBarItem {...props} name="task/list" />
-      <View className="w-20" />
-      <TabBarItem {...props} name="task/create" />
-      <TabBarItem {...props} name="preference" />
-    </View>
+        <TabBarItem {...props} name="index" />
+        <TabBarItem {...props} name="task/list" />
+        <View className="w-20" />
+        <TabBarItem {...props} name="task/create" />
+        <TabBarItem {...props} name="preference" />
+      </View>
+    </SafeAreaView>
   )
 }
