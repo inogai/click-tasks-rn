@@ -24,7 +24,7 @@ interface RouteDefinition {
 // @keep-aligned* ,
 const _routes = [
   { name: 'index'      , label: t('routes.index')      , icon: HomeIcon                                                       , title: () => <AppLogo /> }                                           ,
-  { name: 'task/list'  , label: t('routes.task.list')  , icon: ListTodoIcon }                                                 ,
+  { name: 'task'       , label: t('routes.task.list')  , icon: ListTodoIcon }                                                 ,
   { name: 'task/create', label: t('routes.task.create'), props: z.object({ initialValues: TaskRecord.zodSchema.optional() }) },
   { name: 'task/update', label: t('routes.task.update'), navigation: 'hide'                                                   , props: z.object({ taskId: z.string() }) }                            ,
   { name: 'preference' , label: t('routes.preference') , icon: SettingsIcon }                                                 ,

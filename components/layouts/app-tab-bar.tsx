@@ -11,7 +11,7 @@ import { VoiceButton } from '~/components/voice-button'
 
 import { SquareDashedIcon } from '~/lib/icons'
 import { intentionRecognition } from '~/lib/intention-recognition'
-import { routes } from '~/lib/routes'
+import { routes, useRoute } from '~/lib/routes'
 import { cn } from '~/lib/utils'
 
 function TabBarItem({
@@ -155,7 +155,7 @@ export function AppTabBar(props: BottomTabBarProps) {
         </TabBarNotch>
 
         <TabBarItem {...props} name="index" />
-        <TabBarItem {...props} name="task/list" />
+        <TabBarItem {...props} name="task" />
         <View className="w-20" />
         <TabBarItem {...props} name="task/create" />
         <TabBarItem {...props} name="preference" />
