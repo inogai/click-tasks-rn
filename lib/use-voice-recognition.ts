@@ -1,5 +1,6 @@
 import Voice from '@react-native-voice/voice'
 import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 
 import { usePreferenceStore } from '~/lib/preference'
 
@@ -70,7 +71,7 @@ export function useVoiceRecognition() {
     }
   }, [])
 
-  if (isDeliberatelyStopped && isRecording) {
+  if (Platform.OS === 'android' && isDeliberatelyStopped && isRecording) {
     setIsDeliberatelyStopped(false)
     setStoredResult(prev => `${prev} ${partialResult} //\n`)
     setPartialResult('')
