@@ -8,7 +8,7 @@ import { DateInput } from '~/components/date-input'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 
-type FieldType = 'text' | 'datetime'
+type FieldType = 'text' | 'numeric' | 'datetime'
 
 interface FormFieldProps<T extends FieldValues> {
   control: Control<T>
@@ -42,6 +42,17 @@ export function FormField<T extends FieldValues>({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+              />
+            )}
+
+            {type === 'numeric' && (
+              <Input
+                nativeID={name}
+                placeholder={placeholder || label}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                keyboardType="numeric"
               />
             )}
 
