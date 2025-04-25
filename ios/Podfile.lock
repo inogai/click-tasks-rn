@@ -1664,7 +1664,7 @@ PODS:
     - React-logger (= 0.76.8)
     - React-perflogger (= 0.76.8)
     - React-utils (= 0.76.8)
-  - RealmJS (12.14.1):
+  - RealmJS (20.1.0):
     - React
   - RNDateTimePicker (8.2.0):
     - DoubleConversion
@@ -2263,7 +2263,7 @@ SPEC CHECKSUMS:
   React-utils: 945a79dd54aad2c9ee213ee01da246acec920a2c
   ReactCodegen: 6d884ae1e7d4a51a4ca6d3a1a428a89daa8335fd
   ReactCommon: 2b7118eace1eab072a4ccdae57303eaefc2a3941
-  RealmJS: 5b0258b3c04b9f48536b2692965690afe024164c
+  RealmJS: 9fd51c849eb552ade9f7b11db42a319b4f6cab4c
   RNDateTimePicker: 9ec036a62ad0f5a2d04c1c7829338e87b4e423e7
   RNFlashList: c989a55fd69b28ca158551cdf2d885348d50e154
   RNGestureHandler: 16ef3dc2d7ecb09f240f25df5255953c4098819b
