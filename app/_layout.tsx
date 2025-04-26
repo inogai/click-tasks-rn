@@ -8,7 +8,7 @@ import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
 import { useAppPreference } from '~/lib/preference'
-import { useTaskRecordListeners } from '~/lib/realm'
+import { useRealmSideEffects } from '~/lib/realm'
 import { useColorScheme } from '~/lib/useColorScheme'
 
 import '~/components/layouts/side-effects'
@@ -21,7 +21,7 @@ export {
 
 function Layout() {
   useAppPreference()
-  useTaskRecordListeners()
+  useRealmSideEffects()
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -115,37 +115,23 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       this.alarmId = alarmId
     }
   }
-}
 
-function attachTaskRecordListeners(realm: Realm) {
-  const objects = realm.objects(TaskRecord)
+  static onAttach(realm: Realm) {
+    const objects = realm.objects(TaskRecord)
 
-  objects.addListener((collection, changes) => {
+    objects.addListener((collection, changes) => {
     // changes.deletions.forEach((index) => {
     // })
 
-    changes.newModifications.forEach((index) => {
-      const task = collection[index]
-      task.syncAlarm()
+      changes.newModifications.forEach((index) => {
+        const task = collection[index]
+        task.syncAlarm()
+      })
+
+      changes.insertions.forEach((index) => {
+        const task = collection[index]
+        task.syncAlarm()
+      })
     })
-
-    changes.insertions.forEach((index) => {
-      const task = collection[index]
-      task.syncAlarm()
-    })
-  })
-}
-
-let attached = false
-
-export function useTaskRecordListeners() {
-  const realm = useRealm()
-
-  useEffect(() => {
-    if (attached)
-      return
-
-    attachTaskRecordListeners(realm)
-    attached = true
-  }, [realm])
+  }
 }

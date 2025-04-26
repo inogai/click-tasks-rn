@@ -8,6 +8,7 @@ import type { FC } from 'react'
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
+  BookPlus,
   Calendar,
   CalendarClock,
   Check,
@@ -29,6 +30,7 @@ import {
   SquareDashed,
   SunMoon,
   Trash,
+  Wallet,
   X,
 } from 'lucide-react-native'
 import { cssInterop } from 'nativewind'
@@ -67,6 +69,7 @@ function createIcon(OriginalIcon: LucideIcon): FC<LucideProps> {
 
 export const BanknoteArrowDownIcon = createIcon(BanknoteArrowDown)
 export const BanknoteArrowUpIcon = createIcon(BanknoteArrowUp)
+export const BookPlusIcon = createIcon(BookPlus)
 export const CalendarIcon = createIcon(Calendar)
 export const CalendarClockIcon = createIcon(CalendarClock)
 export const CheckIcon = createIcon(Check)
@@ -88,4 +91,5 @@ export const SquareIcon = createIcon(Square)
 export const SquareDashedIcon = createIcon(SquareDashed)
 export const SunMoonIcon = createIcon(SunMoon)
 export const TrashIcon = createIcon(Trash)
+export const WalletIcon = createIcon(Wallet)
 export const XIcon = createIcon(X)

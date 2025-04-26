@@ -23,6 +23,7 @@ export async function intentionRecognition(message: string) {
   const result = await model.invoke([
     ['system', 'You are a helpful assistant that helps users to create to-do tasks'],
     ['system', `Time now is ${formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss X')}`],
+    ['system', `Plan the plannedBegin and plannedEnd fields if time is specified. If duration is unknown, please estimate it.`],
     message,
   ])
 

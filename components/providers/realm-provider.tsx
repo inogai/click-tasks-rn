@@ -1,7 +1,16 @@
 import { RealmProvider as NativeRealmProvider } from '@realm/react'
 
-import { TaskRecord } from '~/lib/realm'
+import { TaskRecord, TxnAccount, TxnRecord } from '~/lib/realm'
 
 export function RealmProvider({ children }: { children: React.ReactNode }) {
-  return <NativeRealmProvider schema={[TaskRecord]}>{children}</NativeRealmProvider>
+  return (
+    <NativeRealmProvider schema={[
+      TaskRecord,
+      TxnAccount,
+      TxnRecord,
+    ]}
+    >
+      {children}
+    </NativeRealmProvider>
+  )
 }

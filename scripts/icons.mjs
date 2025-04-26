@@ -6,6 +6,7 @@ const ICON_NAMES = [
   // 'Banknote',
   'BanknoteArrowDown',
   'BanknoteArrowUp',
+  'BookPlus',
   'Calendar',
   'CalendarClock',
   'Check',
@@ -27,6 +28,7 @@ const ICON_NAMES = [
   'SquareDashed',
   'SunMoon',
   'Trash',
+  'Wallet',
   'X',
 ]
 

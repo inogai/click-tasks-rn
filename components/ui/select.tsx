@@ -4,7 +4,6 @@ import type { ComponentRef } from 'react'
 import { useControllableState } from '@rn-primitives/hooks'
 import { FlashList } from '@shopify/flash-list'
 import { cva } from 'class-variance-authority'
-import { CheckIcon, ChevronsUpDownIcon } from '~/lib/icons'
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import { Button } from '~/components/ui/button'
@@ -13,6 +12,7 @@ import { Pressable } from '~/components/ui/pressable'
 import { Separator } from '~/components/ui/separator'
 import { Text } from '~/components/ui/text'
 
+import { CheckIcon, ChevronsUpDownIcon } from '~/lib/icons'
 import { cn } from '~/lib/utils'
 
 type SelectValue = string | number
@@ -76,12 +76,12 @@ export function Select({
     <Popover onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          nativeID={nativeID}
-          ref={triggetRef}
           aria-disabled={disabled}
           aria-expanded={open}
           className={cn(selectTriggerVariants({ error }))}
           disabled={disabled}
+          nativeID={nativeID}
+          ref={triggetRef}
           role="combobox"
           variant="outline"
         >
@@ -93,23 +93,23 @@ export function Select({
       </PopoverTrigger>
       <PopoverContent className="border border-border p-0" style={{ width }}>
         <FlashList
+          data={options}
+          estimatedItemSize={56}
+          extraData={[value]}
           ItemSeparatorComponent={() =>
             <Separator className="mx-2" />}
-          estimatedItemSize={56}
-          data={options}
-          extraData={[value]}
           renderItem={({ item }) => {
             const isSelected = value === item.value
             return (
               <Pressable
                 aria-label={item.label}
                 aria-selected={isSelected}
-                role="option"
+                className="flex-row items-center px-2 py-1.5"
                 onPress={() => {
                   setValue(item.value)
                   setOpen(false)
                 }}
-                className="flex-row items-center px-2 py-1.5"
+                role="option"
               >
                 <CheckIcon className={cn(
                   'mr-2 h-5 w-5 text-foreground',

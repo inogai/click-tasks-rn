@@ -11,21 +11,27 @@ const tabRoutes = routes
 export default function TabLayout() {
   return (
     <Tabs
-      tabBar={props => <AppTabBar {...props} />}
       screenOptions={{
         tabBarActiveTintColor: '#4A90E2',
       }}
+      tabBar={props => <AppTabBar {...props} />}
     >
       {tabRoutes
-        .map(route => (
-          <Tabs.Screen
-            name={route.name}
-            key={route.name}
-            options={{
-              header: route.header,
-            }}
-          />
-        ))}
+        .map((route) => {
+          const headerOpts = route.header === 'hidden'
+            ? { headerShown: false }
+            : { header: route.header }
+
+          return (
+            <Tabs.Screen
+              key={route.name}
+              name={route.name}
+              options={{
+                ...headerOpts,
+              }}
+            />
+          )
+        })}
     </Tabs>
   )
 }

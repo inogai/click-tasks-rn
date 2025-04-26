@@ -164,7 +164,7 @@ export function AppTabBar(props: BottomTabBarProps) {
         <TabBarItem {...props} name="index" />
         <TabBarItem {...props} name="task" />
         <View className="w-20" />
-        <TabBarItem {...props} name="task/create" />
+        <TabBarItem {...props} name="txn" />
         <TabBarItem {...props} name="preference" />
       </View>
     </SafeAreaView>

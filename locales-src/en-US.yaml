@@ -26,6 +26,22 @@ task_form:
       pending: Pending
       completed: Completed
 
+txn_account_form:
+  name:
+    label: Account Name
+  currency:
+    label: Account Currency
+
+txn_form:
+  account:
+    label: Account
+  amount:
+    label: Amount
+  date:
+    label: Transaction Date
+  summary:
+    label: Summary
+
 calendar:
   weekday:
     narrow: "{{ val, datetime(weekday: 'narrow') }}"
@@ -47,10 +63,9 @@ expenses_view:
 # Routes
 routes:
   index: Home
-  task:
-    list: Tasks
-    create: Create Tasks
-    update: Update Tasks
+  task: Tasks
+  task.create: Create Tasks
+  task.update: Update Tasks
   preference: Preferences
 
 # Pages
