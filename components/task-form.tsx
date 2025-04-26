@@ -27,6 +27,7 @@ interface TaskFormProps {
 export function useTaskForm(defaultValues?: Partial<FormData>) {
   return useForm<FormData>({
     resolver: zodResolver(TaskRecord.zodSchema),
+    mode: 'onChange',
     defaultValues,
   })
 }
@@ -63,12 +64,6 @@ export function TaskForm({
     setValue,
   } = form
 
-  // trigger validation on every field change
-  const watched = useWatch({ control })
-  useEffect(() => {
-    trigger()
-  }, [trigger, watched])
-
   // BEGIN automatically set plannedEnd based on plannedBegin
   const plannedBegin = useWatch({ control, name: 'plannedBegin' })
   const plannedEnd = useWatch({ control, name: 'plannedEnd' })
@@ -92,50 +87,50 @@ export function TaskForm({
   return (
     <View>
       <FormField
+        className="mb-4"
         control={control}
-        name="summary"
         label={t('task_form.summary.label')}
+        name="summary"
         placeholder="Enter task summary"
-        className="mb-4"
       />
 
       <FormField
+        className="mb-4"
         control={control}
-        name="venue"
         label={t('task_form.venue.label')}
+        name="venue"
         placeholder="Enter venue (optional)"
-        className="mb-4"
       />
 
       <FormField
+        className="mb-4"
         control={control}
-        name="due"
         label={t('task_form.due.label')}
+        name="due"
         type="datetime"
-        className="mb-4"
       />
 
       <FormField
+        className="mb-4"
         control={control}
-        name="plannedBegin"
         label={t('task_form.planned_begin.label')}
+        name="plannedBegin"
         type="datetime"
-        className="mb-4"
       />
 
       <FormField
-        name="plannedEnd"
-        label={t('task_form.planned_end.label')}
-        type="datetime"
-        control={control}
         className="mb-4"
+        control={control}
+        label={t('task_form.planned_end.label')}
+        name="plannedEnd"
+        type="datetime"
       />
 
       <SelectField
-        name="status"
-        label={t('task_form.status.label')}
-        control={control}
         className="mb-4"
+        control={control}
+        label={t('task_form.status.label')}
+        name="status"
         options={[
           { label: t('task_form.status.values.pending'), value: TaskStatus.PENDING },
           { label: t('task_form.status.values.completed'), value: TaskStatus.COMPLETED },
@@ -148,8 +143,8 @@ export function TaskForm({
 
       <Button
         className="mt-4 flex-row gap-4"
-        onPress={handleSubmit(onSubmit)}
         disabled={!isValid || isSubmitting}
+        onPress={handleSubmit(onSubmit)}
       >
         <CheckIcon className="text-primary-foreground" />
         <Text className="text-primary-foreground">
