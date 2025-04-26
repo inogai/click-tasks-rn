@@ -8,7 +8,8 @@ import { TaskStatus } from './lib'
 
 const zodSchema = z.object({
   summary: z.string().nonempty().describe('The summary of the task'),
-  status: z.nativeEnum(TaskStatus).describe('The status of the task, 0 for PENDING, 1 for COMPLETED'),
+  status: z.nativeEnum(TaskStatus)
+    .describe('1 for PENDING, 2 for COMPLETED'),
 
   due: z.coerce.date().optional().nullable().describe('The due date of the task'),
   venue: z.string().optional().nullable().describe('The venue of the task'),

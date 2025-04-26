@@ -1,8 +1,8 @@
 import type Realm from 'realm'
 
 export enum TaskStatus {
-  PENDING = 0,
-  COMPLETED = 1,
+  PENDING = 1,
+  COMPLETED = 2,
 }
 
 export interface SystemFields {
