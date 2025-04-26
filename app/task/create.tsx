@@ -2,41 +2,47 @@ import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 
 import { useRealm } from '@realm/react'
-import { router } from 'expo-router'
-import { useEffect } from 'react'
-import {
-  SafeAreaView,
-} from 'react-native'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import { useCallback } from 'react'
+import { SafeAreaView } from 'react-native'
+import { z } from 'zod'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
 import { TaskRecord, TaskStatus } from '~/lib/realm'
-import { useRoute } from '~/lib/routes'
 
 type FormData = ITaskRecord
 
+const defaultValues: Partial<FormData> = {
+  status: TaskStatus.PENDING,
+}
+
 export default function Screen() {
-  const route = useRoute<'task/create'>()
-  const initialValues = route.params?.initialValues
-
   const realm = useRealm()
+  const form = useTaskForm()
 
-  const form = useTaskForm({
-    status: TaskStatus.PENDING,
-  })
+  // capture initial values if any
+  const initialValues = useLocalSearchParams()
 
-  useEffect(() => {
-    form.reset(initialValues)
-  }, [initialValues])
+  useFocusEffect(useCallback(() => {
+    form.reset({
+      ...defaultValues,
+      ...initialValues,
+      status: initialValues.status
+        ? z.coerce.number().parse(initialValues.status)
+        : undefined,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []))
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const handleSubmit: SubmitHandler<FormData> = (data) => {
     const task = TaskRecord.create(data)
 
     realm.write(() => {
-      realm.create('Task', task)
+      realm.create(TaskRecord, task)
     })
 
-    form.reset({})
+    form.reset({ ...defaultValues })
     // Navigate back after successful submission
     router.back()
   }
@@ -45,7 +51,7 @@ export default function Screen() {
     <SafeAreaView>
       <TaskForm
         form={form}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       />
     </SafeAreaView>
   )

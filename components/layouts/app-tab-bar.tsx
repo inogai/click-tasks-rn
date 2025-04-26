@@ -3,7 +3,8 @@ import type { ReactNode } from 'react'
 
 import { PlatformPressable } from '@react-navigation/elements'
 import { useLinkBuilder } from '@react-navigation/native'
-import { useNavigation } from 'expo-router'
+import { formatISO } from 'date-fns'
+import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Text, View } from '~/components/ui/text'
@@ -11,7 +12,7 @@ import { VoiceButton } from '~/components/voice-button'
 
 import { SquareDashedIcon } from '~/lib/icons'
 import { intentionRecognition } from '~/lib/intention-recognition'
-import { routes, useRoute } from '~/lib/routes'
+import { routes } from '~/lib/routes'
 import { cn } from '~/lib/utils'
 
 function TabBarItem({
@@ -34,12 +35,8 @@ function TabBarItem({
   const {
     icon: IconComp = SquareDashedIcon,
     label = 'unknown',
-    navigation: navOption,
-  } = routes.find(def => def.name === route.name) ?? {}
-
-  if (navOption === 'hide') {
-    return null
-  }
+  } = routes
+    .find(def => def.name === `/(tabs)/${route.name}`) ?? {}
 
   const isFocused = state.index === index
 
@@ -120,7 +117,7 @@ function TabBarNotch({
 }
 
 function FunctionalVoiceButton() {
-  const navigation = useNavigation()
+  const router = useRouter()
 
   async function handleVoiceAccept(message: string) {
     const results = await intentionRecognition(message)
@@ -129,8 +126,18 @@ function FunctionalVoiceButton() {
 
     // TODO: we will have a dedicated UI to tell the user what items will be created
     // for now we just take the first 1 and send to task/create
-    navigation.navigate('task/create', {
-      initialValues: results.tasks?.[0],
+    const task = results.tasks[0]
+
+    router.navigate({
+      pathname: '/task/create',
+      params: {
+        summary: task.summary,
+        status: task.status,
+        due: task.due && formatISO(task.due),
+        venue: task.venue,
+        plannedBegin: task.plannedBegin && formatISO(task.plannedBegin),
+        plannedEnd: task.plannedEnd && formatISO(task.plannedEnd),
+      },
     })
   }
 

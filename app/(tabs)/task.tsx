@@ -1,5 +1,5 @@
 import { useQuery, useRealm } from '@realm/react'
-import { useNavigation } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { TaskView } from '~/components/views/task-view'
@@ -7,7 +7,7 @@ import { TaskView } from '~/components/views/task-view'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export function TaskListScreen() {
-  const navigation = useNavigation()
+  const router = useRouter()
 
   const realm = useRealm()
   const tasks = useQuery(TaskRecord)
@@ -19,13 +19,19 @@ export function TaskListScreen() {
   }
 
   function handleItemPress(task: TaskRecord) {
-    navigation.navigate('task/update', {
-      taskId: task._id.toString(),
+    router.navigate({
+      pathname: '/task/update/[taskId]',
+      params: {
+        taskId: task._id.toString(),
+      },
     })
   }
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView
+      edges={['left', 'right']}
+      className="flex-1"
+    >
       <TaskView
         tasks={Array.from(tasks)}
         onCheckedChange={handleCheckedChange}

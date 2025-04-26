@@ -2,7 +2,7 @@ import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 
 import { useObject, useRealm } from '@realm/react'
-import { router, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useMemo } from 'react'
 import { SafeAreaView } from 'react-native'
 import { BSON } from 'realm'
@@ -10,15 +10,13 @@ import { BSON } from 'realm'
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
 import { TaskRecord } from '~/lib/realm'
-import { useRoute } from '~/lib/routes'
 
 type FormData = ITaskRecord
 
 export function TaskUpdateScreen() {
   // navigation
-  const route = useRoute<'task/update'>()
+  const { taskId } = useLocalSearchParams<'/task/update/[taskId]'>()
   const navigation = useNavigation()
-  const { taskId = '' } = route.params ?? {}
 
   const realm = useRealm()
 

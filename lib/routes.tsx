@@ -1,57 +1,34 @@
-import type { RouteProp } from '@react-navigation/native'
-import type { LucideProps } from '~/lib/icons'
-import type { AnyZodObject } from 'zod'
+import type { LucideProps } from 'lucide-react-native'
 
-import { useRoute as useNavRoute } from '@react-navigation/native'
-import { z } from 'zod'
-
-import { AppLogo } from '~/components/app-logo'
+import { AppHeader } from '~/components/app-header'
 
 import { t } from '~/lib/i18n'
-import { HomeIcon, ListTodoIcon, SettingsIcon } from '~/lib/icons'
-import { TaskRecord } from '~/lib/realm'
+import { HomeIcon, ListTodoIcon, SettingsIcon, SquareDashedIcon } from '~/lib/icons'
 
 interface RouteDefinition {
   name: string
   label: string
-  title?: string | (() => JSX.Element)
-  props?: AnyZodObject
   icon?: React.FC<LucideProps>
-  navigation?: 'hide'
+  header?: () => React.ReactNode
 }
 
-/* eslint-disable style/no-multi-spaces, style/comma-spacing */
-// @keep-aligned* ,
-const _routes = [
-  { name: 'index'      , label: t('routes.index')      , icon: HomeIcon                                                       , title: () => <AppLogo /> }                                           ,
-  { name: 'task'       , label: t('routes.task.list')  , icon: ListTodoIcon }                                                 ,
-  { name: 'task/create', label: t('routes.task.create'), props: z.object({ initialValues: TaskRecord.zodSchema.optional() }) },
-  { name: 'task/update', label: t('routes.task.update'), navigation: 'hide'                                                   , props: z.object({ taskId: z.string() }) }                            ,
-  { name: 'preference' , label: t('routes.preference') , icon: SettingsIcon }                                                 ,
-] as const satisfies RouteDefinition[]
-/* eslint-enable style/comma-spacing */
-
-type Routes = typeof _routes
-
-// Export not as const to hide impl details
-// and prevent error when accessing optional fields
-export const routes = _routes as RouteDefinition[]
-
-export type RouteNames = Routes[number]['name']
-
-type RouteByName<TName extends RouteNames> = Extract<Routes[number], { name: TName }>
-
-type ParamsList = {
-  [TName in RouteNames]: RouteByName<TName> extends { props: infer P extends AnyZodObject }
-    ? z.infer<P> | undefined
-    : undefined
-}
-
-declare global {
-  // eslint-disable-next-line ts/no-namespace
-  namespace ReactNavigation {
-    interface RootParamList extends ParamsList {}
+function createRoute(route: RouteDefinition): Required<RouteDefinition> {
+  return {
+    icon: SquareDashedIcon,
+    header: AppHeader,
+    ...route,
   }
 }
 
-export const useRoute = useNavRoute as <TName extends RouteNames>() => RouteProp<ParamsList, TName>
+/* eslint-disable style/no-multi-spaces, style/comma-spacing */
+// @keep-aligned , }
+const _routes = [
+  { name: '/(tabs)/index'        , label: t('routes.index')        , icon: HomeIcon     },
+  { name: '/(tabs)/task'         , label: t('routes.task')         , icon: ListTodoIcon },
+  { name: '/(tabs)/preference'   , label: t('routes.preference')   , icon: SettingsIcon },
+  { name: '/task/create'         , label: t('routes.task.create')                       },
+  { name: '/task/update/[taskId]', label: t('routes.task.update')                       },
+] satisfies RouteDefinition[]
+/* eslint-enable style/comma-spacing */
+
+export const routes = _routes.map(route => createRoute(route))
