@@ -36,6 +36,7 @@ const importSortRules = [
       'simple-import-sort': simpleImportSort,
     },
     rules: {
+      'perfectionist/sort-named-imports': 'off',
       'perfectionist/sort-imports': 'off',
       'simple-import-sort/imports': ['error', {
         groups: [
@@ -70,6 +71,7 @@ export default antfu(
     rules: {
       'no-console': 'warn',
       'unused-imports/no-unused-vars': 'warn',
+      'perfectionist/sort-jsx-props': 'warn',
     },
   },
   {
