@@ -60,7 +60,6 @@ export function TaskForm({
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    trigger,
     setValue,
   } = form
 
@@ -85,9 +84,8 @@ export function TaskForm({
   // END
 
   return (
-    <View>
+    <View className="gap-4">
       <FormField
-        className="mb-4"
         control={control}
         label={t('task_form.summary.label')}
         name="summary"
@@ -95,7 +93,6 @@ export function TaskForm({
       />
 
       <FormField
-        className="mb-4"
         control={control}
         label={t('task_form.venue.label')}
         name="venue"
@@ -111,7 +108,6 @@ export function TaskForm({
       />
 
       <FormField
-        className="mb-4"
         control={control}
         label={t('task_form.planned_begin.label')}
         name="plannedBegin"
@@ -119,7 +115,6 @@ export function TaskForm({
       />
 
       <FormField
-        className="mb-4"
         control={control}
         label={t('task_form.planned_end.label')}
         name="plannedEnd"
@@ -127,7 +122,6 @@ export function TaskForm({
       />
 
       <SelectField
-        className="mb-4"
         control={control}
         label={t('task_form.status.label')}
         name="status"
@@ -142,7 +136,7 @@ export function TaskForm({
       </Text>
 
       <Button
-        className="mt-4 flex-row gap-4"
+        className="flex-row gap-4"
         disabled={!isValid || isSubmitting}
         onPress={handleSubmit(onSubmit)}
       >
