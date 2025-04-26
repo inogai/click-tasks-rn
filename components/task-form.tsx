@@ -3,7 +3,6 @@ import type { UseFormReturn } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
-import { CheckIcon } from '~/lib/icons'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Text, View } from 'react-native'
@@ -13,6 +12,7 @@ import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
+import { CheckIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 import { usePrevious } from '~/lib/use-previous'
 
@@ -58,7 +58,7 @@ export function TaskForm({
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting, isValidating },
+    formState: { errors, isValid, isSubmitting },
     trigger,
     setValue,
   } = form
@@ -73,9 +73,12 @@ export function TaskForm({
   const plannedBegin = useWatch({ control, name: 'plannedBegin' })
   const plannedEnd = useWatch({ control, name: 'plannedEnd' })
   const oldPlannedBegin = usePrevious(plannedBegin)
+  const oldPlannedEnd = usePrevious(plannedEnd)
   useEffect(() => {
-    if (isValidating)
+    if (oldPlannedEnd !== plannedEnd) {
+      // do nothing if both values are changed at once
       return
+    }
     console.log('plannedBegin changed', plannedBegin)
     setValue('plannedEnd', getNewEnd(
       oldPlannedBegin,
