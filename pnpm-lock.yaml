@@ -83,6 +83,9 @@ importers:
       '@shopify/flash-list':
         specifier: ^1.7.3
         version: 1.7.3(@babel/runtime@7.27.0)(react-native@0.76.8(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.20)(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: ^5.74.4
+        version: 5.74.4(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -207,6 +210,9 @@ importers:
       '@eslint-react/eslint-plugin':
         specifier: ^1.37.3
         version: 1.38.4(eslint@9.23.0(jiti@2.4.2))(ts-api-utils@2.1.0(typescript@5.8.2))(typescript@5.8.2)
+      '@tanstack/eslint-plugin-query':
+        specifier: ^5.73.3
+        version: 5.73.3(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
       '@types/react':
         specifier: ~18.3.12
         version: 18.3.20
@@ -2454,6 +2460,19 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=9.0.0'
+
+  '@tanstack/eslint-plugin-query@5.73.3':
+    resolution: {integrity: sha512-GmUtnOkRzDuNOq96g3eW5ADKC1nWfrM9RI0kRyQVr87rOl6y+PUgkuVaPxh3R2C0EVODxCS07b9aaWphidl/OA==}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+
+  '@tanstack/query-core@5.74.4':
+    resolution: {integrity: sha512-YuG0A0+3i9b2Gfo9fkmNnkUWh5+5cFhWBN0pJAHkHilTx6A0nv8kepkk4T4GRt4e5ahbtFj2eTtkiPcVU1xO4A==}
+
+  '@tanstack/react-query@5.74.4':
+    resolution: {integrity: sha512-mAbxw60d4ffQ4qmRYfkO1xzRBPUEf/72Dgo3qqea0J66nIKuDTLEqQt0ku++SDFlMGMnB6uKDnEG1xD/TDse4Q==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tanstack/react-table@8.21.3':
     resolution: {integrity: sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==}
@@ -9524,6 +9543,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  '@tanstack/eslint-plugin-query@5.73.3(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)':
+    dependencies:
+      '@typescript-eslint/utils': 8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
+      eslint: 9.23.0(jiti@2.4.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@tanstack/query-core@5.74.4': {}
+
+  '@tanstack/react-query@5.74.4(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.74.4
+      react: 18.3.1
 
   '@tanstack/react-table@8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:

@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { NestedProviders } from '~/components/layouts/nested-providers'
+import { QueryClientProvider } from '~/components/providers/query-client-provider'
 import { RealmProvider } from '~/components/providers/realm-provider'
 import { ThemeProvider } from '~/components/providers/theme-provider'
 
@@ -36,7 +37,12 @@ export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme()
 
   return (
-    <NestedProviders providers={[ThemeProvider, RealmProvider]}>
+    <NestedProviders providers={[
+      ThemeProvider,
+      RealmProvider,
+      QueryClientProvider,
+    ]}
+    >
       <>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
         <Layout />
