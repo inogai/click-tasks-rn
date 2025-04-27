@@ -8,6 +8,7 @@ import type { FC } from 'react'
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
+  Book,
   BookPlus,
   Calendar,
   CalendarClock,
@@ -15,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  CirclePlus,
   Clock,
   DollarSign,
   Home,
@@ -69,6 +71,7 @@ function createIcon(OriginalIcon: LucideIcon): FC<LucideProps> {
 
 export const BanknoteArrowDownIcon = createIcon(BanknoteArrowDown)
 export const BanknoteArrowUpIcon = createIcon(BanknoteArrowUp)
+export const BookIcon = createIcon(Book)
 export const BookPlusIcon = createIcon(BookPlus)
 export const CalendarIcon = createIcon(Calendar)
 export const CalendarClockIcon = createIcon(CalendarClock)
@@ -76,6 +79,7 @@ export const CheckIcon = createIcon(Check)
 export const ChevronLeftIcon = createIcon(ChevronLeft)
 export const ChevronRightIcon = createIcon(ChevronRight)
 export const ChevronsUpDownIcon = createIcon(ChevronsUpDown)
+export const CirclePlusIcon = createIcon(CirclePlus)
 export const ClockIcon = createIcon(Clock)
 export const DollarSignIcon = createIcon(DollarSign)
 export const HomeIcon = createIcon(Home)

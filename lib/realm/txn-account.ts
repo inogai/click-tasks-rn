@@ -51,6 +51,13 @@ export class TxnAccount extends Realm.Object<TxnAccount> {
     })
   }
 
+  toFormValues(): ITxnAccount {
+    return {
+      name: this.name,
+      currency: this.currency,
+    }
+  }
+
   static onAttach(realm: Realm) {
     if (realm.objects(TxnAccount).length === 0) {
       realm.write(() => {

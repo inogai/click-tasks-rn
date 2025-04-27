@@ -2,7 +2,7 @@ import { Realm } from '@realm/react'
 import { BSON } from 'realm'
 import { z } from 'zod'
 
-import { TxnAccount } from '~/lib/realm'
+import { TxnAccount } from './txn-account'
 
 const zodSchema = z.object({
   accountId: z.string().nonempty(),
@@ -69,5 +69,14 @@ export class TxnRecord extends Realm.Object<TxnRecord> {
       amount: props.amount && new Realm.BSON.Decimal128(props.amount),
       account: (props.accountId && realm.objectForPrimaryKey(TxnAccount, new BSON.ObjectId(props.accountId))) ?? undefined,
     })
+  }
+
+  toFormValues(): ITxnRecord {
+    return {
+      accountId: this.account?._id?.toString(),
+      amount: this.amount.toString(),
+      date: this.date,
+      summary: this.summary,
+    }
   }
 }

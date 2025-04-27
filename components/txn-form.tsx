@@ -2,10 +2,8 @@ import type { SelectOption } from '~/components/ui/select'
 import type { ITxnRecord } from '~/lib/realm'
 import type { UseFormReturn } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@realm/react'
-import { useEffect, useMemo } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 
 import { FormField } from '~/components/form/form-field'

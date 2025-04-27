@@ -5,12 +5,11 @@ import { useRealm } from '@realm/react'
 import { router } from 'expo-router'
 import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { BSON } from 'realm'
 
 import { TxnForm } from '~/components/txn-form'
 import { View } from '~/components/ui/text'
 
-import { TxnAccount, TxnRecord } from '~/lib/realm'
+import { TxnRecord } from '~/lib/realm'
 
 export default function TxnCreateScreen() {
   const realm = useRealm()

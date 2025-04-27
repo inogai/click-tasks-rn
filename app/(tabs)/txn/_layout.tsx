@@ -1,7 +1,7 @@
 import { Drawer } from 'expo-router/drawer'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
-import { BookPlusIcon, PlusIcon, WalletIcon } from '~/lib/icons'
+import { BookIcon, BookPlusIcon, CirclePlusIcon, WalletIcon } from '~/lib/icons'
 
 export default function TxnLayout() {
   return (
@@ -16,17 +16,9 @@ export default function TxnLayout() {
         />
 
         <Drawer.Screen
-          name="account-create"
-          options={{
-            drawerIcon: BookPlusIcon,
-            title: 'Create Account',
-          }}
-        />
-
-        <Drawer.Screen
           name="account-list"
           options={{
-            drawerIcon: BookPlusIcon,
+            drawerIcon: BookIcon,
             title: 'Accounts',
           }}
         />
@@ -34,7 +26,7 @@ export default function TxnLayout() {
         <Drawer.Screen
           name="create"
           options={{
-            drawerIcon: PlusIcon,
+            drawerIcon: CirclePlusIcon,
             title: 'Create Transaction',
           }}
         />

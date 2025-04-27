@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 
+import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { DataTable } from '~/components/data-table'
@@ -36,6 +37,14 @@ export default function AccountListScreen() {
         columnWidths={[60, 60, 60]}
         data={Array.from(accounts)}
         estimatedRowSize={75}
+        onRowPressed={(row) => {
+          router.push({
+            pathname: '/txn/account-edit/[accountId]',
+            params: {
+              accountId: row._id.toString(),
+            },
+          })
+        }}
       />
     </SafeAreaView>
   )

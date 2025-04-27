@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import { useQuery } from '@realm/react'
 import { formatDate } from 'date-fns'
+import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { DataTable } from '~/components/data-table'
@@ -34,6 +35,14 @@ export function TxnScreen() {
         columnWidths={[80, 10, 120, 60]}
         data={Array.from(txnRecords)}
         estimatedRowSize={106}
+        onRowPressed={(row) => {
+          router.push({
+            pathname: '/txn/edit/[txnId]',
+            params: {
+              txnId: row._id.toString(),
+            },
+          })
+        }}
       />
     </SafeAreaView>
   )

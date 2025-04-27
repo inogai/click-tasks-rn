@@ -2,7 +2,9 @@ import type { ViewRef } from '@rn-primitives/types'
 import type {
   ColumnDef,
   Renderable,
+  Row,
 } from '@tanstack/react-table'
+import type { ComponentProps } from 'react'
 
 import { FlashList } from '@shopify/flash-list'
 import {
@@ -10,9 +12,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useRef } from 'react'
-import { useWindowDimensions } from 'react-native'
+import { useCallback, useMemo, useRef } from 'react'
+import { Platform, useWindowDimensions } from 'react-native'
 
+import { Pressable } from '~/components/ui/pressable'
 import {
   Table,
   TableBody,
@@ -25,7 +28,7 @@ import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { useMeasure } from '~/lib/use-mesaure'
-import { R } from '~/lib/utils'
+import { cn, R } from '~/lib/utils'
 
 function flexRender<TProps extends object>(
   Comp: Renderable<TProps>,
@@ -42,6 +45,7 @@ interface DataTableProps<TData, TValue> {
   columnWidths?: number[]
   columnWeights?: number[]
   estimatedRowSize?: number
+  onRowPressed?: (row: TData) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -50,6 +54,7 @@ export function DataTable<TData, TValue>({
   columnWidths: baseWidths,
   columnWeights: weights,
   estimatedRowSize,
+  onRowPressed,
 }: DataTableProps<TData, TValue>) {
   baseWidths = baseWidths ?? R.range(0, columns.length).map(() => 0)
   weights = weights ?? R.range(0, columns.length).map(() => 0)
@@ -78,6 +83,23 @@ export function DataTable<TData, TValue>({
     )
   }, [baseWidths, columns.length, weights, width])
 
+  const getRowProps = useCallback((row: Row<TData>): Partial<ComponentProps<typeof TableRow>> => {
+    if (!onRowPressed) {
+      return {}
+    }
+
+    return {
+      android_ripple: { color: '#888' },
+      className: cn(
+        `
+          opacity-100 transition-opacity
+          active:opacity-50
+        `,
+      ),
+      onPress: () => { onRowPressed(row.original) },
+    }
+  }, [onRowPressed])
+
   return (
     <Table className="flex-1" ref={tableRef}>
       <TableHeader>
@@ -104,10 +126,11 @@ export function DataTable<TData, TValue>({
               <FlashList
                 data={table.getRowModel().rows}
                 estimatedItemSize={estimatedRowSize}
-                extraData={baseWidths}
+                extraData={[baseWidths, 5]}
                 renderItem={({ item: row }) => (
                   <TableRow
                     key={row.id}
+                    {...getRowProps(row)}
                   >
                     {row.getVisibleCells().map((cell, colIndex) => (
                       <TableCell key={cell.id} style={{ width: computedColumnWidths[colIndex] }}>
