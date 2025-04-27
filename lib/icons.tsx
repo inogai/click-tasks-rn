@@ -3,7 +3,6 @@ import type {
   LucideIcon,
   LucideProps,
 } from 'lucide-react-native'
-import type { FC } from 'react'
 
 import {
   BanknoteArrowDown,
@@ -36,7 +35,7 @@ import {
   X,
 } from 'lucide-react-native'
 import { cssInterop } from 'nativewind'
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 
 import { TextClassContext } from '~/components/ui/text'
 
@@ -56,13 +55,13 @@ function iconWithClassName(icon: LucideIcon) {
   })
 }
 
-function createIcon(OriginalIcon: LucideIcon): FC<LucideProps> {
+function createIcon(OriginalIcon: LucideIcon): LucideIcon {
   iconWithClassName(OriginalIcon)
 
-  function Comp({ className, ...props }: LucideProps) {
+  const Comp = memo(({ className, ...props }: LucideProps) => {
     const textClass = useContext(TextClassContext)
     return <OriginalIcon {...props} className={cn('text-foreground', textClass, className)} />
-  }
+  })
 
   Comp.displayName = OriginalIcon.displayName
 
