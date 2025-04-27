@@ -61,14 +61,14 @@ function TabBarItem({
 
   return (
     <PlatformPressable
-      key={route.key}
-      href={buildHref(route.name, route.params)}
-      accessibilityState={isFocused ? { selected: true } : {}}
       accessibilityLabel={options.tabBarAccessibilityLabel}
-      testID={options.tabBarButtonTestID}
-      onPress={onPress}
-      onLongPress={onLongPress}
+      accessibilityState={isFocused ? { selected: true } : {}}
       className="flex-1 items-center justify-center"
+      href={buildHref(route.name, route.params)}
+      key={route.key}
+      onLongPress={onLongPress}
+      onPress={onPress}
+      testID={options.tabBarButtonTestID}
     >
       <View
         className={cn(
@@ -119,24 +119,11 @@ function TabBarNotch({
 function FunctionalVoiceButton() {
   const router = useRouter()
 
-  async function handleVoiceAccept(message: string) {
-    const results = await intentionRecognition(message)
-
-    console.log('Intention recognition results', results)
-
-    // TODO: we will have a dedicated UI to tell the user what items will be created
-    // for now we just take the first 1 and send to task/create
-    const task = results.tasks[0]
-
-    router.navigate({
-      pathname: '/task/create',
+  function handleVoiceAccept(message: string) {
+    router.push({
+      pathname: '/recognize/[text]',
       params: {
-        summary: task.summary,
-        status: task.status,
-        due: task.due && formatISO(task.due),
-        venue: task.venue,
-        plannedBegin: task.plannedBegin && formatISO(task.plannedBegin),
-        plannedEnd: task.plannedEnd && formatISO(task.plannedEnd),
+        text: message,
       },
     })
   }
@@ -144,9 +131,9 @@ function FunctionalVoiceButton() {
   return (
     <VoiceButton
       containerClass="absolute w-20 h-20"
-      triggerClass="rounded-full"
       iconClass="w-10 h-10"
       onAccept={handleVoiceAccept}
+      triggerClass="rounded-full"
     />
   )
 }

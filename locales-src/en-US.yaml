@@ -69,6 +69,12 @@ routes:
   preference: Preferences
 
 # Pages
+recognize:
+  transcribed:
+    label: I heard you said...
+  result:
+    label: I have identified...
+
 preference:
   theme:
     label: Theme

@@ -82,6 +82,14 @@
     "task.update": "Update Tasks",
     "preference": "Preferences"
   },
+  "recognize": {
+    "transcribed": {
+      "label": "I heard you said..."
+    },
+    "result": {
+      "label": "I have identified..."
+    }
+  },
   "preference": {
     "theme": {
       "label": "Theme",
