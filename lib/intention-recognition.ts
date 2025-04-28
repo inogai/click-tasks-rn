@@ -13,6 +13,8 @@ const resultSchema = z.object({
   // TODO: will add expenses and feeling journal later
 })
 
+export type IntentionRecognitionResult = z.infer<typeof resultSchema>
+
 export async function intentionRecognition(message: string, realm: Realm) {
   // TODO: maybe allow user to select their own model and API keys
   const model = new ChatDeepSeek({

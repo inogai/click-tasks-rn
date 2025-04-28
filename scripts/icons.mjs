@@ -14,6 +14,7 @@ const ICON_NAMES = [
   'ChevronLeft',
   'ChevronRight',
   'ChevronsUpDown',
+  'CircleDollarSign',
   'CirclePlus',
   'Clock',
   'DollarSign',

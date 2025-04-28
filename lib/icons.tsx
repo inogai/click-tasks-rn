@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  CircleDollarSign,
   CirclePlus,
   Clock,
   DollarSign,
@@ -79,6 +80,7 @@ export const CheckIcon = createIcon(Check)
 export const ChevronLeftIcon = createIcon(ChevronLeft)
 export const ChevronRightIcon = createIcon(ChevronRight)
 export const ChevronsUpDownIcon = createIcon(ChevronsUpDown)
+export const CircleDollarSignIcon = createIcon(CircleDollarSign)
 export const CirclePlusIcon = createIcon(CirclePlus)
 export const ClockIcon = createIcon(Clock)
 export const DollarSignIcon = createIcon(DollarSign)

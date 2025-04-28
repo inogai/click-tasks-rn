@@ -1,23 +1,27 @@
+import type { IntentionRecognitionResult } from '~/lib/intention-recognition'
 import type { ITaskRecord, ITxnRecord } from '~/lib/realm'
 import type { VariantProps } from 'class-variance-authority'
 import type { LucideIcon } from 'lucide-react-native'
+import type { ReactNode } from 'react'
 
 import { useRealm } from '@realm/react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { cva } from 'class-variance-authority'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BSON } from 'realm'
 
+import { TaskForm, useTaskForm } from '~/components/task-form'
 import { Button } from '~/components/ui/button'
 import { Card, CardTitle } from '~/components/ui/card'
+import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
 import { Separator } from '~/components/ui/separator'
 import { Text, View } from '~/components/ui/text'
 import { BlockQuote, H4 } from '~/components/ui/typography'
 
 import { t } from '~/lib/i18n'
-import { CalendarIcon, ClockIcon, MapPinIcon, PencilIcon } from '~/lib/icons'
+import { BookIcon, CalendarIcon, CircleDollarSignIcon, ClockIcon, MapPinIcon, PencilIcon } from '~/lib/icons'
 import { intentionRecognition } from '~/lib/intention-recognition'
 import { TxnAccount, useRealmObject } from '~/lib/realm'
 import { smartFormatDate, smartFormatDateRange } from '~/lib/utils/format-date-range'
@@ -52,17 +56,19 @@ interface BaseCardProps extends VariantProps<typeof cardVariant> {
   title: string
   titleTag: string
   lines: (CardLine | '' | null | undefined)[]
+  renderRightBtn?: (props: { className?: string, iconClass?: string }) => ReactNode
 }
 
 function BaseCard({
   title,
   titleTag,
   lines,
+  renderRightBtn,
   ...props
 }: BaseCardProps) {
   return (
     <Card className={cardVariant(props)}>
-      <View className="flex-1 p-4">
+      <View className="flex-1 p-4 pr-0">
         <View className="mb-2 flex-row items-center gap-4">
           <CardTitle className="pt-1">{title}</CardTitle>
           <Text className={tagsVariant(props)}>{titleTag}</Text>
@@ -80,14 +86,21 @@ function BaseCard({
         </View>
       </View>
 
-      <Button className="h-auto w-12 rounded-none" size="icon" variant="default">
-        <PencilIcon className="h-5 text-primary-foreground" />
-      </Button>
+      {renderRightBtn && renderRightBtn({
+        className: 'h-auto w-12',
+        iconClass: 'h-5 w-5',
+      })}
     </Card>
   )
 }
 
-function TaskCard({ task }: { task: ITaskRecord }) {
+function TaskCard({
+  task,
+  onEdit,
+}: {
+  task: ITaskRecord
+  onEdit: (task: ITaskRecord) => void
+}) {
   const {
     due,
     plannedBegin,
@@ -96,16 +109,40 @@ function TaskCard({ task }: { task: ITaskRecord }) {
     venue,
   } = task
 
+  const [editDialog, setEditDialog] = useState(false)
+  const editForm = useTaskForm()
+
+  useEffect(() => {
+    editForm.reset({ ...task })
+  }, [editDialog])
+
+  function handleEditSubmit(data: ITaskRecord) {
+    setEditDialog(false)
+    onEdit(data)
+  }
+
   return (
     <BaseCard
+      title={summary}
+      titleTag="Task"
+      type="task"
       lines={[
         due && [ClockIcon, smartFormatDate(due)],
         plannedBegin && [CalendarIcon, smartFormatDateRange(plannedEnd!, plannedBegin)],
         venue && [MapPinIcon, venue],
       ]}
-      title={summary}
-      titleTag="Task"
-      type="task"
+      renderRightBtn={({ className, iconClass }) => (
+        <Dialog className={className} open={editDialog} onOpenChange={setEditDialog}>
+          <DialogTrigger asChild>
+            <Button className="w-full flex-1 rounded-none" size="icon" variant="default">
+              <PencilIcon className={iconClass} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <TaskForm form={editForm} onSubmit={handleEditSubmit} />
+          </DialogContent>
+        </Dialog>
+      )}
     />
   )
 }
@@ -127,16 +164,37 @@ function TxnCard({ txn }: { txn: ITxnRecord }) {
 
   return (
     <BaseCard
-      lines={[
-        [MapPinIcon, account.name],
-        date && [CalendarIcon, smartFormatDate(date)],
-        [ClockIcon, `${account.currency} ${amount}`],
-      ]}
       title={summary}
       titleTag={Number.parseFloat(amount) > 0 ? 'Income' : 'Expense'}
       type="txn"
+      lines={[
+        [BookIcon, account.name],
+        date && [CalendarIcon, smartFormatDate(date)],
+        [CircleDollarSignIcon, `${account.currency} ${amount}`],
+      ]}
     />
   )
+}
+
+async function localMutate({
+  type,
+  index,
+  value,
+  context,
+}: {
+  type: 'tasks' | 'transactions'
+  index: number
+  value: any
+  context: IntentionRecognitionResult
+}) {
+  // @ts-expect-error not iterator signatur
+  const newArr = [...context[type]]
+  newArr[index] = value
+
+  return {
+    ...context,
+    [type]: newArr,
+  }
 }
 
 export default function RecognizationScreen() {
@@ -147,6 +205,13 @@ export default function RecognizationScreen() {
     queryKey: ['recognization', text],
     queryFn: () => intentionRecognition(text ?? '', realm),
     refetchInterval: 0,
+  })
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: localMutate,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['recognization', text], data)
+    },
   })
 
   useFocusEffect(useCallback(() => {
@@ -180,7 +245,7 @@ export default function RecognizationScreen() {
 
         <Separator className="my-4" />
 
-        { isPending
+        { isPending || isFetching
           ? <Text>Loading...</Text>
           : (
               <>
@@ -189,8 +254,19 @@ export default function RecognizationScreen() {
                 </H4>
                 <View className="gap-4 p-2">
                   {data.tasks?.map((task, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <TaskCard key={index} task={task} />
+                    <TaskCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      task={task}
+                      onEdit={(value) => {
+                        mutation.mutate({
+                          index,
+                          value,
+                          type: 'tasks',
+                          context: data,
+                        })
+                      }}
+                    />
                   ))}
                   {data.transactions?.map((txn, index) => (
                     // eslint-disable-next-line react/no-array-index-key
