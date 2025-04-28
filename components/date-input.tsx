@@ -3,11 +3,12 @@ import type { DateTimePickerEvent } from '@react-native-community/datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useControllableState } from '@rn-primitives/hooks'
 import { formatDate } from 'date-fns'
-import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from '~/lib/icons'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { Button } from '~/components/ui/button'
+
+import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from '~/lib/icons'
 
 interface BaseDateInputProps {
   value: Date | undefined
@@ -49,11 +50,11 @@ function BaseDateInput({
   return (
     <View className="flex-1">
       <Button
+        variant="outline"
         className={`
           native:py-0 native:gap-3
           flex-row items-center justify-start gap-4 py-0 leading-none
         `}
-        variant="outline"
         onPress={handleButtonPress}
       >
         {mode === 'date'
@@ -80,9 +81,9 @@ function BaseDateInput({
 
       {show && (
         <DateTimePicker
+          mode={mode}
           nativeID={nativeID}
           value={date ?? new Date()}
-          mode={mode}
           onChange={handleChange}
         />
       )}
@@ -91,8 +92,8 @@ function BaseDateInput({
 }
 
 interface DateInputProps {
-  value: Date | undefined
-  onValueChange: (date: Date | undefined) => void
+  value: Date | undefined | null
+  onValueChange: (date: Date | undefined | null) => void
   nativeID?: string
   mode: 'date' | 'datetime' | 'time'
 }
@@ -135,7 +136,7 @@ export function DateInput({
   }
 
   function handleClear() {
-    onValueChange(undefined)
+    onValueChange(null)
   }
 
   // TODO: figure out how to use nativeID to make this accessible
@@ -143,24 +144,24 @@ export function DateInput({
     <View className="flex-row justify-stretch gap-4">
       {mode !== 'time' && (
         <BaseDateInput
+          mode="date"
           value={value}
           onValueChange={handleDateChange}
-          mode="date"
         />
       )}
       {mode !== 'date' && (
         <BaseDateInput
-          show={timeShow}
-          onShowChange={handleTimeShowChange}
-          value={value}
-          onValueChange={handleTimeChange}
           mode="time"
+          show={timeShow}
+          value={value}
+          onShowChange={handleTimeShowChange}
+          onValueChange={handleTimeChange}
         />
       )}
       <Button
+        className="h-12 w-12"
         size="icon"
         variant="destructive"
-        className="h-12 w-12"
       >
         <TrashIcon
           className="h-6 w-6 text-destructive-foreground"
