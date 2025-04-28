@@ -71,7 +71,17 @@ export default antfu(
     rules: {
       'no-console': 'warn',
       'unused-imports/no-unused-vars': 'warn',
-      'perfectionist/sort-jsx-props': 'warn',
+      'perfectionist/sort-jsx-props': ['warn', {
+        groups: [
+          'unknown',
+          'shorthand',
+          'multiline',
+          'callback',
+        ],
+        customGroups: {
+          callback: '^(on|render).*',
+        },
+      }],
     },
   },
   {
