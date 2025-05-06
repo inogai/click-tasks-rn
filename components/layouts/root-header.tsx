@@ -8,17 +8,7 @@ import { Button } from '~/components/ui/button'
 
 import { MenuIcon } from '~/lib/icons'
 
-interface AppHeaderProps {
-  renderLeft?: () => React.ReactNode
-  renderRight?: () => React.ReactNode
-  renderTitle?: () => React.ReactNode
-}
-
-export function AppHeader({
-  renderLeft,
-  renderRight,
-  renderTitle,
-}: AppHeaderProps) {
+export function RootHeader() {
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
@@ -27,15 +17,18 @@ export function AppHeader({
       `}
     >
       <View className="flex-1 basis-0 flex-row justify-start gap-2">
-        {renderLeft}
+        <Button
+          size="icon"
+          variant="ghost"
+        >
+          <MenuIcon />
+        </Button>
       </View>
 
-      <View className="flex-1">
-        {renderTitle}
-      </View>
+      <AppLogo />
 
       <View className="flex-1 basis-0 flex-row justify-end gap-2">
-        {renderRight}
+        <ThemeToggle />
       </View>
     </SafeAreaView>
   )

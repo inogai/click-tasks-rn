@@ -10,6 +10,7 @@ import { ThemeProvider } from '~/components/providers/theme-provider'
 
 import { useAppPreference } from '~/lib/preference'
 import { useRealmSideEffects } from '~/lib/realm'
+import { routes } from '~/lib/routes'
 import { useColorScheme } from '~/lib/useColorScheme'
 
 import '~/components/layouts/side-effects'
@@ -27,7 +28,16 @@ function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        { routes.map(route => (
+          <Stack.Screen
+            key={route.name}
+            name={route.name}
+            options={{
+              title: route.label,
+              ...route.opts?.screenOptions,
+            }}
+          />
+        ))}
       </Stack>
     </GestureHandlerRootView>
   )

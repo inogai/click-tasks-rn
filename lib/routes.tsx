@@ -1,36 +1,47 @@
-import type { LucideProps } from 'lucide-react-native'
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
+import type { LucideIcon } from 'lucide-react-native'
 
-import { AppHeader } from '~/components/app-header'
-import { TxnHeader } from '~/components/layouts/txn-header'
+import { router } from 'expo-router'
+
+import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
-import { HomeIcon, ListTodoIcon, SettingsIcon, SquareDashedIcon, WalletIcon } from '~/lib/icons'
+import { HomeIcon, ListTodoIcon, PlusIcon, WalletIcon } from '~/lib/icons'
 
 interface RouteDefinition {
   name: string
   label: string
-  icon?: React.FC<LucideProps>
-  header?: 'hidden' | (() => React.ReactNode)
-}
-
-function createRoute(route: RouteDefinition): Required<RouteDefinition> {
-  return {
-    icon: SquareDashedIcon,
-    header: AppHeader,
-    ...route,
+  icon?: LucideIcon
+  opts?: {
+    screenOptions?: NativeStackNavigationOptions
+    children?: RouteDefinition[]
+    tabProps?: BottomTabNavigationOptions
   }
 }
 
-/* eslint-disable style/no-multi-spaces, style/comma-spacing */
-// @keep-aligned , }
-const _routes = [
-  { name: '/(tabs)/index'        , label: t('routes.index')      , icon: HomeIcon                         },
-  { name: '/(tabs)/task'         , label: t('routes.task')       , icon: ListTodoIcon                     },
-  { name: '/(tabs)/txn'          , label: t('routes.txn')        , icon: WalletIcon   , header: 'hidden'  },
-  { name: '/(tabs)/preference'   , label: t('routes.preference') , icon: SettingsIcon                     },
-  { name: '/task/create'         , label: t('routes.task.create')                                         },
-  { name: '/task/update/[taskId]', label: t('routes.task.update')                                         },
+export const routes = [
+  // use header in tabRoutes
+  { name: '(tabs)', label: t('routes.(tabs).__itself__'), icon: HomeIcon, opts: { screenOptions: { headerShown: false } } },
+  { name: 'task/update/[taskId]', label: t('routes.task.update'), icon: ListTodoIcon },
+  { name: 'task/create', label: t('routes.task.create'), icon: ListTodoIcon },
+  { name: 'txn/create', label: t('routes.txn.create'), icon: WalletIcon },
+  { name: 'txn/edit/[txnId]', label: t('routes.txn.edit'), icon: WalletIcon },
+  { name: 'txn-account/list', label: t('routes.txn-account.list'), opts: {
+    screenOptions: {
+      headerRight: () => (
+        <Button
+          className="mr-4"
+          size="icon"
+          variant="ghost"
+          onPress={() => router.push('/txn-account/create')}
+          accessibilityLabel={t('routes.txn-account.create')}
+        >
+          <PlusIcon />
+        </Button>
+      ),
+    },
+  } },
+  { name: 'txn-account/create', label: t('routes.txn-account.create') },
+  { name: 'txn-account/edit/[accountId]', label: t('routes.txn-account.edit') },
 ] satisfies RouteDefinition[]
-/* eslint-enable style/comma-spacing */
-
-export const routes = _routes.map(route => createRoute(route))

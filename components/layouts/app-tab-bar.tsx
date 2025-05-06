@@ -9,8 +9,6 @@ import { Text, View } from '~/components/ui/text'
 import { VoiceButton } from '~/components/voice-button'
 
 import { t } from '~/lib/i18n'
-import { SquareDashedIcon } from '~/lib/icons'
-import { routes } from '~/lib/routes'
 import { cn } from '~/lib/utils'
 
 function TabBarItem({
@@ -21,20 +19,11 @@ function TabBarItem({
 }: BottomTabBarProps & {
   name: string
 }) {
-  let index = state.routes.findIndex(r => r.name === name)
-  if (index < 0) {
-    index = 0
-  }
+  const index = state.routes.findIndex(r => r.name === name)
   const route = state.routes[index]
 
   const { buildHref } = useLinkBuilder()
   const { options } = descriptors[route.key]
-
-  const {
-    icon: IconComp = SquareDashedIcon,
-    label = 'unknown',
-  } = routes
-    .find(def => def.name === `/(tabs)/${route.name}`) ?? {}
 
   const isFocused = state.index === index
 
@@ -82,9 +71,9 @@ function TabBarItem({
           isFocused && 'text-primary-foreground',
         )}
       >
-        <IconComp key={`${route.key}#a`} size={20} />
+        {options.tabBarIcon?.({ size: 20, focused: isFocused, color: '#f00' })}
       </View>
-      <Text className="text-sm font-medium">{label}</Text>
+      <Text className="text-sm font-medium">{options.title}</Text>
     </PlatformPressable>
   )
 }

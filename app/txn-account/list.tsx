@@ -39,7 +39,7 @@ export default function AccountListScreen() {
         estimatedRowSize={75}
         onRowPressed={(row) => {
           router.push({
-            pathname: '/txn/account-edit/[accountId]',
+            pathname: '/txn-account/edit/[accountId]',
             params: {
               accountId: row._id.toString(),
             },

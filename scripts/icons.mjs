@@ -33,6 +33,7 @@ const ICON_NAMES = [
   'SquareDashed',
   'SunMoon',
   'Trash',
+  'UserRoundCog',
   'Wallet',
   'X',
 ]

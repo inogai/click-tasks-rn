@@ -34,6 +34,7 @@ import {
   SquareDashed,
   SunMoon,
   Trash,
+  UserRoundCog,
   Wallet,
   X,
 } from 'lucide-react-native'
@@ -100,5 +101,6 @@ export const SquareIcon = createIcon(Square)
 export const SquareDashedIcon = createIcon(SquareDashed)
 export const SunMoonIcon = createIcon(SunMoon)
 export const TrashIcon = createIcon(Trash)
+export const UserRoundCogIcon = createIcon(UserRoundCog)
 export const WalletIcon = createIcon(Wallet)
 export const XIcon = createIcon(X)

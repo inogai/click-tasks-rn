@@ -97,11 +97,26 @@
     }
   },
   "routes": {
-    "index": "Home",
-    "task": "Tasks",
-    "task.create": "Create Tasks",
-    "task.update": "Update Tasks",
-    "preference": "Preferences"
+    "(tabs)": {
+      "__itself__": "Home",
+      "index": "Home",
+      "task": "Tasks",
+      "txn": "Transactions",
+      "preference": "Preferences"
+    },
+    "task": {
+      "update": "Update Task",
+      "create": "Create Task"
+    },
+    "txn": {
+      "edit": "Edit Transaction",
+      "create": "Create Transaction"
+    },
+    "txn-account": {
+      "list": "Manage Transaction Accounts",
+      "edit": "Edit Transaction Account",
+      "create": "Create Transaction Account"
+    }
   },
   "recognize": {
     "transcribed": {

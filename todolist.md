@@ -7,4 +7,9 @@
 
 ## Improvements
 
-- [ ] `./components/calendar-strip.tsx` Animation fix
+### Calendar
+
+`./components/calendar-strip.tsx`
+
+- [ ] animation fix
+- [ ] dots are currently based on due not plannedStart/End
