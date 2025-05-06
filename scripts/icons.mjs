@@ -23,6 +23,7 @@ const ICON_NAMES = [
   'MapPin',
   'Menu',
   'Mic',
+  'Minus',
   'Pencil',
   'Plus',
   'RotateCcw',

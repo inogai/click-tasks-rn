@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 
 import { FormField } from '~/components/form/form-field'
+import { MoneyField } from '~/components/form/money-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
 
@@ -56,11 +57,10 @@ export function TxnForm({
       />
 
       {/* TODO: add a easy switch for +/- value */}
-      <FormField
+      <MoneyField
         control={control}
         label={t('txn_form.amount.label')}
         name="amount"
-        type="numeric"
       />
 
       <FormField

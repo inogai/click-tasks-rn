@@ -24,6 +24,7 @@ import {
   MapPin,
   Menu,
   Mic,
+  Minus,
   Pencil,
   Plus,
   RotateCcw,
@@ -89,6 +90,7 @@ export const ListTodoIcon = createIcon(ListTodo)
 export const MapPinIcon = createIcon(MapPin)
 export const MenuIcon = createIcon(Menu)
 export const MicIcon = createIcon(Mic)
+export const MinusIcon = createIcon(Minus)
 export const PencilIcon = createIcon(Pencil)
 export const PlusIcon = createIcon(Plus)
 export const RotateCcwIcon = createIcon(RotateCcw)
