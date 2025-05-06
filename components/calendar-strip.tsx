@@ -2,7 +2,6 @@ import type { Day } from 'date-fns'
 
 import { useControllableState } from '@rn-primitives/hooks'
 import { addDays, addMonths, addWeeks, differenceInDays, differenceInWeeks, formatDate, getWeek, startOfMonth, startOfWeek } from 'date-fns'
-import { ChevronLeftIcon, ChevronRightIcon } from '~/lib/icons'
 import { useCallback, useMemo, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 
@@ -11,37 +10,8 @@ import { EvenList } from '~/components/even-list'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
+import { ChevronLeftIcon, ChevronRightIcon } from '~/lib/icons'
 import { cn, R } from '~/lib/utils'
-
-interface DotsProps {
-  count?: number
-  selected?: boolean
-}
-
-function Dots({
-  count = 1,
-  selected = false,
-}: DotsProps) {
-  if (count === 0)
-    return null
-
-  return (
-    <View className={`
-      absolute bottom-1 flex-row items-center justify-center gap-1
-    `}
-    >
-      {R.range(0, count).map(x => (
-        <View
-          className={cn(
-            'h-1 w-1 rounded-full bg-primary',
-            selected && 'bg-primary-foreground',
-          )}
-          key={x}
-        />
-      ))}
-    </View>
-  )
-}
 
 export interface CalendarStripProps {
   selectedDate: Date
@@ -143,22 +113,20 @@ function CalendarWeek({
   return (
     <EvenList
       data={weekDays}
-      horizontal
       keyExtractor={x => x.key}
+      horizontal
       renderItem={({ item: { date, key }, mainDim: width }) => {
         const selected = selectedDateKey === key
         const count = dots?.[key] ?? 0
         return (
           <CalendarDay
-            style={{ width }}
             className="h-full"
             date={date}
             key="key"
+            numTasks={count}
             selected={selected}
+            style={{ width }}
             onSelectedChange={value => value && onDayItemPress(date)}
-            renderDots={() => (
-              <Dots count={count} selected={selected} />
-            )}
           />
         )
       }}
@@ -202,15 +170,13 @@ function CalendarGrid({
 
             return (
               <CalendarDay
-                style={{ width }}
-                date={date}
-                className="h-full"
-                selected={isSelected}
-                onSelectedChange={value => value && onDayItemPress(date)}
                 active={date.getMonth() === monthNr}
-                renderDots={() => (
-                  <Dots count={dotsCount} selected={isSelected} />
-                )}
+                className="h-full"
+                date={date}
+                numTasks={dotsCount}
+                selected={isSelected}
+                style={{ width }}
+                onSelectedChange={value => value && onDayItemPress(date)}
               />
             )
           }}
@@ -222,8 +188,8 @@ function CalendarGrid({
   return (
     <FlatList
       data={weeks}
-      renderItem={renderWeekRow}
       scrollEnabled={false}
+      renderItem={renderWeekRow}
     />
   )
 }
@@ -277,16 +243,37 @@ export function CalendarStrip({
     <View className={cn('flex flex-col items-center gap-2', className)}>
       {/* Header with month display and navigation buttons */}
       <View className="w-full flex-row items-center justify-between px-2">
-        <Button size="icon" variant="ghost" onPress={loadLeft}>
-          <ChevronLeftIcon className="text-foreground" />
+        <Button
+          size="icon"
+          variant="ghost"
+          onPress={loadLeft}
+          accessibilityLabel={expanded
+            ? t('calendar_strip.button_prev.expanded')
+            : t('calendar_strip.button_prev.default')}
+        >
+          <ChevronLeftIcon />
         </Button>
-        <Text className="font-semibold text-muted-foreground">
-          {t('calendar.strip.title', {
+        <Text
+          className="font-semibold text-muted-foreground"
+          accessibilityLabel={t('calendar_strip.title.label', {
+            val: anchorDate,
+            week: getWeek(anchorDate),
+          })}
+          accessibilityRole="header"
+        >
+          {t('calendar_strip.title.display', {
             val: anchorDate,
             week: getWeek(anchorDate),
           })}
         </Text>
-        <Button size="icon" variant="ghost" onPress={loadRight}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onPress={loadRight}
+          accessibilityLabel={expanded
+            ? t('calendar_strip.button_next.expanded')
+            : t('calendar_strip.button_next.default')}
+        >
           <ChevronRightIcon className="text-foreground" />
         </Button>
       </View>
@@ -303,11 +290,11 @@ export function CalendarStrip({
         )}
         >
           <CalendarGrid
+            dots={dots}
             month={month}
             selectedDate={selectedDate}
-            onDayItemPress={handleDayItemPress}
             weekStartsOn={weekStartsOn}
-            dots={dots}
+            onDayItemPress={handleDayItemPress}
           />
         </View>
 
@@ -322,11 +309,11 @@ export function CalendarStrip({
           )}
         >
           <CalendarWeek
-            week={anchorDate}
-            selectedDate={selectedDate}
-            onDayItemPress={handleDayItemPress}
-            weekStartsOn={weekStartsOn}
             dots={dots}
+            selectedDate={selectedDate}
+            week={anchorDate}
+            weekStartsOn={weekStartsOn}
+            onDayItemPress={handleDayItemPress}
           />
         </View>
       </View>
@@ -334,6 +321,9 @@ export function CalendarStrip({
       <TouchableOpacity
         className="-mb-4 h-4 w-32"
         onPress={() => { setExpanded?.(!expanded) }}
+        accessibilityLabel={expanded
+          ? t('calendar_strip.button_expand.expanded')
+          : t('calendar_strip.button_expand.default')}
       >
         <View className="h-1 rounded-full bg-border" />
       </TouchableOpacity>

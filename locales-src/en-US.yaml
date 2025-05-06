@@ -43,12 +43,34 @@ txn_form:
   summary:
     label: Summary
 
-calendar:
-  weekday:
-    narrow: "{{ val, datetime(weekday: 'narrow') }}"
+calendar_day:
+  taskCount: '{{ count }} task pending.'
+  taskCount_zero: ' '
+  taskCount_one: '{{ count }} task.'
+  taskCount_other: '{{ count }} tasks.'
 
-  strip:
-    title: "W{{ week}} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+  label: >
+    $t(calendar_day.taskCount, { "count": {{ numTasks }} })
+    {{ date, datetime(weekday: 'long') }},
+    {{ date, datetime(day: 'numeric') }},
+    {{ date, datetime(month: 'long')}}
+
+  week_of_day:
+    display: "{{ date, datetime(weekday: 'narrow') }}"
+
+calendar_strip:
+  button_prev:
+    default: Previous Week
+    expanded: Previous Month
+  button_next:
+    default: Next Week
+    expanded: Next Month
+  title:
+    label: "Week {{ week }}, {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+    display: "W{{ week }} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+  button_expand:
+    default: Expand Calendar
+    expanded: Collaspe Calendar
 
 timeline_view:
   title: Timeline

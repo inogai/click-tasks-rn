@@ -59,15 +59,15 @@ function TabBarItem({
 
   return (
     <PlatformPressable
-      accessibilityLabel={options.tabBarAccessibilityLabel}
-      accessibilityRole="tab"
-      accessibilityState={isFocused ? { selected: true } : {}}
       className="flex-1 items-center justify-center"
       href={buildHref(route.name, route.params)}
       key={route.key}
       testID={options.tabBarButtonTestID}
       onLongPress={onLongPress}
       onPress={onPress}
+      accessibilityLabel={options.tabBarAccessibilityLabel}
+      accessibilityRole="tab"
+      accessibilityState={isFocused ? { selected: true } : {}}
     >
       <View
         className={cn(
@@ -123,8 +123,8 @@ export function AppTabBar(props: BottomTabBarProps) {
       edges={['bottom']}
     >
       <View
-        accessibilityRole="tablist"
         className="h-20 flex-row overflow-visible border-t border-border"
+        accessibilityRole="tablist"
       >
         <TabBarNotch />
         <TabBarItem {...props} name="index" />
@@ -132,12 +132,12 @@ export function AppTabBar(props: BottomTabBarProps) {
         <View className="w-20">
           <View className="absolute -top-10 w-full items-center">
             <VoiceButton
-              aria-hidden={false}
-              aria-label={t('voice_button.label')}
               containerClass="absolute w-20 h-20"
               iconClass="w-10 h-10"
               triggerClass="rounded-full"
               onAccept={handleVoiceAccept}
+              aria-hidden={false}
+              aria-label={t('voice_button.label')}
             />
           </View>
         </View>

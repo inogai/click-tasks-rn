@@ -5,7 +5,37 @@ import { Text, TouchableOpacity, View } from 'react-native'
 
 import { isHoliday } from '~/lib/holidays'
 import { t } from '~/lib/i18n'
-import { cn } from '~/lib/utils'
+import { cn, R } from '~/lib/utils'
+
+interface DotsProps {
+  count?: number
+  selected?: boolean
+}
+
+function Dots({
+  count = 1,
+  selected = false,
+}: DotsProps) {
+  if (count === 0)
+    return null
+
+  return (
+    <View className={`
+      absolute bottom-1 flex-row items-center justify-center gap-1
+    `}
+    >
+      {R.range(0, count).map(x => (
+        <View
+          key={x}
+          className={cn(
+            'h-1 w-1 rounded-full bg-primary',
+            selected && 'bg-primary-foreground',
+          )}
+        />
+      ))}
+    </View>
+  )
+}
 
 const dayContainerVariants = cva(
   'flex flex-col items-center justify-center overflow-hidden',
@@ -98,7 +128,7 @@ export interface CalendarDayProps {
   onSelectedChange?: (selected: boolean) => void
   style?: ViewStyle
   className?: string
-  renderDots?: () => React.ReactNode
+  numTasks?: number
 }
 
 export function CalendarDay({
@@ -108,7 +138,7 @@ export function CalendarDay({
   onSelectedChange,
   style,
   className,
-  renderDots,
+  numTasks = 0,
 }: CalendarDayProps) {
   const dayOfMonth = date.getDate()
   const variant = getDateVariant(date)
@@ -122,8 +152,12 @@ export function CalendarDay({
       onPress={handlePress}
     >
       <View
-        style={style}
         className={cn(dayContainerVariants({ selected }), className)}
+        style={style}
+        accessibilityLabel={t('calendar_day.label', {
+          date,
+          numTasks,
+        })}
       >
         <Text
           className={cn(dayNameVariants({
@@ -132,8 +166,8 @@ export function CalendarDay({
             active,
           }))}
         >
-          {t('calendar.weekday.narrow', {
-            val: date,
+          {t('calendar_day.week_of_day.display', {
+            date,
           })}
         </Text>
         <Text
@@ -145,7 +179,10 @@ export function CalendarDay({
         >
           { dayOfMonth }
         </Text>
-        {renderDots?.()}
+        <Dots
+          count={numTasks}
+          selected={selected}
+        />
       </View>
     </TouchableOpacity>
   )
