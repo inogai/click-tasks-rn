@@ -15,8 +15,8 @@
     "lint": "eslint . --quiet",
     "lint:verbose": "eslint .",
     "lint:fix": "eslint --fix .",
-    "locales": "node ./locales.build.cjs",
-    "dev:locales": "node ./locales.build.cjs --watch"
+    "locales": "node ./scripts/locales.build.cjs",
+    "dev:locales": "node ./scripts/locales.build.cjs --watch"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

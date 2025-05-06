@@ -8,8 +8,9 @@ const yaml = require('js-yaml')
 const chokidar = require('chokidar')
 
 // Configuration
-const srcDir = path.join(__dirname, 'locales-src')
-const destDir = path.join(__dirname, 'locales')
+const workspaceDir = path.resolve(__dirname, '..')
+const srcDir = path.join(workspaceDir, 'locales-src')
+const destDir = path.join(workspaceDir, 'locales')
 const watch = process.argv.includes('--watch')
 
 // Ensure destination directory exists
