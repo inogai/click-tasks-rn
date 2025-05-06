@@ -123,7 +123,7 @@ export function AppTabBar(props: BottomTabBarProps) {
             <VoiceButton
               containerClass="absolute w-20 h-20"
               iconClass="w-10 h-10"
-              triggerClass="rounded-full"
+              triggerClass="rounded-full bg-primary shadow"
               onAccept={handleVoiceAccept}
               aria-hidden={false}
               aria-label={t('voice_button.label')}
