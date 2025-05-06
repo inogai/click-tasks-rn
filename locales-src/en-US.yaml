@@ -3,6 +3,7 @@ button:
   submit: Submit
 
 voice_button:
+  label: Create Tasks by Voice
   title: Please speak now...
   cancel: Cancel
   accept: Accept

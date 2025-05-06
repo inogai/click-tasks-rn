@@ -1,17 +1,15 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import type { ReactNode } from 'react'
 
 import { PlatformPressable } from '@react-navigation/elements'
 import { useLinkBuilder } from '@react-navigation/native'
-import { formatISO } from 'date-fns'
-import { useRouter } from 'expo-router'
+import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Text, View } from '~/components/ui/text'
 import { VoiceButton } from '~/components/voice-button'
 
+import { t } from '~/lib/i18n'
 import { SquareDashedIcon } from '~/lib/icons'
-import { intentionRecognition } from '~/lib/intention-recognition'
 import { routes } from '~/lib/routes'
 import { cn } from '~/lib/utils'
 
@@ -62,13 +60,14 @@ function TabBarItem({
   return (
     <PlatformPressable
       accessibilityLabel={options.tabBarAccessibilityLabel}
+      accessibilityRole="tab"
       accessibilityState={isFocused ? { selected: true } : {}}
       className="flex-1 items-center justify-center"
       href={buildHref(route.name, route.params)}
       key={route.key}
+      testID={options.tabBarButtonTestID}
       onLongPress={onLongPress}
       onPress={onPress}
-      testID={options.tabBarButtonTestID}
     >
       <View
         className={cn(
@@ -90,16 +89,12 @@ function TabBarItem({
   )
 }
 
-function TabBarNotch({
-  children,
-}: {
-  children: ReactNode
-}) {
+function TabBarNotch() {
   // Set top to -1px to hide the border
   return (
     <>
       <View className={`
-        pointer-events-none absolute inset-0 -top-px z-10 overflow-hidden
+        pointer-events-none absolute inset-0 -top-px overflow-hidden
       `}
       >
         <View className="absolute -top-12 w-full items-center">
@@ -109,16 +104,11 @@ function TabBarNotch({
           />
         </View>
       </View>
-      <View className="absolute -top-10 z-20 w-full items-center">
-        {children}
-      </View>
     </>
   )
 }
 
-function FunctionalVoiceButton() {
-  const router = useRouter()
-
+export function AppTabBar(props: BottomTabBarProps) {
   function handleVoiceAccept(message: string) {
     router.push({
       pathname: '/recognize/[text]',
@@ -129,28 +119,28 @@ function FunctionalVoiceButton() {
   }
 
   return (
-    <VoiceButton
-      containerClass="absolute w-20 h-20"
-      iconClass="w-10 h-10"
-      onAccept={handleVoiceAccept}
-      triggerClass="rounded-full"
-    />
-  )
-}
-
-export function AppTabBar(props: BottomTabBarProps) {
-  return (
     <SafeAreaView
       edges={['bottom']}
     >
-      <View className="h-20 flex-row border-t border-border">
-        <TabBarNotch>
-          <FunctionalVoiceButton />
-        </TabBarNotch>
-
+      <View
+        accessibilityRole="tablist"
+        className="h-20 flex-row overflow-visible border-t border-border"
+      >
+        <TabBarNotch />
         <TabBarItem {...props} name="index" />
         <TabBarItem {...props} name="task" />
-        <View className="w-20" />
+        <View className="w-20">
+          <View className="absolute -top-10 w-full items-center">
+            <VoiceButton
+              aria-hidden={false}
+              aria-label={t('voice_button.label')}
+              containerClass="absolute w-20 h-20"
+              iconClass="w-10 h-10"
+              triggerClass="rounded-full"
+              onAccept={handleVoiceAccept}
+            />
+          </View>
+        </View>
         <TabBarItem {...props} name="txn" />
         <TabBarItem {...props} name="preference" />
       </View>

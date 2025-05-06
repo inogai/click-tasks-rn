@@ -1,3 +1,5 @@
+import type { ButtonProps } from '~/components/ui/button'
+
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -17,7 +19,7 @@ import { MicIcon, SquareIcon } from '~/lib/icons'
 import { useVoiceRecognition } from '~/lib/use-voice-recognition'
 import { cn } from '~/lib/utils'
 
-export interface VoiceButtonProps {
+export interface VoiceButtonProps extends ButtonProps {
   containerClass?: string
   triggerClass?: string
   iconClass?: string
@@ -29,6 +31,7 @@ export function VoiceButton({
   triggerClass,
   iconClass: iconClassProp,
   onAccept: onAcceptProp,
+  ...buttonProps
 }: VoiceButtonProps) {
   const [open, setOpen] = useState(false)
 
@@ -70,10 +73,11 @@ export function VoiceButton({
   )
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange} className={containerClass}>
+    <Dialog className={containerClass} open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           variant="default"
+          {...buttonProps}
           className={cn('grow', triggerClass)}
         >
           {isRecording
@@ -101,9 +105,9 @@ export function VoiceButton({
           </Button>
 
           <Button
-            variant="default"
-            size="icon"
             className="-mb-2 h-16 w-16 rounded-full"
+            size="icon"
+            variant="default"
             onPress={isRecording ? stopRecord : startRecord}
           >
             {isRecording
