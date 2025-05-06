@@ -77,9 +77,11 @@ export default antfu(
           'shorthand',
           'multiline',
           'callback',
+          'accessibility',
         ],
         customGroups: {
           callback: '^(on|render).*',
+          accessibility: '^(accessibility|aria-).*',
         },
       }],
     },
