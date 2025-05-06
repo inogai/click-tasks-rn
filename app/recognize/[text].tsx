@@ -6,13 +6,16 @@ import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { ActionButton } from '~/components/action-button'
 import { RecognizeCard } from '~/components/recognize-card'
 import { Separator } from '~/components/ui/separator'
 import { Text, View } from '~/components/ui/text'
 import { BlockQuote, H4 } from '~/components/ui/typography'
 
 import { t } from '~/lib/i18n'
+import { CheckIcon } from '~/lib/icons'
 import { intentionRecognition } from '~/lib/intention-recognition'
+import { TaskRecord, TxnRecord } from '~/lib/realm'
 
 async function localMutate({
   type,
@@ -54,12 +57,12 @@ export default function RecognizationScreen() {
   })
 
   useFocusEffect(useCallback(() => {
+    console.log('focus effect')
     if (isFetching || isPending) {
       return
     }
     refetch()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text]))
+  }, []))
 
   if (!text) {
     router.replace('/+not-found')
@@ -74,8 +77,35 @@ export default function RecognizationScreen() {
     )
   }
 
+  function handleActionButtonPress() {
+    try {
+      realm.write(() => {
+        if (data) {
+          const { tasks, transactions } = data
+          tasks?.forEach((task) => {
+            realm.create(TaskRecord, TaskRecord.create(task))
+          })
+          transactions?.forEach((txn) => {
+            realm.create(TxnRecord, TxnRecord.create(txn, realm))
+          })
+        }
+      })
+    }
+    catch (e) {
+      console.error('Error writing to realm:', e)
+      return
+    }
+
+    console.log('Data written to realm successfully')
+    router.back()
+  }
+
   return (
     <SafeAreaView edges={['left', 'right']}>
+      <ActionButton disabled={isPending || isFetching} onPress={handleActionButtonPress}>
+        <CheckIcon />
+      </ActionButton>
+
       <View className="h-full p-4">
         <H4>
           {t('recognize.transcribed.label')}
