@@ -22,7 +22,6 @@ export {
 } from 'expo-router'
 
 function Layout() {
-  useAppPreference()
   useRealmSideEffects()
 
   return (
@@ -45,6 +44,7 @@ function Layout() {
 
 export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme()
+  useAppPreference()
 
   return (
     <NestedProviders providers={[
