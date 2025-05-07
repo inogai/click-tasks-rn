@@ -34,6 +34,7 @@ export default function TxnEditScreen() {
     }
 
     form.reset(txnObj.toFormValues())
+    form.trigger()
   }, [txnObj]))
 
   function handleSubmit(data: ITxnRecord) {
