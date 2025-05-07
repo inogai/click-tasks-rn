@@ -1,3 +1,4 @@
+import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import * as React from 'react'
 import { View } from 'react-native'
 
@@ -6,11 +7,39 @@ import { Label } from '~/components/ui/label'
 
 import { t } from '~/lib/i18n'
 import { BanknoteArrowDownIcon, BanknoteArrowUpIcon, DollarSignIcon } from '~/lib/icons'
+import { TxnRecord, useRealmQuery } from '~/lib/realm'
+import { R } from '~/lib/utils'
 
-export function ExpenseView() {
-  const dailyBalance = -200
-  const monthlyBalance = +2000
-  const unit = 'HKD'
+const sumTxn: ((x: TxnRecord[]) => number) = R.piped(
+  R.map(x => x.amount),
+  R.map(x => Number.parseFloat(x.toString())),
+  R.sum(),
+)
+
+export function ExpenseView({
+  anchorDate,
+}: {
+  anchorDate: Date
+}) {
+  const unit = 'USD'
+
+  const dailyTxn = useRealmQuery({
+    type: TxnRecord,
+    query: collection => collection
+      .filtered('date >= $0 && date <= $1', startOfDay(anchorDate), endOfDay(anchorDate))
+      .filtered('account.currency == $0', unit),
+  })
+
+  const dailyBalance = sumTxn(Array.from(dailyTxn))
+
+  const monthlyTxn = useRealmQuery({
+    type: TxnRecord,
+    query: collection => collection
+      .filtered('date >= $0 && date <= $1', startOfMonth(anchorDate), endOfMonth(anchorDate))
+      .filtered('account.currency == $0', unit),
+  })
+
+  const monthlyBalance = sumTxn(Array.from(monthlyTxn))
 
   return (
     <View className="flex-row items-center justify-center">
