@@ -61,16 +61,16 @@ function TxnAccountCreateScreen() {
           form={form}
           onSubmit={handleSubmit}
         />
-      </View>
 
-      <Button
-        className="mt-4 flex-row gap-2"
-        onPress={handleDelete}
-        variant="destructive"
-      >
-        <TrashIcon />
-        <Text>{t('button.delete')}</Text>
-      </Button>
+        <Button
+          className="mt-4 flex-row gap-2"
+          variant="destructive"
+          onPress={handleDelete}
+        >
+          <TrashIcon />
+          <Text>{t('button.delete')}</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   )
 }
