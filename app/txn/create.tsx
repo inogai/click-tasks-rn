@@ -6,7 +6,7 @@ import { router } from 'expo-router'
 import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { TxnForm } from '~/components/txn-form'
+import { TxnForm, useTxnForm } from '~/components/txn-form'
 import { View } from '~/components/ui/text'
 
 import { TxnRecord } from '~/lib/realm'
@@ -14,10 +14,7 @@ import { TxnRecord } from '~/lib/realm'
 export default function TxnCreateScreen() {
   const realm = useRealm()
 
-  const form = useForm({
-    resolver: zodResolver(TxnRecord.zodSchema),
-    mode: 'onChange',
-  })
+  const form = useTxnForm()
 
   function handleSubmit(data: ITxnRecord) {
     const record = TxnRecord.create(data, realm)

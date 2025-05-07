@@ -45,7 +45,8 @@
   },
   "txn_form": {
     "account": {
-      "label": "Account"
+      "label": "Account",
+      "error": "Not a valid account"
     },
     "amount": {
       "label": "Amount"

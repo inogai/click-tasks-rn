@@ -2,8 +2,10 @@ import type { SelectOption } from '~/components/ui/select'
 import type { ITxnRecord } from '~/lib/realm'
 import type { UseFormReturn } from 'react-hook-form'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@realm/react'
 import { useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
 import { FormField } from '~/components/form/form-field'
@@ -13,7 +15,7 @@ import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
-import { TxnAccount } from '~/lib/realm'
+import { TxnAccount, TxnRecord } from '~/lib/realm'
 
 // Define the form data type based on the Transaction schema
 type FormData = ITxnRecord
@@ -21,6 +23,19 @@ type FormData = ITxnRecord
 export interface TxnFormProps {
   onSubmit: (data: FormData) => void
   form: UseFormReturn<FormData>
+}
+
+export function useTxnForm() {
+  const accounts = useQuery(TxnAccount)
+  const schema = TxnRecord.zodSchema
+    .refine(x => accounts.some(a => a._id.toString() === x.accountId), {
+      message: t('txn_form.account.error'),
+    })
+
+  return useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  })
 }
 
 export function TxnForm({

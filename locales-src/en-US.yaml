@@ -37,6 +37,7 @@ txn_account_form:
 txn_form:
   account:
     label: Account
+    error: Not a valid account
   amount:
     label: Amount
   date:

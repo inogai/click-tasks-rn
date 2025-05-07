@@ -1,14 +1,12 @@
 import type { ITxnRecord } from '~/lib/realm'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useObject, useRealm } from '@realm/react'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { useCallback } from 'react'
-import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BSON } from 'realm'
 
-import { TxnForm } from '~/components/txn-form'
+import { TxnForm, useTxnForm } from '~/components/txn-form'
 import { Button } from '~/components/ui/button'
 import { Text, View } from '~/components/ui/text'
 
@@ -22,10 +20,7 @@ export default function TxnEditScreen() {
   const { txnId } = useLocalSearchParams<'/txn/edit/[txnId]'>()
   const txnObj = useObject({ type: TxnRecord, primaryKey: new BSON.ObjectId(txnId) })
 
-  const form = useForm({
-    resolver: zodResolver(TxnRecord.zodSchema),
-    mode: 'onChange',
-  })
+  const form = useTxnForm()
 
   useFocusEffect(useCallback(() => {
     if (!txnObj) {
@@ -74,8 +69,8 @@ export default function TxnEditScreen() {
 
         <Button
           className="mt-4 flex-row gap-2"
-          onPress={handleDelete}
           variant="destructive"
+          onPress={handleDelete}
         >
           <TrashIcon />
           <Text>{t('button.delete')}</Text>
