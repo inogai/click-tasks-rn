@@ -57,6 +57,17 @@ export function PreferenceScreen() {
           { label: t('preference.language.values.zh-Hant'), value: 'zh-Hant' },
           { label: t('preference.language.values.system'), value: 'system' },
         ]}
+        renderLabel={({ label, value }) => (
+          <View className="flex-1 flex-row items-baseline">
+            <Text>
+              {label}
+              {'  '}
+            </Text>
+            <Text className="text-sm text-muted-foreground">
+              {t(`preference.language.values.${value}`, { lng: value })}
+            </Text>
+          </View>
+        )}
       />
 
       <SelectField

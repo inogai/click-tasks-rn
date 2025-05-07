@@ -15,6 +15,7 @@ interface SelectFieldProps<T extends FieldValues> {
   placeholder?: string
   className?: string
   options: SelectOption[]
+  renderLabel?: (option: SelectOption) => React.ReactNode
 }
 
 export function SelectField<T extends FieldValues>({
@@ -24,6 +25,7 @@ export function SelectField<T extends FieldValues>({
   placeholder,
   className,
   options,
+  renderLabel,
 }: SelectFieldProps<T>) {
   return (
     <View className={className}>
@@ -34,10 +36,11 @@ export function SelectField<T extends FieldValues>({
         render={({ field: { onChange, onBlur, value }, fieldState }) => (
           <>
             <Select
-              value={value}
-              onChange={onChange}
               options={options}
               placeholder={placeholder || label}
+              value={value}
+              onChange={onChange}
+              renderLabel={renderLabel}
             />
 
             {fieldState?.error && (

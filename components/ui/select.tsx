@@ -46,6 +46,7 @@ export interface SelectProps {
   disabled?: boolean
   nativeID?: string
   placeholder?: string
+  renderLabel?: (option: SelectOption) => React.ReactNode
 }
 
 export function Select({
@@ -56,6 +57,7 @@ export function Select({
   error = false,
   nativeID,
   placeholder,
+  renderLabel = ({ label }) => <Text>{label}</Text>,
 }: SelectProps & VariantProps<typeof selectTriggerVariants>) {
   const [value, setValue] = useControllableState({
     prop: valueProp,
@@ -127,7 +129,7 @@ export function Select({
           }}
         >
           {value
-            ? <Text>{options.find(opt => opt.value === value)?.label}</Text>
+            ? renderLabel(options.find(opt => opt.value === value)!)
             : <Text className="text-muted-foreground">{placeholder}</Text>}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
         </Button>
@@ -161,7 +163,7 @@ export function Select({
                   isSelected ? 'opacity-100' : 'opacity-0',
                 )}
                 />
-                <Text>{item.label}</Text>
+                {renderLabel(item)}
               </Pressable>
             )
           }}
