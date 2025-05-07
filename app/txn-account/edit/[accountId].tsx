@@ -49,7 +49,12 @@ function TxnAccountCreateScreen() {
   }
 
   function handleDelete() {
-    realm.delete(account)
+    // TODO: may be we want to prompt user for confirmation
+    // also handle the case when this account is used in a transaction
+    realm.write(() => {
+      realm.delete(account)
+    })
+    router.back()
   }
 
   return (
