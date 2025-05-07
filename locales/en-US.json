@@ -3,6 +3,10 @@
     "submit": "Submit",
     "delete": "Delete"
   },
+  "select": {
+    "prevOption": "Previous Option",
+    "nextOption": "Next Option"
+  },
   "voice_button": {
     "label": "Create Tasks by Voice",
     "title": "Please speak now...",

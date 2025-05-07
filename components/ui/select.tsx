@@ -12,6 +12,7 @@ import { Pressable } from '~/components/ui/pressable'
 import { Separator } from '~/components/ui/separator'
 import { Text } from '~/components/ui/text'
 
+import { t } from '~/lib/i18n'
 import { CheckIcon, ChevronsUpDownIcon } from '~/lib/icons'
 import { cn } from '~/lib/utils'
 
@@ -87,14 +88,43 @@ export function Select({
     <Popover onOpenChange={setOpen}>
       <PopoverTrigger ref={popoverTriggerRef} asChild>
         <Button
-          aria-disabled={disabled}
-          aria-expanded={open}
+          accessible={true}
           className={cn(selectTriggerVariants({ error }))}
           disabled={disabled}
           nativeID={nativeID}
           ref={triggetRef}
-          role="combobox"
           variant="outline"
+          // TODO: blocked by react-native
+          // https://github.com/facebook/react-native/issues/47268
+          accessibilityActions={[
+            { name: 'nextOption', label: t('select.nextOption') },
+            { name: 'prevOption', label: t('select.prevOption') },
+          ]}
+          accessibilityRole="combobox"
+          accessibilityState={{
+            disabled,
+            expanded: open,
+          }}
+          onAccessibilityAction={(event) => {
+            console.log(event)
+            switch (event.nativeEvent.actionName) {
+              case 'nextOption': {
+                const nextIndex = options.findIndex(opt => opt.value === value) + 1
+                const nextOption = options[nextIndex % options.length]
+                setValue(nextOption.value)
+                break
+              }
+              case 'prevOption': {
+                const prevIndex = options.findIndex(opt => opt.value === value) - 1
+                const prevOption = options[(prevIndex + options.length) % options.length]
+                setValue(prevOption.value)
+                break
+              }
+              case 'activate': {
+                setOpen(prev => !prev)
+              }
+            }
+          }}
         >
           {value
             ? <Text>{options.find(opt => opt.value === value)?.label}</Text>
@@ -102,7 +132,10 @@ export function Select({
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="border border-border p-0" style={{ width }}>
+      <PopoverContent
+        className="border border-border p-0"
+        style={{ width }}
+      >
         <FlashList
           data={options}
           estimatedItemSize={56}
@@ -113,14 +146,15 @@ export function Select({
             const isSelected = value === item.value
             return (
               <Pressable
-                aria-label={item.label}
-                aria-selected={isSelected}
                 className="flex-row items-center px-2 py-1.5"
                 onPress={() => {
                   setValue(item.value)
                   setOpen(false)
                 }}
-                role="option"
+                // accessibilityLabel={item.label}
+                // accessibilityState={{
+                //   selected: isSelected,
+                // }}
               >
                 <CheckIcon className={cn(
                   'mr-2 h-5 w-5 text-foreground',

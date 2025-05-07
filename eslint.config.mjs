@@ -80,8 +80,8 @@ export default antfu(
           'accessibility',
         ],
         customGroups: {
+          accessibility: '^(accessibility|onAccessibility|aria-).*',
           callback: '^(on|render).*',
-          accessibility: '^(accessibility|aria-).*',
         },
       }],
     },
