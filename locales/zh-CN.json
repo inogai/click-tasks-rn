@@ -1,18 +1,95 @@
 {
   "button": {
-    "submit": "提交"
+    "submit": "提交",
+    "delete": "删除"
   },
-  "calendar": {
-    "weekday": {
-      "narrow": "{{ val, datetime(weekday: 'narrow') }}"
+  "voice_button": {
+    "label": "语音创建任务",
+    "title": "请开始说话...",
+    "cancel": "取消",
+    "accept": "确认"
+  },
+  "task_form": {
+    "summary": {
+      "label": "任务摘要",
+      "placeholder": "输入任务摘要"
     },
-    "strip": {
-      "title": "第{{ week}}周 {{ val, datetime(year: 'numeric') }}{{ val, datetime(month: 'long') }}"
+    "venue": {
+      "label": "地点",
+      "placeholder": "输入地点（可选）"
+    },
+    "due": {
+      "label": "截止日期"
+    },
+    "planned_begin": {
+      "label": "计划开始日期"
+    },
+    "planned_end": {
+      "label": "计划结束日期"
+    },
+    "status": {
+      "label": "状态",
+      "values": {
+        "pending": "待处理",
+        "completed": "已完成"
+      }
     }
   },
-  "timeline_view": {
-    "title": "时间轴",
-    "placeholder": "今天没有任务。"
+  "txn_account_form": {
+    "name": {
+      "label": "账户名称"
+    },
+    "currency": {
+      "label": "账户货币"
+    }
+  },
+  "txn_form": {
+    "account": {
+      "label": "账户"
+    },
+    "amount": {
+      "label": "金额"
+    },
+    "date": {
+      "label": "交易日期"
+    },
+    "summary": {
+      "label": "摘要"
+    }
+  },
+  "calendar_day": {
+    "taskCount": "{{ count }} 个任务待处理。",
+    "taskCount_zero": " ",
+    "taskCount_one": "{{ count }} 个任务。",
+    "taskCount_other": "{{ count }} 个任务。",
+    "label": "$t(calendar_day.taskCount, { \"count\": {{ numTasks }} }) {{ date, datetime(weekday: 'long') }}, {{ date, datetime(day: 'numeric') }}, {{ date, datetime(month: 'long')}}\n",
+    "week_of_day": {
+      "display": "{{ date, datetime(weekday: 'narrow') }}"
+    }
+  },
+  "calendar_strip": {
+    "button_prev": {
+      "default": "上一周",
+      "expanded": "上一个月"
+    },
+    "button_next": {
+      "default": "下一周",
+      "expanded": "下一个月"
+    },
+    "title": {
+      "label": "第 {{ week }} 周 {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}",
+      "display": "W{{ week }} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+    },
+    "button_expand": {
+      "default": "展开日历",
+      "expanded": "收起日历"
+    }
+  },
+  "timetable": {
+    "task": {
+      "label": "{{ summary }}, 从 {{ plannedBegin, datetime(month: 'long')}} {{ plannedBegin, datetime(day: 'numeric') }} 号 {{ plannedBegin, datetime(weekday: 'long') }} {{ plannedBegin, datetime(timeStyle: 'short')}} 到 {{ plannedEnd, datetime(month: 'long')}} {{ plannedEnd, datetime(day: 'numeric') }} 号 {{ plannedEnd datetime(weekday: 'long') }} {{ plannedEnd, datetime(timeStyle: 'short')}}\n",
+      "label_sameday": "{{ summary }}, 从 {{ plannedBegin, datetime(month: 'long')}} {{ plannedBegin, datetime(day: 'numeric') }} 号 {{ plannedBegin, datetime(weekday: 'long') }} {{ plannedBegin, datetime(timeStyle: 'short')}} 到 {{ plannedEnd, datetime(timeStyle: 'short')}}\n"
+    }
   },
   "expenses_view": {
     "daily_balance": {
@@ -22,8 +99,35 @@
       "title": "本月收支"
     }
   },
-  "home": {
-    "voice_button": "语音输入"
+  "routes": {
+    "(tabs)": {
+      "__itself__": "首页",
+      "index": "首页",
+      "task": "任务",
+      "txn": "交易",
+      "preference": "偏好设置"
+    },
+    "task": {
+      "update": "更新任务",
+      "create": "创建任务"
+    },
+    "txn": {
+      "edit": "编辑交易",
+      "create": "创建交易"
+    },
+    "txn-account": {
+      "list": "管理交易账户",
+      "edit": "编辑交易账户",
+      "create": "创建交易账户"
+    }
+  },
+  "recognize": {
+    "transcribed": {
+      "label": "我听到你说..."
+    },
+    "result": {
+      "label": "我识别到了..."
+    }
   },
   "preference": {
     "theme": {
@@ -41,6 +145,14 @@
         "zh-Hans": "简体中文",
         "zh-Hant": "繁体中文",
         "system": "跟随系统"
+      }
+    },
+    "speech_language": {
+      "label": "语音语言",
+      "values": {
+        "en-US": "英语",
+        "zh-CN": "中文（普通话）",
+        "zh-HK": "中文（粤语）"
       }
     }
   }

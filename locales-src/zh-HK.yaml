@@ -1,17 +1,102 @@
 # Components
 button:
   submit: 提交
+  delete: 刪除
 
-calendar:
-  weekday:
-    narrow: "{{ val, datetime(weekday: 'narrow') }}"
+voice_button:
+  label: 語音建立任務
+  title: 請開始說話...
+  cancel: 取消
+  accept: 確認
 
-  strip:
-    title: "第{{ week}}週 {{ val, datetime(year: 'numeric') }}{{ val, datetime(month: 'long') }}"
+task_form:
+  summary:
+    label: 任務摘要
+    placeholder: 輸入任務摘要
+  venue:
+    label: 地點
+    placeholder: 輸入地點（可選）
+  due:
+    label: 截止日期
+  planned_begin:
+    label: 計劃開始日期
+  planned_end:
+    label: 計劃結束日期
+  status:
+    label: 狀態
+    values:
+      pending: 待處理
+      completed: 已完成
 
-timeline_view:
-  title: 時間軸
-  placeholder: 今天沒有任務。
+txn_account_form:
+  name:
+    label: 賬戶名稱
+  currency:
+    label: 賬戶貨幣
+
+txn_form:
+  account:
+    label: 賬戶
+  amount:
+    label: 金額
+  date:
+    label: 交易日期
+  summary:
+    label: 摘要
+
+calendar_day:
+  taskCount: '{{ count }} 個任務待處理。'
+  taskCount_zero: ' '
+  taskCount_one: '{{ count }} 個任務。'
+  taskCount_other: '{{ count }} 個任務。'
+
+  label: >
+    $t(calendar_day.taskCount, { "count": {{ numTasks }} })
+    {{ date, datetime(weekday: 'long') }},
+    {{ date, datetime(day: 'numeric') }},
+    {{ date, datetime(month: 'long')}}
+
+  week_of_day:
+    display: "{{ date, datetime(weekday: 'narrow') }}"
+
+calendar_strip:
+  button_prev:
+    default: 上個禮拜
+    expanded: 上個月
+  button_next:
+    default: 下個禮拜
+    expanded: 下個月
+  title:
+    label: "第 {{ week }} 週 {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+    display: "W{{ week }} {{ val, datetime(month: 'long') }} {{ val, datetime(year: 'numeric') }}"
+  button_expand:
+    default: 展開日曆
+    expanded: 收起日曆
+
+timetable:
+  task:
+    label: >
+      {{ summary }},
+      由
+      {{ plannedBegin, datetime(month: 'long')}}
+      {{ plannedBegin, datetime(day: 'numeric') }} 號
+      {{ plannedBegin, datetime(weekday: 'long') }}
+      {{ plannedBegin, datetime(timeStyle: 'short')}}
+      到
+      {{ plannedEnd, datetime(month: 'long')}}
+      {{ plannedEnd, datetime(day: 'numeric') }} 號
+      {{ plannedEnd datetime(weekday: 'long') }}
+      {{ plannedEnd, datetime(timeStyle: 'short')}}
+
+    label_sameday: >
+      {{ summary }},
+      由
+      {{ plannedBegin, datetime(month: 'long')}}
+      {{ plannedBegin, datetime(day: 'numeric') }} 號
+      {{ plannedBegin, datetime(weekday: 'long') }}
+      {{ plannedBegin, datetime(timeStyle: 'short')}}
+      到
+      {{ plannedEnd, datetime(timeStyle: 'short')}}
 
 expenses_view:
   daily_balance:
@@ -20,9 +105,34 @@ expenses_view:
   monthly_balance:
     title: 本月收支
 
+# Routes
+routes:
+  (tabs):
+    __itself__: 主頁
+    index: 主頁
+    task: 任務
+    txn: 交易
+    preference: 偏好設定
+
+  task:
+    update: 更新任務
+    create: 建立任務
+
+  txn:
+    edit: 編輯交易
+    create: 建立交易
+
+  txn-account:
+    list: 管理交易賬戶
+    edit: 編輯交易賬戶
+    create: 建立交易賬戶
+
 # Pages
-home:
-  voice_button: 語音輸入
+recognize:
+  transcribed:
+    label: 我聽到你說...
+  result:
+    label: 我已識別...
 
 preference:
   theme:
@@ -35,7 +145,14 @@ preference:
   language:
     label: 語言
     values:
-      en: 英語
+      en: 英文
       zh-Hans: 簡體中文
       zh-Hant: 繁體中文
       system: 跟隨系統
+
+  speech_language:
+    label: 語音語言
+    values:
+      en-US: 英文
+      zh-CN: 中文（普通話）
+      zh-HK: 中文（粵語）
