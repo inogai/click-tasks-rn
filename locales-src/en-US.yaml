@@ -1,6 +1,7 @@
 # Components
 button:
   submit: Submit
+  delete: Delete
 
 voice_button:
   label: Create Tasks by Voice
@@ -72,9 +73,33 @@ calendar_strip:
     default: Expand Calendar
     expanded: Collaspe Calendar
 
-timeline_view:
-  title: Timeline
-  placeholder: No tasks today.
+timetable:
+  task:
+    label: >
+      {{ summary }},
+      from
+      {{ plannedBegin, datetime(timeStyle: 'short')}}
+      on
+      {{ plannedBegin, datetime(weekday: 'long') }},
+      {{ plannedBegin, datetime(day: 'numeric') }},
+      {{ plannedBegin, datetime(month: 'long')}}
+      to
+      {{ plannedEnd, datetime(timeStyle: 'short')}}
+      on
+      {{ plannedEnd datetime(weekday: 'long') }},
+      {{ plannedEnd, datetime(day: 'numeric') }},
+      {{ plannedEnd, datetime(month: 'long')}}
+
+    label_sameday: >
+      {{ summary }},
+      from
+      {{ plannedBegin, datetime(timeStyle: 'short')}}
+      to
+      {{ plannedEnd, datetime(timeStyle: 'short')}}
+      on
+      {{ plannedBegin, datetime(weekday: 'long') }},
+      {{ plannedBegin, datetime(day: 'numeric') }},
+      {{ plannedBegin, datetime(month: 'long')}}
 
 expenses_view:
   daily_balance:

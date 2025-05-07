@@ -9,7 +9,7 @@ class CrossAxisBuilder {
   }
 
   allocate(startPos: number, lengthPos: number) {
-    const endPos = startPos + lengthPos
+    const endPos = startPos + lengthPos - 1
 
     let availCross: number[] = R.range(0, this.length)
 
@@ -79,7 +79,6 @@ export function createTimeTable<T>({
   orientation,
   timeStep = TimeDelta.MINUTE(1),
   beginDt,
-  endDt,
 }: CreateTimeTableOpts<T>) {
   const data = R.sortBy(dataProp, x => x.from.getTime())
 
@@ -102,17 +101,28 @@ export function createTimeTable<T>({
 
       const crossBegin = crossAxis.allocate(timeBegin, timeLength)
       const crossEnd = crossBegin + 1
-      const crossLength = crossEnd - crossBegin
-
-      const style = orientation === 'horizontal'
-        ? { left: timeBegin, top: crossBegin, width: timeLength, height: crossLength }
-        : { left: crossBegin, top: timeBegin, width: crossLength, height: timeLength }
+      const crossLength = (crossEnd - crossBegin)
 
       return {
         key: `${timeBegin}-${crossBegin}`,
         value: it.item,
-        style,
+        _private: {
+          timeBegin,
+          timeLength,
+          crossBegin,
+          crossLength,
+        },
       }
+    }).map((it) => {
+      let { timeBegin, timeLength, crossBegin, crossLength } = it._private
+      crossBegin = crossBegin / crossAxis.length
+      crossLength = crossLength / crossAxis.length
+
+      return Object.assign({}, it, {
+        style: orientation === 'horizontal'
+          ? { left: timeBegin, top: crossBegin, width: timeLength, height: crossLength }
+          : { left: crossBegin, top: timeBegin, width: crossLength, height: timeLength },
+      })
     })
 
     return { items }

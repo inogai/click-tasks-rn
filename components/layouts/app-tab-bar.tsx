@@ -109,7 +109,7 @@ export function AppTabBar(props: BottomTabBarProps) {
 
   return (
     <SafeAreaView
-      edges={['bottom']}
+      edges={['left', 'right', 'bottom']}
     >
       <View
         className="h-20 flex-row overflow-visible border-t border-border"

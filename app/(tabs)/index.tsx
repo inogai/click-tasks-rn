@@ -1,22 +1,17 @@
 import { useQuery } from '@realm/react'
 import { endOfDay, endOfMonth, formatDate, startOfDay, startOfMonth } from 'date-fns'
-import { Link, useNavigation } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import * as React from 'react'
 import { useMemo } from 'react'
-import { Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
 import { CalendarStrip } from '~/components/calendar-strip'
-import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
 import { H3 } from '~/components/ui/typography'
 import { ExpenseView } from '~/components/views/expense-view'
-import { TimelineView } from '~/components/views/timeline-view'
-import { VoiceButton } from '~/components/voice-button'
+import { TimeTableView } from '~/components/views/timetable-view'
 
 import { t } from '~/lib/i18n'
-import { MicIcon, PlusIcon, SmileIcon } from '~/lib/icons'
-import { intentionRecognition } from '~/lib/intention-recognition'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export default function Screen() {
@@ -70,23 +65,12 @@ export default function Screen() {
     <View className="flex-1 gap-y-4 px-4 py-6">
       <View className="relative mb-2 h-36">
         <CalendarStrip
+          dots={dots}
+          selectedDate={currentDate}
           className={`
             absolute z-10 rounded-xl border border-border bg-background py-4
           `}
-          selectedDate={currentDate}
           onSelectedDateChange={setCurrentDate}
-          dots={dots}
-        />
-      </View>
-
-      <Separator />
-
-      <View>
-        <H3 className="pl-2">{t('timeline_view.title')}</H3>
-        <TimelineView
-          className="h-36 pt-2"
-          tasks={tasks as unknown as TaskRecord[]}
-          date={currentDate}
         />
       </View>
 
@@ -96,9 +80,7 @@ export default function Screen() {
 
       <Separator />
 
-      <View className="h-[198px] flex-1 items-center justify-center">
-        <SmileIcon className="h-[198px] w-[198px] text-green-500" />
-      </View>
+      <TimeTableView anchorDate={currentDate} />
     </View>
   )
 }
