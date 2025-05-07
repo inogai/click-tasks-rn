@@ -1,13 +1,11 @@
 import type { Preference } from '~/lib/preference'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckIcon } from '~/lib/icons'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
-import { Button } from '~/components/ui/button'
 import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
@@ -40,8 +38,8 @@ export function PreferenceScreen() {
     <View className="gap-y-4 px-4 py-6">
       <SelectField
         control={control}
-        name="theme"
         label={t('preference.theme.label')}
+        name="theme"
         options={[
           { label: t('preference.theme.values.light'), value: 'light' },
           { label: t('preference.theme.values.dark'), value: 'dark' },
@@ -51,8 +49,8 @@ export function PreferenceScreen() {
 
       <SelectField
         control={control}
-        name="language"
         label={t('preference.language.label')}
+        name="language"
         options={[
           { label: t('preference.language.values.en'), value: 'en' },
           { label: t('preference.language.values.zh-Hans'), value: 'zh-Hans' },
@@ -63,13 +61,20 @@ export function PreferenceScreen() {
 
       <SelectField
         control={control}
-        name="speechLanguage"
         label={t('preference.speech_language.label')}
+        name="speechLanguage"
         options={[
           { label: t('preference.speech_language.values.en-US'), value: 'en-US' },
           { label: t('preference.speech_language.values.zh-CN'), value: 'zh-CN' },
           { label: t('preference.speech_language.values.zh-HK'), value: 'zh-HK' },
         ]}
+      />
+
+      <FormField
+        control={control}
+        label={t('preference.prefered_currency.label')}
+        name="preferedCurrency"
+        type="text"
       />
 
       <Text className="text-destructive">

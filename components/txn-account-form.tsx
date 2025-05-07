@@ -11,18 +11,20 @@ import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
+import { usePreferenceStore } from '~/lib/preference'
 import { TxnAccount } from '~/lib/realm'
 
 type FormData = ITxnAccount
 
-const defaultValues: Partial<FormData> = {
-  currency: 'USD',
-}
-
 export function useTxnAccountForm() {
+  const defaultCurrency = usePreferenceStore(store => store.preferedCurrency)
+
   return useForm<FormData>({
     resolver: zodResolver(TxnAccount.zodSchema),
-    defaultValues,
+    defaultValues: {
+      currency: defaultCurrency,
+    },
+    mode: 'onChange',
   })
 }
 

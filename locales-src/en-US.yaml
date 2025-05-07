@@ -159,3 +159,6 @@ preference:
       en-US: English
       zh-CN: Chinese (Mandarin)
       zh-HK: Chinese (Cantonese)
+
+  prefered_currency:
+    label: Prefered Currency (3 Characters)

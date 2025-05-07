@@ -56,7 +56,6 @@ export function TxnForm({
         name="summary"
       />
 
-      {/* TODO: add a easy switch for +/- value */}
       <MoneyField
         control={control}
         label={t('txn_form.amount.label')}

@@ -7,6 +7,7 @@ import { Label } from '~/components/ui/label'
 
 import { t } from '~/lib/i18n'
 import { BanknoteArrowDownIcon, BanknoteArrowUpIcon, DollarSignIcon } from '~/lib/icons'
+import { usePreferenceStore } from '~/lib/preference'
 import { TxnRecord, useRealmQuery } from '~/lib/realm'
 import { R } from '~/lib/utils'
 
@@ -21,14 +22,14 @@ export function ExpenseView({
 }: {
   anchorDate: Date
 }) {
-  const unit = 'USD'
+  const unit = usePreferenceStore(store => store.preferedCurrency)
 
   const dailyTxn = useRealmQuery({
     type: TxnRecord,
     query: collection => collection
       .filtered('date >= $0 && date <= $1', startOfDay(anchorDate), endOfDay(anchorDate))
       .filtered('account.currency == $0', unit),
-  })
+  }, [anchorDate, unit])
 
   const dailyBalance = sumTxn(Array.from(dailyTxn))
 
@@ -37,7 +38,7 @@ export function ExpenseView({
     query: collection => collection
       .filtered('date >= $0 && date <= $1', startOfMonth(anchorDate), endOfMonth(anchorDate))
       .filtered('account.currency == $0', unit),
-  })
+  }, [anchorDate, unit])
 
   const monthlyBalance = sumTxn(Array.from(monthlyTxn))
 
