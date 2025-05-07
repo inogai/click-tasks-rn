@@ -4,7 +4,7 @@ import type { ComponentRef } from 'react'
 import { useControllableState } from '@rn-primitives/hooks'
 import { FlashList } from '@shopify/flash-list'
 import { cva } from 'class-variance-authority'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { Button } from '~/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
@@ -72,9 +72,20 @@ export function Select({
     })
   })
 
+  const popoverTriggerRef = useRef<ComponentRef<typeof PopoverTrigger>>(null)
+
+  useEffect(() => {
+    if (open) {
+      popoverTriggerRef.current?.open()
+    }
+    else {
+      popoverTriggerRef.current?.close()
+    }
+  }, [open])
+
   return (
     <Popover onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger ref={popoverTriggerRef} asChild>
         <Button
           aria-disabled={disabled}
           aria-expanded={open}
