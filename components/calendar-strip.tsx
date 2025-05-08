@@ -242,7 +242,7 @@ export function CalendarStrip({
   return (
     <View className={cn('flex flex-col items-center gap-2', className)}>
       {/* Header with month display and navigation buttons */}
-      <View className="w-full flex-row items-center justify-between px-2">
+      <View className="w-full flex-row items-center justify-between">
         <Button
           size="icon"
           variant="ghost"

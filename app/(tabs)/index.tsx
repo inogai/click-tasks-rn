@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { CalendarStrip } from '~/components/calendar-strip'
 import { Button } from '~/components/ui/button'
+import { Card, CardHeader } from '~/components/ui/card'
 import { Separator } from '~/components/ui/separator'
 import { View } from '~/components/ui/text'
 import { CountdownView } from '~/components/views/countdown-view'
@@ -101,14 +102,15 @@ export default function Screen() {
         <CountdownView />
 
         <View className="relative mb-2 h-36">
-          <CalendarStrip
-            dots={dots}
-            selectedDate={currentDate}
-            className={`
-              absolute z-10 rounded-xl border border-border bg-background py-4
-            `}
-            onSelectedDateChange={setCurrentDate}
-          />
+          <Card className="absolute z-10 bg-background">
+            <CardHeader className="px-2 py-4">
+              <CalendarStrip
+                dots={dots}
+                selectedDate={currentDate}
+                onSelectedDateChange={setCurrentDate}
+              />
+            </CardHeader>
+          </Card>
         </View>
 
         <Separator />
