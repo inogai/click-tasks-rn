@@ -1,6 +1,6 @@
 import { Header } from '@react-navigation/elements'
 import { useQuery } from '@realm/react'
-import { endOfMonth, formatDate, startOfMonth } from 'date-fns'
+import { addDays, endOfMonth, formatDate, startOfMonth } from 'date-fns'
 import { router } from 'expo-router'
 import * as React from 'react'
 import { useMemo } from 'react'
@@ -18,6 +18,7 @@ import { TimeTableView } from '~/components/views/timetable-view'
 import { t } from '~/lib/i18n'
 import { Calendar1Icon, CalendarIcon, NotepadTextIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
+import { dateRange, TimeDelta } from '~/lib/utils'
 
 export default function Screen() {
   const [currentDate, setCurrentDate] = React.useState(new Date())
@@ -26,14 +27,11 @@ export default function Screen() {
     type: TaskRecord,
     query: collection => collection
       .filtered(
-        'due >= $0 && due <= $1 && status == $2',
+        'plannedBegin <= $1 && plannedEnd >= $0', // ensure overlap
         startOfMonth(currentDate),
         endOfMonth(currentDate),
-        TaskStatus.PENDING,
       )
-      .sorted('due'),
-    // I think this might have performance issues
-    // Let's see if we can optimize it later
+      .sorted('plannedBegin'),
   }, [currentDate])
 
   const dots = useMemo(
@@ -41,11 +39,18 @@ export default function Screen() {
       const result: Record<string, number> = {}
 
       for (const task of tasksInMonth) {
-        if (!task.due)
+        if (!task.plannedBegin) {
           continue
+        }
 
-        const date = formatDate(task.due, 'yyyy-MM-dd')
-        result[date] = (result[date] ?? 0) + 1
+        for (const date of dateRange(
+          task.plannedBegin,
+          task.plannedEnd!,
+          TimeDelta.DAY(1),
+        )) {
+          const dateStr = formatDate(date, 'yyyy-MM-dd')
+          result[dateStr] = (result[dateStr] ?? 0) + 1
+        }
       }
 
       return result
