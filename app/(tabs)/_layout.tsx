@@ -1,3 +1,4 @@
+import { formatDate } from 'date-fns'
 import { router, Tabs } from 'expo-router'
 
 import { AppTabBar } from '~/components/layouts/app-tab-bar'
@@ -25,6 +26,7 @@ export default function TabLayout() {
         options={{
           title: t('routes.(tabs).index'),
           tabBarIcon: props => <HomeIcon {...props} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen

@@ -128,6 +128,8 @@ export function TaskForm({
         options={[
           { label: t('task_form.status.values.pending'), value: TaskStatus.PENDING },
           { label: t('task_form.status.values.completed'), value: TaskStatus.COMPLETED },
+          { label: t('task_form.status.values.overdue_completed'), value: TaskStatus.OVERDUE_COMPLETED },
+          { label: t('task_form.status.values.deleted'), value: TaskStatus.DELETED },
         ]}
       />
 

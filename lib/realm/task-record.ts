@@ -4,12 +4,12 @@ import { z } from 'zod'
 
 import { clearAlarm, setAlarm } from '~/lib/alarm'
 
-import { TaskStatus } from './lib'
+import { getTaskStatusLabel, TaskStatus } from './lib'
 
 const zodSchema = z.object({
   summary: z.string().nonempty().describe('The summary of the task'),
   status: z.nativeEnum(TaskStatus)
-    .describe('1 for PENDING, 2 for COMPLETED'),
+    .describe('1 for PENDING, 2 for COMPLETED, 3 for OVERDUELY_COMPLETED, 4 for DELETED'),
 
   due: z.coerce.date().optional().nullable().describe('The due date of the task'),
   venue: z.string().optional().nullable().describe('The venue of the task'),
@@ -91,6 +91,27 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   update(props: Partial<ITaskRecord>) {
     this.updated = new Date()
     Object.assign(this, props)
+  }
+
+  toModel(): string {
+    if (this.status === TaskStatus.DELETED) {
+      return ''
+    }
+
+    const content = Object.entries({
+      summary: this.summary,
+      due: this.due?.toLocaleString(),
+      plannedBegin: this.plannedBegin?.toLocaleString(),
+      plannedEnd: this.plannedEnd?.toLocaleString(),
+      venue: this.venue,
+      status: getTaskStatusLabel(this.status),
+    })
+      .map(([key, value]) => `  <${key}>${value}</${key}>`)
+      .join('\n')
+
+    return `<task>
+${content}
+</task>`
   }
 
   async syncAlarm(this: TaskRecord) {

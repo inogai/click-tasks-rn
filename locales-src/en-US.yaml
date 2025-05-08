@@ -113,6 +113,10 @@ expenses_view:
   monthly_balance:
     title: Monthly
 
+prod_summary:
+  currency:
+    label: Choose the currency to summarize...
+
 # Routes
 routes:
   (tabs):
@@ -134,6 +138,11 @@ routes:
     list: Manage Transaction Accounts
     edit: Edit Transaction Account
     create: Create Transaction Account
+
+  recognize: Voice Recognize
+
+  prod-summary:
+    monthly: Monthly Summary
 
 # Pages
 recognize:

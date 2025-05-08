@@ -104,6 +104,11 @@
       "title": "Monthly"
     }
   },
+  "prod_summary": {
+    "currency": {
+      "label": "Choose the currency to summarize..."
+    }
+  },
   "routes": {
     "(tabs)": {
       "__itself__": "Home",
@@ -124,6 +129,10 @@
       "list": "Manage Transaction Accounts",
       "edit": "Edit Transaction Account",
       "create": "Create Transaction Account"
+    },
+    "recognize": "Voice Recognize",
+    "prod-summary": {
+      "monthly": "Monthly Summary"
     }
   },
   "recognize": {

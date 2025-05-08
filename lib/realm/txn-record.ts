@@ -79,4 +79,19 @@ export class TxnRecord extends Realm.Object<TxnRecord> {
       summary: this.summary,
     }
   }
+
+  toModel(): string {
+    const content = Object.entries({
+      account: this.account?.name,
+      currency: this.account?.currency,
+      date: this.date.toLocaleString(),
+      summary: this.summary,
+    })
+      .map(([key, value]) => `  <${key}>${value}</${key}>`)
+      .join('\n')
+
+    return `<txn>
+${content}
+</txn>`
+  }
 }

@@ -24,6 +24,7 @@ const ICON_NAMES = [
   'Menu',
   'Mic',
   'Minus',
+  'NotepadText',
   'Pencil',
   'Plus',
   'RotateCcw',

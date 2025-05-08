@@ -44,4 +44,6 @@ export const routes = [
   } },
   { name: 'txn-account/create', label: t('routes.txn-account.create') },
   { name: 'txn-account/edit/[accountId]', label: t('routes.txn-account.edit') },
+  { name: 'recognize/[text]', label: t('routes.recognize') },
+  { name: 'prod-summary/monthly/[date]', label: t('routes.prod-summary.monthly') },
 ] satisfies RouteDefinition[]
