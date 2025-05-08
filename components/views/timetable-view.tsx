@@ -194,7 +194,7 @@ export function TimeTableView({
   const timeBegin = R.pipe(
     items,
     R.map(it => Time.fromDate(it.from)),
-    item => minBy(item, it => it.getTime())!,
+    item => minBy(item, it => it.getTime()) ?? Time.fromLiteral('00:00'),
     // at least 00:00 and at most 23:00 (1 hour for timeEnd)
     x => clampDate(x, Time.fromLiteral('00:00'), Time.fromLiteral('23:00')),
   ) as Time
@@ -202,7 +202,7 @@ export function TimeTableView({
   const timeEnd = R.pipe(
     items,
     R.map(it => Time.fromDate(it.to)),
-    item => minBy(item, it => -it.getTime())!,
+    item => minBy(item, it => -it.getTime()) ?? Time.fromLiteral('24:00'),
     // at least 1 hour after timeBegin and at most 24:00
     x => clampDate(x, addHours(timeBegin, 1), Time.fromLiteral('24:00')),
   ) as Time
