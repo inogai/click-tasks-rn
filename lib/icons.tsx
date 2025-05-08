@@ -10,6 +10,7 @@ import {
   Book,
   BookPlus,
   Calendar,
+  Calendar1,
   CalendarClock,
   Check,
   ChevronLeft,
@@ -78,6 +79,7 @@ export const BanknoteArrowUpIcon = createIcon(BanknoteArrowUp)
 export const BookIcon = createIcon(Book)
 export const BookPlusIcon = createIcon(BookPlus)
 export const CalendarIcon = createIcon(Calendar)
+export const Calendar1Icon = createIcon(Calendar1)
 export const CalendarClockIcon = createIcon(CalendarClock)
 export const CheckIcon = createIcon(Check)
 export const ChevronLeftIcon = createIcon(ChevronLeft)

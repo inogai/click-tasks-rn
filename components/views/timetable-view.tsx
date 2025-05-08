@@ -168,13 +168,16 @@ export function TimeTable({
 
 export interface TimeTableViewProps {
   anchorDate?: Date
+  mode: 'day' | '3day'
 }
 
 export function TimeTableView({
   anchorDate = new Date(),
+  mode,
 }: TimeTableViewProps) {
-  const dateBegin = addDays(anchorDate, -1)
-  const dateEnd = addDays(anchorDate, 2)
+  const [dateBegin, dateEnd] = mode === 'day'
+    ? [anchorDate, addDays(anchorDate, 1)]
+    : [addDays(anchorDate, -1), addDays(anchorDate, 2)]
 
   const taskRecords = useRealmQuery({
     type: TaskRecord,

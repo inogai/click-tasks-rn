@@ -9,6 +9,7 @@ const ICON_NAMES = [
   'Book',
   'BookPlus',
   'Calendar',
+  'Calendar1',
   'CalendarClock',
   'Check',
   'ChevronLeft',

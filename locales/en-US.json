@@ -91,6 +91,10 @@
     }
   },
   "timetable": {
+    "mode": {
+      "day": "1 Day View",
+      "3day": "3 Day View"
+    },
     "task": {
       "label": "{{ summary }}, from {{ plannedBegin, datetime(timeStyle: 'short')}} on {{ plannedBegin, datetime(weekday: 'long') }}, {{ plannedBegin, datetime(day: 'numeric') }}, {{ plannedBegin, datetime(month: 'long')}} to {{ plannedEnd, datetime(timeStyle: 'short')}} on {{ plannedEnd datetime(weekday: 'long') }}, {{ plannedEnd, datetime(day: 'numeric') }}, {{ plannedEnd, datetime(month: 'long')}}\n",
       "label_sameday": "{{ summary }}, from {{ plannedBegin, datetime(timeStyle: 'short')}} to {{ plannedEnd, datetime(timeStyle: 'short')}} on {{ plannedBegin, datetime(weekday: 'long') }}, {{ plannedBegin, datetime(day: 'numeric') }}, {{ plannedBegin, datetime(month: 'long')}}\n"

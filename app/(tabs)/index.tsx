@@ -1,7 +1,7 @@
 import { Header } from '@react-navigation/elements'
 import { useQuery } from '@realm/react'
 import { endOfMonth, formatDate, startOfMonth } from 'date-fns'
-import { router, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -9,12 +9,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CalendarStrip } from '~/components/calendar-strip'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
-import { Text, View } from '~/components/ui/text'
+import { View } from '~/components/ui/text'
 import { ExpenseView } from '~/components/views/expense-view'
 import { TimeTableView } from '~/components/views/timetable-view'
 
 import { t } from '~/lib/i18n'
-import { NotepadTextIcon } from '~/lib/icons'
+import { Calendar1Icon, CalendarIcon, NotepadTextIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 
 export default function Screen() {
@@ -51,27 +51,48 @@ export default function Screen() {
     [tasksInMonth],
   )
 
+  const timetableModes = [
+    { label: t('timetable.mode.day'), value: 'day' },
+    { label: t('timetable.mode.3day'), value: '3day' },
+  ] as const
+  type TimetableMode = (typeof timetableModes)[number]['value']
+  const [timetableMode, setTimetableMode] = React.useState<TimetableMode>('day')
+
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['left', 'right', 'bottom']}>
       <Header
         title={t('routes.(tabs).index')}
         headerRight={() => (
-          <Button
-            className="mr-4"
-            size="icon"
-            variant="ghost"
-            onPress={() => {
-              router.push({
-                pathname: '/prod-summary/monthly/[date]',
-                params: {
-                  date: formatDate(currentDate, 'yyyy-MM-dd'),
-                },
-              })
-            }}
-            accessibilityLabel={t('routes.prod-summary.monthly')}
-          >
-            <NotepadTextIcon />
-          </Button>
+          <View className="mr-4 flex-row items-center gap-x-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              onPress={() => {
+                const idx = timetableModes.findIndex(m => m.value === timetableMode) + 1
+                setTimetableMode(timetableModes[idx % timetableModes.length].value)
+              }}
+              accessibilityLabel={timetableModes.find(m => m.value === timetableMode)?.label}
+            >
+              {timetableMode === 'day' && <Calendar1Icon />}
+              {timetableMode === '3day' && <CalendarIcon />}
+            </Button>
+
+            <Button
+              size="icon"
+              variant="ghost"
+              onPress={() => {
+                router.push({
+                  pathname: '/prod-summary/monthly/[date]',
+                  params: {
+                    date: formatDate(currentDate, 'yyyy-MM-dd'),
+                  },
+                })
+              }}
+              accessibilityLabel={t('routes.prod-summary.monthly')}
+            >
+              <NotepadTextIcon />
+            </Button>
+          </View>
         )}
       />
 
@@ -93,7 +114,7 @@ export default function Screen() {
 
         <Separator />
 
-        <TimeTableView anchorDate={currentDate} />
+        <TimeTableView anchorDate={currentDate} mode={timetableMode} />
       </View>
     </SafeAreaView>
   )

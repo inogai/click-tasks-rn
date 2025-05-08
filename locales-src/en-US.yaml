@@ -79,6 +79,10 @@ calendar_strip:
     expanded: Collaspe Calendar
 
 timetable:
+  mode:
+    day: 1 Day View
+    3day: 3 Day View
+
   task:
     label: >
       {{ summary }},
