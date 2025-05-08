@@ -135,6 +135,8 @@ function useProductiveSummary({
     { title: 'Total Expense', value: totalExpense, suffix: currency },
   ]
 
+  const locale = usePreferenceStore(store => store.language)
+
   const comment = useQuery({
     queryKey: ['recognization'],
     queryFn: async () => {
@@ -149,6 +151,7 @@ function useProductiveSummary({
       const resp = await model.invoke([
         ['system', promptTemplate],
         ['system', `Time now: ${formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss\'Z')}`],
+        ['system', `- Reply in ${locale}`],
         ['user', info],
       ])
       return resp.text
