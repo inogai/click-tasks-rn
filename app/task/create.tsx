@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
-import { TaskRecord, TaskStatus } from '~/lib/realm'
+import { Countdown, TaskRecord, TaskStatus } from '~/lib/realm'
 
 type FormData = ITaskRecord
 
@@ -36,10 +36,12 @@ export default function Screen() {
   }, []))
 
   const handleSubmit: SubmitHandler<FormData> = (data) => {
-    const task = TaskRecord.create(data)
-
     realm.write(() => {
-      realm.create(TaskRecord, task)
+      const task = realm.create(TaskRecord, TaskRecord.create(data))
+
+      if (data.addToCountdown) {
+        Countdown.create(task, realm)
+      }
     })
 
     form.reset({ ...defaultValues })

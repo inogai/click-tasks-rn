@@ -8,8 +8,9 @@ import { SafeAreaView } from 'react-native'
 import { BSON } from 'realm'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
+import { Button } from '~/components/ui/button'
 
-import { TaskRecord } from '~/lib/realm'
+import { Countdown, TaskRecord } from '~/lib/realm'
 
 type FormData = ITaskRecord
 
@@ -30,7 +31,10 @@ export function TaskUpdateScreen() {
 
   // trigger reset when task changes
   useEffect(() => {
-    form.reset(defaultValues)
+    form.reset({
+      ...defaultValues,
+      addToCountdown: Countdown.existsByTaskRecord(task!, realm),
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues])
 
@@ -43,6 +47,11 @@ export function TaskUpdateScreen() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     realm.write(() => {
       task.update(data)
+      Countdown.deleteByTaskRecord(task, realm)
+
+      if (data.addToCountdown) {
+        Countdown.create(task, realm)
+      }
     })
 
     // Navigate back after successful submission
@@ -52,8 +61,8 @@ export function TaskUpdateScreen() {
   return (
     <SafeAreaView>
       <TaskForm
-        form={form}
         defaultValues={defaultValues}
+        form={form}
         onSubmit={onSubmit}
       />
     </SafeAreaView>

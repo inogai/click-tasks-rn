@@ -31,6 +31,12 @@ task_form:
     values:
       pending: Pending
       completed: Completed
+      overdue_completed: Overdue Completed
+      deleted: Deleted
+  add_to_countdown:
+    label: Add Item to Dashboard Countdown
+    error:
+      no_due: Due date must be defined when adding to countdown
 
 txn_account_form:
   name:
@@ -120,6 +126,10 @@ expenses_view:
 prod_summary:
   currency:
     label: Choose the currency to summarize...
+
+countdown_view:
+  days_left: <1>{{ count }}</1> days left
+  days_left_one: <1>{{ count }}</1> day left
 
 # Routes
 routes:

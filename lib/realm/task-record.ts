@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { z } from 'zod'
 
 import { clearAlarm, setAlarm } from '~/lib/alarm'
+import { t } from '~/lib/i18n'
 
 import { getTaskStatusLabel, TaskStatus } from './lib'
 
@@ -15,6 +16,8 @@ const zodSchema = z.object({
   venue: z.string().optional().nullable().describe('The venue of the task'),
   plannedBegin: z.coerce.date().optional().nullable().describe('The planned begin date of the task'),
   plannedEnd: z.coerce.date().optional().nullable().describe('The planned end date of the task'),
+
+  addToCountdown: z.coerce.boolean().describe('don\'t modify this'),
 }).superRefine((val, ctx) => {
   // Ensure plannedBegin and plannedEnd are either
   // 1. both defined; or
@@ -34,6 +37,14 @@ const zodSchema = z.object({
       code: z.ZodIssueCode.custom,
       message: 'Planned end date must be after planned begin date',
       path: ['plannedEnd'],
+    })
+  }
+
+  if (val.addToCountdown && !val.due) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('task_form.add_to_countdown.error.no_due'),
+      path: ['due'],
     })
   }
 })

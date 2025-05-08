@@ -1,6 +1,6 @@
 import { RealmProvider as NativeRealmProvider } from '@realm/react'
 
-import { TaskRecord, TxnAccount, TxnRecord } from '~/lib/realm'
+import { Countdown, TaskRecord, TxnAccount, TxnRecord } from '~/lib/realm'
 
 export function RealmProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +8,7 @@ export function RealmProvider({ children }: { children: React.ReactNode }) {
       TaskRecord,
       TxnAccount,
       TxnRecord,
+      Countdown,
     ]}
     >
       {children}

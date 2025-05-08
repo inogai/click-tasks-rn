@@ -34,6 +34,7 @@ const ICON_NAMES = [
   'Square',
   'SquareDashed',
   'SunMoon',
+  'Timer',
   'Trash',
   'UserRoundCog',
   'Wallet',

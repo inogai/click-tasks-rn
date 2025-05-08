@@ -35,6 +35,7 @@ import {
   Square,
   SquareDashed,
   SunMoon,
+  Timer,
   Trash,
   UserRoundCog,
   Wallet,
@@ -104,6 +105,7 @@ export const SmileIcon = createIcon(Smile)
 export const SquareIcon = createIcon(Square)
 export const SquareDashedIcon = createIcon(SquareDashed)
 export const SunMoonIcon = createIcon(SunMoon)
+export const TimerIcon = createIcon(Timer)
 export const TrashIcon = createIcon(Trash)
 export const UserRoundCogIcon = createIcon(UserRoundCog)
 export const WalletIcon = createIcon(Wallet)

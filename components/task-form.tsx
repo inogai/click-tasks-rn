@@ -7,9 +7,11 @@ import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
+import { CheckboxField } from '~/components/form/checkbox-field'
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
+import { Checkbox } from '~/components/ui/checkbox'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
@@ -24,11 +26,13 @@ interface TaskFormProps {
   form: UseFormReturn<FormData>
 }
 
-export function useTaskForm(defaultValues?: Partial<FormData>) {
+export function useTaskForm() {
   return useForm<FormData>({
     resolver: zodResolver(TaskRecord.zodSchema),
     mode: 'onChange',
-    defaultValues,
+    defaultValues: {
+      addToCountdown: false,
+    },
   })
 }
 
@@ -133,6 +137,12 @@ export function TaskForm({
         ]}
       />
 
+      <CheckboxField
+        control={control}
+        label={t('task_form.add_to_countdown.label')}
+        name="addToCountdown"
+      />
+
       <Text className="text-destructive">
         { errors.root?.message }
       </Text>
@@ -143,7 +153,7 @@ export function TaskForm({
         onPress={handleSubmit(onSubmit)}
       >
         <CheckIcon className="text-primary-foreground" />
-        <Text className="text-primary-foreground">
+        <Text className="font-semibold text-primary-foreground">
           {t('button.submit')}
         </Text>
       </Button>

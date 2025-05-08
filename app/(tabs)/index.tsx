@@ -10,6 +10,7 @@ import { CalendarStrip } from '~/components/calendar-strip'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
 import { View } from '~/components/ui/text'
+import { CountdownView } from '~/components/views/countdown-view'
 import { ExpenseView } from '~/components/views/expense-view'
 import { TimeTableView } from '~/components/views/timetable-view'
 
@@ -97,6 +98,8 @@ export default function Screen() {
       />
 
       <View className="flex-1 gap-y-4 px-4 py-6">
+        <CountdownView />
+
         <View className="relative mb-2 h-36">
           <CalendarStrip
             dots={dots}

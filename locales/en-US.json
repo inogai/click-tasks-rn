@@ -35,7 +35,15 @@
       "label": "Status",
       "values": {
         "pending": "Pending",
-        "completed": "Completed"
+        "completed": "Completed",
+        "overdue_completed": "Overdue Completed",
+        "deleted": "Deleted"
+      }
+    },
+    "add_to_countdown": {
+      "label": "Add Item to Dashboard Countdown",
+      "error": {
+        "no_due": "Due date must be defined when adding to countdown"
       }
     }
   },
@@ -112,6 +120,10 @@
     "currency": {
       "label": "Choose the currency to summarize..."
     }
+  },
+  "countdown_view": {
+    "days_left": "<1>{{ count }}</1> days left",
+    "days_left_one": "<1>{{ count }}</1> day left"
   },
   "routes": {
     "(tabs)": {
