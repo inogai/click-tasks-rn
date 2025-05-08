@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { endOfMonth, formatDate, startOfMonth } from 'date-fns'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import React, { useCallback, useState } from 'react'
+import Markdown from 'react-native-markdown-display'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { z } from 'zod'
 
@@ -38,6 +39,7 @@ const model = getModel()
 const promptTemplate = `
 You are a productivity assistant. You will be given a list of tasks and transactions.
 - give concise recommendations to arrange task to improve productivity
+- reply in point form.
 - don't repeat the tasks and transactions.
 - don't suggest changes to the data format
 - don't suggest recurrent schedules
@@ -205,9 +207,16 @@ export default function ProductivitySummaryScreen() {
         />
         <SummaryCard summary={txnsSummary} />
 
-        {comment.isFetching
-          ? <Text>Loading...</Text>
-          : <Text>{comment.data}</Text>}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('prod_summary.comments.title')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {comment.isFetching
+              ? <Text>Loading...</Text>
+              : <Markdown>{comment.data}</Markdown>}
+          </CardContent>
+        </Card>
       </View>
     </SafeAreaView>
   )

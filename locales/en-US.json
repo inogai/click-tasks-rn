@@ -119,6 +119,9 @@
   "prod_summary": {
     "currency": {
       "label": "Choose the currency to summarize..."
+    },
+    "comments": {
+      "title": "Recommendations for you..."
     }
   },
   "countdown_view": {
