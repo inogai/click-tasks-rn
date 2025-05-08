@@ -182,7 +182,7 @@ export function TimeTableView({
       c
         .filtered('plannedBegin > $0', dateBegin)
         .filtered('plannedEnd < $0', dateEnd),
-  })
+  }, [dateBegin, dateEnd])
 
   const items: TimeTableItem[] = Array.from(taskRecords)
     .map(item => ({
