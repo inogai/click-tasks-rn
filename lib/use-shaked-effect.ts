@@ -60,6 +60,7 @@ export function useShakedEffect(
   useEffect(() => {
     if (triggerCount >= count) {
       callback()
+      setTriggerCount(0)
       if (once) {
         _unsubscribe()
       }
