@@ -28,27 +28,26 @@ export function SelectField<T extends FieldValues>({
   renderLabel,
 }: SelectFieldProps<T>) {
   return (
-    <View className={className}>
-      <Label nativeID={name}>{label}</Label>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field: { onChange, onBlur, value }, fieldState }) => (
-          <>
-            <Select
-              options={options}
-              placeholder={placeholder || label}
-              value={value}
-              onChange={onChange}
-              renderLabel={renderLabel}
-            />
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, onBlur, value }, fieldState }) => (
+        <View className={className}>
+          <Label nativeID={name}>{label}</Label>
+          <Select
+            options={options}
+            placeholder={placeholder || label}
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            renderLabel={renderLabel}
+          />
 
-            {fieldState?.error && (
-              <Text className="text-destructive">{fieldState.error?.message || ''}</Text>
-            )}
-          </>
-        )}
-      />
-    </View>
+          {fieldState?.error && (
+            <Text className="text-destructive">{fieldState.error?.message || ''}</Text>
+          )}
+        </View>
+      )}
+    />
   )
 }
