@@ -4,11 +4,8 @@ import React from 'react'
 import { Controller } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
-import { DateInput } from '~/components/date-input'
 import { Checkbox } from '~/components/ui/checkbox'
-import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { Pressable } from '~/components/ui/pressable'
 
 interface CheckboxFieldProps<T extends FieldValues> {
   control: Control<T>
@@ -28,7 +25,7 @@ export function CheckboxField<T extends FieldValues>({
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, onBlur, value }, fieldState }) => (
+        render={({ field: { onChange, onBlur, value }, fieldState, formState }) => (
           <>
             <View
               className="flex-row items-center"
@@ -46,6 +43,7 @@ export function CheckboxField<T extends FieldValues>({
                 nativeID={name}
                 onPress={() => {
                   onChange(!value)
+                  onBlur()
                 }}
               >
                 {label}

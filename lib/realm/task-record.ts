@@ -29,6 +29,11 @@ const zodSchema = z.object({
       message: 'Planned begin and end dates must be both defined or both undefined',
       path: ['plannedEnd'],
     })
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Planned end date must be after planned begin date',
+      path: ['plannedBegin'],
+    })
   }
 
   // Ensure plannedBegin is before plannedEnd when both are defined
@@ -38,6 +43,11 @@ const zodSchema = z.object({
       message: 'Planned end date must be after planned begin date',
       path: ['plannedEnd'],
     })
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Planned end date must be after planned begin date',
+      path: ['plannedBegin'],
+    })
   }
 
   if (val.addToCountdown && !val.due) {
@@ -45,6 +55,11 @@ const zodSchema = z.object({
       code: z.ZodIssueCode.custom,
       message: t('task_form.add_to_countdown.error.no_due'),
       path: ['due'],
+    })
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('task_form.add_to_countdown.error.no_due'),
+      path: ['addToCountdown'],
     })
   }
 })
