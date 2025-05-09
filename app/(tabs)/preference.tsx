@@ -1,14 +1,15 @@
 import type { Preference } from '~/lib/preference'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
+import { Button } from '~/components/ui/button'
 import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
+import { CheckIcon } from '~/lib/icons'
 import { preferenceSchema, usePreferenceStore } from '~/lib/preference'
 
 export function PreferenceScreen() {
@@ -17,22 +18,11 @@ export function PreferenceScreen() {
   const {
     control,
     formState: { errors },
-    trigger,
   } = useForm<Preference>({
     resolver: zodResolver(preferenceSchema),
     defaultValues: preference,
+    mode: 'onChange',
   })
-
-  const formValues = useWatch({ control })
-  useEffect(() => {
-    // trigger validation on every field change
-    trigger()
-    // update preference store when watched changes
-    const { data, success } = preferenceSchema.safeParse(formValues)
-    if (success) {
-      setPreference(data)
-    }
-  }, [formValues, setPreference, trigger])
 
   return (
     <View className="gap-y-4 px-4 py-6">
@@ -101,6 +91,11 @@ export function PreferenceScreen() {
       <Text className="text-destructive">
         { errors.root?.message }
       </Text>
+
+      <Button className="flex-row gap-2">
+        <CheckIcon />
+        <Text>{t('button.submit')}</Text>
+      </Button>
     </View>
   )
 }
