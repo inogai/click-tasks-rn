@@ -43,6 +43,7 @@ export interface SelectProps {
   options: SelectOption[]
   value: SelectValue | undefined
   onChange?: (value: SelectValue | undefined) => void
+  onBlur?: () => void
   disabled?: boolean
   nativeID?: string
   placeholder?: string
@@ -57,6 +58,7 @@ export function Select({
   options,
   value: valueProp,
   onChange: onChangeProp,
+  onBlur,
   disabled = false,
   error = false,
   nativeID,
@@ -88,6 +90,8 @@ export function Select({
     else {
       popoverTriggerRef.current?.close()
     }
+    onBlur?.()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   return (
