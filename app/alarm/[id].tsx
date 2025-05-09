@@ -14,8 +14,10 @@ import { BSON } from 'realm'
 import { Button } from '~/components/ui/button'
 import { Text, View } from '~/components/ui/text'
 
+import { t } from '~/lib/i18n'
 import { BellRingIcon } from '~/lib/icons'
 import { Alarm, useRealmObject } from '~/lib/realm'
+import { useShakedEffect } from '~/lib/use-shaked-effect'
 
 export default function AlarmScreen() {
   const { id } = useLocalSearchParams<'/alarm/[id]'>()
@@ -41,6 +43,8 @@ export default function AlarmScreen() {
   }
 
   useInterval(() => triggerShake(), 1000)
+
+  useShakedEffect(() => handleDismiss(), {})
 
   if (!alarm) {
     router.back()
@@ -80,6 +84,10 @@ export default function AlarmScreen() {
           </View>
         </Button>
       </Animated.View>
+
+      <Text className="text-2xl font-semibold text-white">
+        {t('alarm.shake_to_dismiss')}
+      </Text>
     </SafeAreaView>
   )
 }
