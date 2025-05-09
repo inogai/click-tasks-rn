@@ -4,12 +4,14 @@ import { Countdown, TaskRecord, TxnAccount, TxnRecord } from '~/lib/realm'
 
 export function RealmProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NativeRealmProvider schema={[
-      TaskRecord,
-      TxnAccount,
-      TxnRecord,
-      Countdown,
-    ]}
+    <NativeRealmProvider
+      schemaVersion={2}
+      schema={[
+        TaskRecord,
+        TxnAccount,
+        TxnRecord,
+        Countdown,
+      ]}
     >
       {children}
     </NativeRealmProvider>

@@ -2,10 +2,9 @@ import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 
 import { useRealm } from '@realm/react'
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { useCallback } from 'react'
 import { SafeAreaView } from 'react-native'
-import { z } from 'zod'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
@@ -21,17 +20,8 @@ export default function Screen() {
   const realm = useRealm()
   const form = useTaskForm()
 
-  // capture initial values if any
-  const initialValues = useLocalSearchParams()
-
   useFocusEffect(useCallback(() => {
-    form.reset({
-      ...defaultValues,
-      ...initialValues,
-      status: initialValues.status
-        ? z.coerce.number().parse(initialValues.status)
-        : undefined,
-    })
+    form.reset()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []))
 

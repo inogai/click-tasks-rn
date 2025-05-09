@@ -92,7 +92,7 @@ function useProductiveSummary({
     type: TaskRecord,
     query: collection => collection
       .filtered([
-        'due >= $0 && due <= $1',
+        'plannedBegin >= $0 && plannedBegin <= $1',
         'plannedEnd >= $0 && plannedBegin <= $1',
       ]
         .map(it => `(${it})`)

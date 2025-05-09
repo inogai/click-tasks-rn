@@ -1,4 +1,4 @@
-import { addDays, addHours, addMilliseconds, differenceInDays, isSameDay } from 'date-fns'
+import { addDays, addHours, addMilliseconds, addMinutes, differenceInDays, isSameDay } from 'date-fns'
 import { router } from 'expo-router'
 import * as React from 'react'
 
@@ -6,7 +6,7 @@ import { Pressable } from '~/components/ui/pressable'
 import { Text, View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
-import { TaskRecord, useRealmObject, useRealmQuery } from '~/lib/realm'
+import { TaskRecord, useRealmQuery } from '~/lib/realm'
 import { createTimeTable } from '~/lib/timetable'
 import { useMeasure } from '~/lib/use-mesaure'
 import { clampDate, cn, composeDate, dateRange, minBy, R, Time, TimeDelta } from '~/lib/utils'
@@ -122,7 +122,7 @@ export function TimeTable({
                   left: it.left * width / numDates,
                   width: it.width * width / numDates,
                   top: it.top * 60000 * H_PER_MS,
-                  height: it.height * 60000 * H_PER_MS,
+                  height: Math.max(it.height * 60000 * H_PER_MS, 28),
                 },
               })),
               R.map(({ key, value, style }) => (
@@ -184,13 +184,13 @@ export function TimeTableView({
     query: c =>
       c
         .filtered('plannedBegin > $0', dateBegin)
-        .filtered('plannedEnd < $0', dateEnd),
+        .filtered('plannedEnd == null || plannedEnd < $0', dateEnd),
   }, [dateBegin, dateEnd])
 
   const items: TimeTableItem[] = Array.from(taskRecords)
     .map(item => ({
       from: item.plannedBegin!,
-      to: item.plannedEnd!,
+      to: item.plannedEnd ?? addMinutes(item.plannedBegin!, 1),
       item,
     }))
 

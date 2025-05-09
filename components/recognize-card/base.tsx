@@ -36,7 +36,7 @@ export type CardLine = [LucideIcon, string]
 export interface BaseCardProps extends VariantProps<typeof cardVariant> {
   title: string
   titleTag: string
-  lines: (CardLine | '' | null | undefined)[]
+  lines: (CardLine | '' | null | undefined | false)[]
   renderRightBtn?: (props: { className?: string, iconClass?: string }) => ReactNode
 }
 

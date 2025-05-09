@@ -17,10 +17,10 @@ export function TaskListScreen() {
   const tasks = {
     pending: useArrayFrom(useRealmQuery({ type: TaskRecord, query: c => c
       .filtered('status == $0', TaskStatus.PENDING)
-      .sorted('due') })),
+      .sorted('plannedBegin') })),
     recent: useArrayFrom(useRealmQuery({ type: TaskRecord, query: c => c
       .filtered('status != $0', TaskStatus.PENDING)
-      .filtered('due >= $0 || updated >= $0', startDate) }, [startDate])),
+      .filtered('plannedBegin >= $0 || updated >= $0', startDate) }, [startDate])),
   }
 
   function handleItemPress(task: TaskRecord) {

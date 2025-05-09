@@ -21,7 +21,6 @@ export function TaskCard({
   onEdit,
 }: TaskCardProps) {
   const {
-    due,
     plannedBegin,
     plannedEnd,
     summary,
@@ -46,8 +45,8 @@ export function TaskCard({
       titleTag="Task"
       type="task"
       lines={[
-        due && [ClockIcon, smartFormatDate(due)],
-        plannedBegin && [CalendarIcon, smartFormatDateRange(plannedEnd!, plannedBegin)],
+        plannedBegin && !plannedEnd && [ClockIcon, smartFormatDate(plannedBegin)],
+        plannedBegin && plannedEnd && [CalendarIcon, smartFormatDateRange(plannedEnd, plannedBegin)],
         venue && [MapPinIcon, venue],
       ]}
       renderRightBtn={({ className, iconClass }) => (

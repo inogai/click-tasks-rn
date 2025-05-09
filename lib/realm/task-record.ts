@@ -1,5 +1,4 @@
-import { Realm, useRealm } from '@realm/react'
-import { useEffect } from 'react'
+import { Realm } from '@realm/react'
 import { z } from 'zod'
 
 import { clearAlarm, setAlarm } from '~/lib/alarm'
@@ -12,18 +11,14 @@ const zodSchema = z.object({
   status: z.nativeEnum(TaskStatus)
     .describe('1 for PENDING, 2 for COMPLETED, 3 for OVERDUELY_COMPLETED, 4 for DELETED'),
 
-  due: z.coerce.date().optional().nullable().describe('The due date of the task'),
   venue: z.string().optional().nullable().describe('The venue of the task'),
-  plannedBegin: z.coerce.date().optional().nullable().describe('The planned begin date of the task'),
-  plannedEnd: z.coerce.date().optional().nullable().describe('The planned end date of the task'),
+  plannedBegin: z.coerce.date().optional().nullable().describe('Due of task, or activity start date'),
+  plannedEnd: z.coerce.date().optional().nullable().describe('null for task, or activity end date'),
 
   addToCountdown: z.coerce.boolean().describe('don\'t modify this'),
 }).superRefine((val, ctx) => {
-  // Ensure plannedBegin and plannedEnd are either
-  // 1. both defined; or
-  // 2. both undefined.
-  if ((val.plannedBegin && !val.plannedEnd)
-    || (!val.plannedBegin && val.plannedEnd)) {
+  // plannedEnd requires plannedBegin
+  if ((!val.plannedBegin && val.plannedEnd)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: 'Planned begin and end dates must be both defined or both undefined',
@@ -50,11 +45,11 @@ const zodSchema = z.object({
     })
   }
 
-  if (val.addToCountdown && !val.due) {
+  if (val.addToCountdown && !val.plannedBegin) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: t('task_form.add_to_countdown.error.no_due'),
-      path: ['due'],
+      path: ['plannedBegin'],
     })
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -74,7 +69,6 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   summary!: string
   status!: TaskStatus
 
-  due!: Date | null
   venue!: string | null
   plannedBegin!: Date | null
   plannedEnd!: Date | null
@@ -94,7 +88,6 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       status: 'int',
 
       // optional fields
-      due: { type: 'date', optional: true },
       venue: { type: 'string', optional: true },
       plannedBegin: { type: 'date', optional: true },
       plannedEnd: { type: 'date', optional: true },
@@ -126,11 +119,14 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
 
     const content = Object.entries({
       summary: this.summary,
-      due: this.due?.toLocaleString(),
-      plannedBegin: this.plannedBegin?.toLocaleString(),
-      plannedEnd: this.plannedEnd?.toLocaleString(),
       venue: this.venue,
       status: getTaskStatusLabel(this.status),
+      ...this.plannedEnd
+        ? {
+            plannedBegin: this.plannedBegin?.toLocaleString(),
+            plannedEnd: this.plannedEnd?.toLocaleString(),
+          }
+        : { due: this.plannedBegin?.toLocaleString() },
     })
       .map(([key, value]) => `  <${key}>${value}</${key}>`)
       .join('\n')

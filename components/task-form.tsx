@@ -3,7 +3,7 @@ import type { UseFormReturn } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
@@ -11,12 +11,13 @@ import { CheckboxField } from '~/components/form/checkbox-field'
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
-import { Checkbox } from '~/components/ui/checkbox'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 import { usePrevious } from '~/lib/use-previous'
+import { cn } from '~/lib/utils'
 
 type FormData = ITaskRecord
 
@@ -59,7 +60,7 @@ function getNewEnd(
 
 export function TaskForm({
   form,
-  onSubmit,
+  onSubmit: onSubmitProp,
 }: TaskFormProps) {
   const {
     control,
@@ -88,8 +89,38 @@ export function TaskForm({
   }, [plannedBegin])
   // END
 
+  const tabOptions = [
+    { value: 'task', label: t('task_form.tab.task') },
+    { value: 'activity', label: t('task_form.tab.activity') },
+  ]
+  const [tab, setTab] = useState(form.getValues('plannedEnd')
+    ? 'activity'
+    : 'task',
+  )
+
+  function onSubmit(data: FormData) {
+    if (tab === 'task') {
+      data = { ...data, plannedEnd: null }
+    }
+
+    onSubmitProp(data)
+  }
+
   return (
     <View className="gap-4">
+      <Tabs
+        value={tab}
+        onValueChange={setTab}
+      >
+        <TabsList className="w-full flex-row">
+          {tabOptions.map(({ label, value }) => (
+            <TabsTrigger className="flex-1" key={value} value={value}>
+              <Text>{label}</Text>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
       <FormField
         control={control}
         label={t('task_form.summary.label')}
@@ -105,21 +136,16 @@ export function TaskForm({
       />
 
       <FormField
-        className="mb-4"
         control={control}
-        label={t('task_form.due.label')}
-        name="due"
-        type="datetime"
-      />
-
-      <FormField
-        control={control}
-        label={t('task_form.planned_begin.label')}
         name="plannedBegin"
         type="datetime"
+        label={tab === 'task'
+          ? t('task_form.due.label')
+          : t('task_form.planned_begin.label')}
       />
 
       <FormField
+        className={cn('visible', tab === 'task' && 'hidden')}
         control={control}
         label={t('task_form.planned_end.label')}
         name="plannedEnd"

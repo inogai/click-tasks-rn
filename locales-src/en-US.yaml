@@ -14,6 +14,10 @@ voice_button:
   accept: Accept
 
 task_form:
+  tab:
+    activity: Activity
+    task: Task
+
   summary:
     label: Task Summary
     placeholder: Enter task summary

@@ -36,10 +36,12 @@ export function CountdownView() {
             keyExtractor={countdown => countdown._id.toHexString()}
             horizontal
             renderItem={({ item: countdown }) => {
-              const daysLeft = differenceInCalendarDays(
-                countdown.taskRecord.due!,
-                new Date(),
-              )
+              const daysLeft = countdown.taskRecord.plannedBegin
+                ? differenceInCalendarDays(
+                    countdown.taskRecord.plannedBegin,
+                    new Date(),
+                  )
+                : Number.NaN
               const numberClass = cn(
                 'text-3xl font-bold',
                 daysLeft <= 7 && 'text-yellow-500',
