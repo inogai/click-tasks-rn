@@ -34,6 +34,7 @@ export function useTaskForm() {
     defaultValues: {
       addToCountdown: false,
       status: TaskStatus.PENDING,
+      alarm: -1,
     },
   })
 }
