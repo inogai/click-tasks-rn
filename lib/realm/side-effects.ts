@@ -1,7 +1,9 @@
-import { useRealm } from '@realm/react'
-import { useEffect } from 'react'
+import { useQuery, useRealm } from '@realm/react'
+import { useInterval } from 'ahooks'
+import { router } from 'expo-router'
+import { useEffect, useState } from 'react'
 
-import { TaskRecord } from './task-record'
+import { Alarm, TaskRecord } from './task-record'
 import { TxnAccount } from './txn-account'
 import { TxnRecord } from './txn-record'
 
@@ -9,6 +11,7 @@ const OBJECT_CLASSES = [
   TaskRecord,
   TxnAccount,
   TxnRecord,
+  Alarm,
 ]
 
 export function useRealmSideEffects() {
@@ -22,4 +25,30 @@ export function useRealmSideEffects() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const [date, setDate] = useState(new Date())
+
+  const alarms = useQuery({
+    type: Alarm,
+    // query: collection => collection,
+    // .filtered('time <= $0', date),
+  }, [date])
+
+  useInterval(() => {
+    setDate(new Date())
+  }, 5000)
+
+  useEffect(() => {
+    console.log(alarms, date)
+    if (alarms.length > 0) {
+      alarms.forEach((alarm) => {
+        router.push({
+          pathname: '/alarm/[id]',
+          params: {
+            id: alarm._id.toString(),
+          },
+        })
+      })
+    }
+  }, [alarms])
 }

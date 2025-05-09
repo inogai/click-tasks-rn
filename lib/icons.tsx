@@ -7,6 +7,7 @@ import type {
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
+  BellRing,
   Book,
   BookPlus,
   Calendar,
@@ -77,6 +78,7 @@ function createIcon(OriginalIcon: LucideIcon): LucideIcon {
 
 export const BanknoteArrowDownIcon = createIcon(BanknoteArrowDown)
 export const BanknoteArrowUpIcon = createIcon(BanknoteArrowUp)
+export const BellRingIcon = createIcon(BellRing)
 export const BookIcon = createIcon(Book)
 export const BookPlusIcon = createIcon(BookPlus)
 export const CalendarIcon = createIcon(Calendar)

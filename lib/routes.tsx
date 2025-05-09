@@ -46,4 +46,5 @@ export const routes = [
   { name: 'txn-account/edit/[accountId]', label: t('routes.txn-account.edit') },
   { name: 'recognize/[text]', label: t('routes.recognize') },
   { name: 'prod-summary/monthly/[date]', label: t('routes.prod-summary.monthly') },
+  { name: 'alarm/[id]', label: t('routes.alarm'), opts: { screenOptions: { headerShown: false } } },
 ] satisfies RouteDefinition[]

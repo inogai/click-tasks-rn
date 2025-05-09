@@ -13,10 +13,6 @@ import { Alarm, Countdown, TaskRecord, TaskStatus } from '~/lib/realm'
 
 type FormData = ITaskRecord
 
-const defaultValues: Partial<FormData> = {
-  status: TaskStatus.PENDING,
-}
-
 export default function Screen() {
   const realm = useRealm()
   const form = useTaskForm()
@@ -42,7 +38,7 @@ export default function Screen() {
       }
     })
 
-    form.reset({ ...defaultValues })
+    form.reset()
     // Navigate back after successful submission
     router.back()
   }

@@ -6,6 +6,7 @@ const ICON_NAMES = [
   // 'Banknote',
   'BanknoteArrowDown',
   'BanknoteArrowUp',
+  'BellRing',
   'Book',
   'BookPlus',
   'Calendar',

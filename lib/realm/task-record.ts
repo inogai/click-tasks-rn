@@ -165,50 +165,23 @@ export class Alarm extends Realm.Object<Alarm> {
     },
   }
 
-  static async create({
+  static create({
     task,
     time,
   }: {
     task: TaskRecord
     time: Date
   }, realm: Realm) {
-    const alarmType = usePreferenceStore.getState().alarmType
-    const due = task.plannedBegin
-
-    if (!due)
-      throw new Error('Due date is required to set an alarm')
-
-    let alarmIds: string[] = []
-
-    if (alarmType === 'repeat') {
-      console.log(`Alarm: creating repeat alarm for task ${task.summary} at ${time}`)
-      alarmIds = await Promise.all(R
-        .range(0, 60)
-        .map(i => addSeconds(time, 5 * i))
-        .map(date => setAlarm(
-          task.summary,
-          t('alarm.notification.minutesLeft', {
-            minutes: differenceInMinutes(due, date),
-          }),
-          time,
-        )),
-      )
-    }
-    else {
-      alarmIds = [await setAlarm(
-        task.summary,
-        t('alarm.notification.minutesLeft', {
-          minutes: differenceInMinutes(due, time),
-        }),
-        time,
-      )]
-    }
-
-    return realm.create(Alarm, { task, time, alarmIds })
+    return realm.create(Alarm, {
+      _id: new Realm.BSON.ObjectId(),
+      task,
+      time,
+      alarmIds: [],
+    })
   }
 
   delete(realm: Realm) {
-    this.alarmIds.forEach((id) => {
+    this.alarmIds?.forEach((id) => {
       clearAlarm(id)
     })
     realm.delete(this)
@@ -216,6 +189,21 @@ export class Alarm extends Realm.Object<Alarm> {
 
   static onAttach(realm: Realm) {
     const taskRecords = realm.objects(TaskRecord)
+    const alarms = realm.objects(Alarm)
+
+    alarms.addListener((collection, changes) => {
+      changes.insertions.forEach((index) => {
+        const alarm = collection[index]
+
+        console.log('Alarm: setting up alarm for task', alarm.task.summary, 'at', alarm.time)
+
+        setupAlarm(alarm).then((ids) => {
+          realm.write(() => {
+            alarm.alarmIds.push(...ids)
+          })
+        })
+      })
+    })
 
     taskRecords.addListener((collection, changes) => {
       // Handle deletions
@@ -230,4 +218,42 @@ export class Alarm extends Realm.Object<Alarm> {
       })
     })
   }
+}
+
+async function setupAlarm(alarm: Alarm) {
+  const { task, time } = alarm
+  const due = task.plannedBegin
+
+  if (!due)
+    throw new Error('Due date is required to set an alarm')
+
+  const alarmType = usePreferenceStore.getState().alarmType
+
+  let alarmIds: string[] = []
+
+  if (alarmType === 'repeat') {
+    console.log(`Alarm: creating repeat alarm for task ${task.summary} at ${time}`)
+    alarmIds = await Promise.all(R
+      .range(0, 60)
+      .map(i => addSeconds(time, 5 * i))
+      .map(date => setAlarm(
+        task.summary,
+        t('alarm.notification.minutesLeft', {
+          minutes: differenceInMinutes(due, date),
+        }),
+        time,
+      )),
+    )
+  }
+  else {
+    alarmIds = [await setAlarm(
+      task.summary,
+      t('alarm.notification.minutesLeft', {
+        minutes: differenceInMinutes(due, time),
+      }),
+      time,
+    )]
+  }
+
+  return alarmIds
 }
