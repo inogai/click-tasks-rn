@@ -129,7 +129,9 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   }: Partial<ITaskRecord>, realm: Realm) {
     this.updated = new Date()
 
-    this.alarms.forEach((alarm) => { alarm.delete(realm) })
+    this.alarms.forEach((alarm) => {
+      alarm.delete(realm)
+    })
     this.alarms = [] as unknown as Realm.List<Alarm>
 
     if (alarmMs && this.plannedBegin) {

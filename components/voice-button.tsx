@@ -40,7 +40,6 @@ export function VoiceButton({
     startRecord,
     stopRecord,
     partialResult,
-    results,
   } = useVoiceRecognition()
 
   function handleOpenChange(open: boolean) {
@@ -64,8 +63,6 @@ export function VoiceButton({
     setOpen(false)
     onAcceptProp?.(partialResult)
   }
-
-  const contentInsets = useSafeAreaInsets()
 
   const iconClassname = cn(
     'text-primary-foreground',

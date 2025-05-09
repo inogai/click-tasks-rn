@@ -2,8 +2,7 @@ import type { ViewRef } from '@rn-primitives/types'
 import type { LucideIcon } from 'lucide-react-native'
 import type { ViewProps } from 'react-native'
 
-import React from 'react'
-import { View } from 'react-native'
+import * as React from 'react'
 
 import { Pressable } from '~/components/ui/pressable'
 

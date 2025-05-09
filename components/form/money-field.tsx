@@ -100,8 +100,10 @@ function MoneyInput({
       return
     }
 
+    /* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
     setPositive(value[0] !== '-')
     setInput(value.replace(/^[+-]/, ''))
+    /* eslint-enable react-hooks-extra/no-direct-set-state-in-use-effect */
   }, [value])
 
   return (

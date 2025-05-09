@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
 import type { Subscription } from 'expo-sensors/build/Pedometer'
 
 import * as Haptics from 'expo-haptics'
@@ -21,12 +22,12 @@ export function useShakedEffect(
   const [{ x, y, z }, setData] = useState({ x: 0, y: 0, z: 1 })
   const [subscription, setSubscription] = useState<Subscription | null>(null)
 
-  const _subscribe = () => {
+  function subscribe() {
     setSubscription(Accelerometer.addListener(setData))
   }
 
-  const _unsubscribe = () => {
-    subscription && subscription.remove()
+  function unsubscribe() {
+    subscription?.remove()
     setSubscription(null)
   }
 
@@ -42,8 +43,10 @@ export function useShakedEffect(
   }
 
   useEffect(() => {
-    _subscribe()
-    return () => _unsubscribe()
+    subscribe()
+    return () => unsubscribe()
+  // intentionally run once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -55,6 +58,8 @@ export function useShakedEffect(
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
       trigger()
     }
+  // intentionally watch only x, y, z
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [x, y, z])
 
   useEffect(() => {
@@ -62,8 +67,9 @@ export function useShakedEffect(
       callback()
       setTriggerCount(0)
       if (once) {
-        _unsubscribe()
+        unsubscribe()
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerCount])
 }

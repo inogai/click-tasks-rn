@@ -167,12 +167,12 @@ export function TimeTable({
 }
 
 export interface TimeTableViewProps {
-  anchorDate?: Date
+  anchorDate: Date
   mode: 'day' | '3day'
 }
 
 export function TimeTableView({
-  anchorDate = new Date(),
+  anchorDate,
   mode,
 }: TimeTableViewProps) {
   const [dateBegin, dateEnd] = mode === 'day'

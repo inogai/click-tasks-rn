@@ -1,4 +1,4 @@
-import type { SlottableTextProps, TextRef, ViewRef } from '@rn-primitives/types'
+import type { SlottableTextProps, TextRef } from '@rn-primitives/types'
 import type { ViewProps as RNViewProps } from 'react-native'
 
 import * as Slot from '@rn-primitives/slot'
