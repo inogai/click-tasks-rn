@@ -13,6 +13,7 @@ const Pressable = forwardRef<
     return (
       <RNPressable
         android_ripple={{ color: '#888', ...android_ripple }}
+        ref={ref}
         className={cn(
           '',
           Platform.OS === 'ios' && `
@@ -21,7 +22,6 @@ const Pressable = forwardRef<
           `,
           className,
         )}
-        ref={ref}
         {...props}
       />
     )

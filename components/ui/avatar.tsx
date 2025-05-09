@@ -23,8 +23,8 @@ Avatar.displayName = AvatarPrimitiveRoot.displayName
 const AvatarImage = React.forwardRef<AvatarPrimitive.ImageRef, AvatarPrimitive.ImageProps>(
   ({ className, ...props }, ref) => (
     <AvatarPrimitiveImage
-      ref={ref}
       className={cn('aspect-square h-full w-full', className)}
+      ref={ref}
       {...props}
     />
   ),

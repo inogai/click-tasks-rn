@@ -9,6 +9,7 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, TextInputProp
   ({ className, placeholderClassName, ...props }, ref) => {
     return (
       <TextInput
+        placeholderClassName={cn('text-muted-foreground', placeholderClassName)}
         ref={ref}
         className={cn(
           `
@@ -28,7 +29,6 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, TextInputProp
           `,
           className,
         )}
-        placeholderClassName={cn('text-muted-foreground', placeholderClassName)}
         {...props}
       />
     )

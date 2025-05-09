@@ -25,14 +25,14 @@ export function AppSidebar(props: DrawerContentComponentProps) {
         .map((route) => {
           const IconComp = route.icon
           const render = IconComp && (
-            ({ size, color }: IconRenderProps) => <IconComp size={size} color={color} />
+            ({ size, color }: IconRenderProps) => <IconComp color={color} size={size} />
           )
 
           return (
             <DrawerItem
+              icon={render}
               key={route.name}
               label={route.label}
-              icon={render}
               onPress={() => { navigation.navigate(route.name) }}
             />
           )

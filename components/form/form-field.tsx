@@ -39,29 +39,29 @@ export function FormField<T extends FieldValues>({
               <Input
                 nativeID={name}
                 placeholder={placeholder || label}
+                value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
               />
             )}
 
             {type === 'numeric' && (
               <Input
+                keyboardType="numeric"
                 nativeID={name}
                 placeholder={placeholder || label}
+                value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
-                keyboardType="numeric"
               />
             )}
 
             {type === 'datetime' && (
               <DateInput
+                mode="datetime"
                 nativeID={name}
                 value={value}
                 onValueChange={onChange}
-                mode="datetime"
               />
             )}
 

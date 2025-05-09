@@ -29,9 +29,9 @@ const Checkbox = React.forwardRef<CheckboxPrimitive.RootRef, CheckboxPrimitive.R
         `)}
         >
           <Check
+            className="text-primary-foreground"
             size={12}
             strokeWidth={Platform.OS === 'web' ? 2.5 : 3.5}
-            className="text-primary-foreground"
           />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>

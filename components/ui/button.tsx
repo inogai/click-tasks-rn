@@ -114,6 +114,8 @@ const Button = React.forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>
         )}
       >
         <Pressable
+          ref={ref}
+          role="button"
           className={cn(
             props.disabled && `
               opacity-50
@@ -121,8 +123,6 @@ const Button = React.forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>
             `,
             buttonVariants({ variant, size, className }),
           )}
-          ref={ref}
-          role="button"
           {...props}
         />
       </TextClassContext.Provider>

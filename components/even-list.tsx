@@ -54,8 +54,8 @@ export function EvenList<T>({
       ref={listRef}
       {...props}
       data={data}
-      renderItem={handleRenderItem}
       onLayout={handleLayout}
+      renderItem={handleRenderItem}
     />
   )
 }

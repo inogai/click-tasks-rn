@@ -21,16 +21,15 @@ const Card = React.forwardRef<ViewRef, ViewProps>(({ className, ...props }, ref)
 Card.displayName = 'Card'
 
 const CardHeader = React.forwardRef<ViewRef, ViewProps>(({ className, ...props }, ref) => (
-  <View ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
+  <View className={cn('flex flex-col space-y-1.5 p-6', className)} ref={ref} {...props} />
 ))
 CardHeader.displayName = 'CardHeader'
 
 const CardTitle = React.forwardRef<TextRef, React.ComponentPropsWithoutRef<typeof Text>>(
   ({ className, ...props }, ref) => (
     <Text
-      role="heading"
-      aria-level={3}
       ref={ref}
+      role="heading"
       className={cn(
         `
           text-2xl font-semibold leading-none tracking-tight
@@ -38,6 +37,7 @@ const CardTitle = React.forwardRef<TextRef, React.ComponentPropsWithoutRef<typeo
         `,
         className,
       )}
+      aria-level={3}
       {...props}
     />
   ),
@@ -45,19 +45,19 @@ const CardTitle = React.forwardRef<TextRef, React.ComponentPropsWithoutRef<typeo
 CardTitle.displayName = 'CardTitle'
 
 const CardDescription = React.forwardRef<TextRef, TextProps>(({ className, ...props }, ref) => (
-  <Text ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+  <Text className={cn('text-sm text-muted-foreground', className)} ref={ref} {...props} />
 ))
 CardDescription.displayName = 'CardDescription'
 
 const CardContent = React.forwardRef<ViewRef, ViewProps>(({ className, ...props }, ref) => (
   <TextClassContext.Provider value="text-card-foreground">
-    <View ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+    <View className={cn('p-6 pt-0', className)} ref={ref} {...props} />
   </TextClassContext.Provider>
 ))
 CardContent.displayName = 'CardContent'
 
 const CardFooter = React.forwardRef<ViewRef, ViewProps>(({ className, ...props }, ref) => (
-  <View ref={ref} className={cn('flex flex-row items-center p-6 pt-0', className)} {...props} />
+  <View className={cn('flex flex-row items-center p-6 pt-0', className)} ref={ref} {...props} />
 ))
 CardFooter.displayName = 'CardFooter'
 

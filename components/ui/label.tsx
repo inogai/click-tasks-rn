@@ -7,8 +7,8 @@ const Label = React.forwardRef<LabelPrimitive.TextRef, LabelPrimitive.TextProps>
   ({ className, onPress, onLongPress, onPressIn, onPressOut, ...props }, ref) => (
     <LabelPrimitive.Root
       className="web:cursor-default"
-      onPress={onPress}
       onLongPress={onLongPress}
+      onPress={onPress}
       onPressIn={onPressIn}
       onPressOut={onPressOut}
     >

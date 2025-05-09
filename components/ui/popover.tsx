@@ -21,8 +21,8 @@ const PopoverContent = React.forwardRef<
         <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut}>
           <TextClassContext.Provider value="text-popover-foreground">
             <PopoverPrimitive.Content
-              ref={ref}
               align={align}
+              ref={ref}
               sideOffset={sideOffset}
               className={cn(
                 `
