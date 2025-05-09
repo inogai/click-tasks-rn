@@ -49,6 +49,10 @@ export interface SelectProps {
   renderLabel?: (option: SelectOption) => React.ReactNode
 }
 
+function defaultRenderLabel({ label }: SelectOption) {
+  return <Text>{label}</Text>
+}
+
 export function Select({
   options,
   value: valueProp,
@@ -57,7 +61,7 @@ export function Select({
   error = false,
   nativeID,
   placeholder,
-  renderLabel = ({ label }) => <Text>{label}</Text>,
+  renderLabel = defaultRenderLabel,
 }: SelectProps & VariantProps<typeof selectTriggerVariants>) {
   const [value, setValue] = useControllableState({
     prop: valueProp,
