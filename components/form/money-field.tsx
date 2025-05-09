@@ -7,7 +7,7 @@ import { Controller } from 'react-hook-form'
 
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { Text, View } from '~/components/ui/text'
+import { Text, TextClassProvider, View } from '~/components/ui/text'
 
 import { MinusIcon, PlusIcon } from '~/lib/icons'
 import { cn } from '~/lib/utils'
@@ -56,9 +56,10 @@ const CustomSwitch = React.forwardRef<SwitchPrimitives.RootRef, SwitchPrimitives
       <SwitchPrimitives.Thumb asChild>
         <View
           className={cn(cSwitchThumbVariants(props))}
-          textClass="h-5 w-5 text-white"
         >
-          {props.checked ? <PlusIcon /> : <MinusIcon />}
+          <TextClassProvider className="h-5 w-5 text-white">
+            {props.checked ? <PlusIcon /> : <MinusIcon />}
+          </TextClassProvider>
         </View>
       </SwitchPrimitives.Thumb>
     </SwitchPrimitives.Root>

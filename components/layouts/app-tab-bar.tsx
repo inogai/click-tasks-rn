@@ -5,7 +5,7 @@ import { useLinkBuilder } from '@react-navigation/native'
 import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Text, View } from '~/components/ui/text'
+import { Text, TextClassProvider, View } from '~/components/ui/text'
 import { VoiceButton } from '~/components/voice-button'
 
 import { t } from '~/lib/i18n'
@@ -66,12 +66,14 @@ function TabBarItem({
           `,
           isFocused && 'w-16 bg-primary',
         )}
-        textClass={cn(
+      >
+        <TextClassProvider className={cn(
           'text-foreground',
           isFocused && 'text-primary-foreground',
         )}
-      >
-        {options.tabBarIcon?.({ size: 20, focused: isFocused, color: '#f00' })}
+        >
+          {options.tabBarIcon?.({ size: 20, focused: isFocused, color: '#f00' })}
+        </TextClassProvider>
       </View>
       <Text className="text-sm font-medium">{options.title}</Text>
     </PlatformPressable>

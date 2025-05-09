@@ -9,20 +9,19 @@ import { cn } from '~/lib/utils'
 
 const TextClassContext = React.createContext<string | undefined>(undefined)
 
+export function TextClassProvider({ className, children }: { className: string, children: React.ReactNode }) {
+  return (
+    <TextClassContext.Provider value={className}>
+      {children}
+    </TextClassContext.Provider>
+  )
+}
+
 interface ViewProps extends RNViewProps {
   textClass?: string
 }
 
-const View = React.forwardRef<ViewRef, ViewProps & { textClass?: string }>(
-  ({ textClass, ...props }, ref) => {
-    const parentTextClass = React.useContext(TextClassContext)
-    return (
-      <TextClassContext.Provider value={cn(parentTextClass, textClass)}>
-        <RNView {...props} ref={ref} />
-      </TextClassContext.Provider>
-    )
-  },
-)
+const View = RNView
 
 const Text = React.forwardRef<TextRef, SlottableTextProps>(
   ({ className, asChild = false, ...props }, ref) => {
@@ -30,11 +29,11 @@ const Text = React.forwardRef<TextRef, SlottableTextProps>(
     const Component = asChild ? Slot.Text : RNText
     return (
       <Component
+        ref={ref}
         className={cn(`
           text-base text-foreground
           web:select-text
         `, textClass, className)}
-        ref={ref}
         {...props}
       />
     )
