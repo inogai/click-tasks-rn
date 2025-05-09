@@ -9,7 +9,6 @@ import { SafeAreaView } from 'react-native'
 import { BSON } from 'realm'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
-import { Button } from '~/components/ui/button'
 
 import { Alarm, Countdown, TaskRecord } from '~/lib/realm'
 
@@ -26,18 +25,20 @@ export function TaskUpdateScreen() {
     type: TaskRecord,
     primaryKey: new BSON.ObjectId(taskId),
   })
-  const defaultValues = useMemo(() => ({ ...task }), [task])
 
   const form = useTaskForm()
 
   // trigger reset when task changes
   useEffect(() => {
     form.reset({
-      ...defaultValues,
-      addToCountdown: Countdown.existsByTaskRecord(task!, realm),
+      plannedBegin: null, // a little trick to ensure they are reset
+      plannedEnd: null, // so that it will not trigger the useEffect
+      ...task,
+    }, {
+      keepDefaultValues: true,
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValues])
+  }, [task])
 
   if (!task) {
     return (
@@ -47,21 +48,7 @@ export function TaskUpdateScreen() {
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     realm.write(() => {
-      task.update(data)
-      Countdown.deleteByTaskRecord(task, realm)
-
-      if (data.addToCountdown) {
-        Countdown.create(task, realm)
-      }
-
-      task.alarms.forEach(alarm => alarm.delete(realm))
-
-      if (data.plannedBegin && data.alarm !== -1) {
-        Alarm.create({
-          task,
-          time: addMilliseconds(data.plannedBegin, -data.alarm),
-        }, realm)
-      }
+      task.update(data, realm)
     })
 
     // Navigate back after successful submission
@@ -71,7 +58,6 @@ export function TaskUpdateScreen() {
   return (
     <SafeAreaView>
       <TaskForm
-        defaultValues={defaultValues}
         form={form}
         onSubmit={onSubmit}
       />

@@ -62,7 +62,7 @@ export default function AlarmScreen() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-evenly bg-black">
-      <Text className="text-6xl font-semibold text-white">{alarm.task.summary}</Text>
+      <Text className="text-6xl font-semibold text-white">{alarm.title}</Text>
 
       <Animated.View style={animatedStyle}>
         <Button

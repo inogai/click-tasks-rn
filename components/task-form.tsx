@@ -32,7 +32,7 @@ export function useTaskForm() {
     resolver: zodResolver(TaskRecord.zodSchema),
     mode: 'onChange',
     defaultValues: {
-      addToCountdown: false,
+      countdown: false,
       status: TaskStatus.PENDING,
       alarm: -1,
     },
@@ -181,7 +181,7 @@ export function TaskForm({
       <CheckboxField
         control={control}
         label={t('task_form.add_to_countdown.label')}
-        name="addToCountdown"
+        name="countdown"
       />
 
       <SelectField

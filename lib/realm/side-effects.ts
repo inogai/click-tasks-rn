@@ -3,7 +3,8 @@ import { useInterval } from 'ahooks'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 
-import { Alarm, TaskRecord } from './task-record'
+import { Alarm } from './alarm'
+import { TaskRecord } from './task-record'
 import { TxnAccount } from './txn-account'
 import { TxnRecord } from './txn-record'
 

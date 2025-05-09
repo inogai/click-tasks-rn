@@ -8,12 +8,15 @@ import { Pressable } from '~/components/ui/pressable'
 import { Separator } from '~/components/ui/separator'
 import { Text, View } from '~/components/ui/text'
 
-import { useRealmQuery } from '~/lib/realm'
-import { Countdown } from '~/lib/realm/countdown'
+import { TaskRecord, useRealmQuery } from '~/lib/realm'
 import { cn } from '~/lib/utils'
 
 export function CountdownView() {
-  const countdowns = useRealmQuery(Countdown)
+  const countdowns = useRealmQuery({
+    type: TaskRecord,
+    query: c => c
+      .filtered('countdown == true'),
+  })
 
   // If there are no countdowns, hide the view
   if (countdowns.length === 0) {
@@ -33,12 +36,12 @@ export function CountdownView() {
             data={Array.from(countdowns)}
             estimatedItemSize={119} // size for w-28, since we don't care about optimization for len < 3
             ItemSeparatorComponent={() => <Separator className="mx-6" orientation="vertical" />}
-            keyExtractor={countdown => countdown._id.toHexString()}
+            keyExtractor={task => task._id.toHexString()}
             horizontal
             renderItem={({ item: countdown }) => {
-              const daysLeft = countdown.taskRecord.plannedBegin
+              const daysLeft = countdown.plannedBegin
                 ? differenceInCalendarDays(
-                    countdown.taskRecord.plannedBegin,
+                    countdown.plannedBegin,
                     new Date(),
                   )
                 : Number.NaN
@@ -60,12 +63,12 @@ export function CountdownView() {
                       router.push({
                         pathname: '/task/update/[taskId]',
                         params: {
-                          taskId: countdown.taskRecord._id.toHexString(),
+                          taskId: countdown._id.toHexString(),
                         },
                       })
                     }}
                   >
-                    <Text className="line-clamp-1 font-medium">{countdown.taskRecord.summary}</Text>
+                    <Text className="line-clamp-1 font-medium">{countdown.summary}</Text>
                     <Text className={`
                       line-clamp-1 w-full justify-end font-medium
                       text-muted-foreground
