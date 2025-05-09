@@ -108,7 +108,7 @@ export function TimeTable({
             key={idx}
             className={cn(
               'relative',
-              idx % 2 === 0 ? 'bg-slate-50' : 'bg-slate-100',
+              idx % 2 === 0 ? 'bg-slate-500/5' : 'bg-blue-500/10',
             )}
             style={{
               width: width / numDates,
