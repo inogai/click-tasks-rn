@@ -4,7 +4,7 @@ import type { SubmitHandler } from 'react-hook-form'
 import { useObject, useRealm } from '@realm/react'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { BSON } from 'realm'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
@@ -55,7 +55,10 @@ export function TaskUpdateScreen() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      className="flex-1 px-6 py-4"
+      edges={['left', 'right', 'bottom']}
+    >
       <TaskForm
         form={form}
         onSubmit={onSubmit}

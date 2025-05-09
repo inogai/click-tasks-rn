@@ -4,7 +4,7 @@ import type { SubmitHandler } from 'react-hook-form'
 import { useRealm } from '@realm/react'
 import { router, useFocusEffect } from 'expo-router'
 import { useCallback } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
@@ -32,7 +32,10 @@ export default function Screen() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      className="flex-1 px-6 py-4"
+      edges={['left', 'right', 'bottom']}
+    >
       <TaskForm
         form={form}
         onSubmit={handleSubmit}

@@ -50,6 +50,7 @@ export function TaskListScreen() {
         <>
           <H3>Recently Completed</H3>
           <TaskView
+            className="-mx-2"
             tasks={tasks.recent}
             onItemPress={handleItemPress}
           />
