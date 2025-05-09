@@ -32,6 +32,7 @@ export function useTaskForm() {
     mode: 'onChange',
     defaultValues: {
       addToCountdown: false,
+      status: TaskStatus.PENDING,
     },
   })
 }

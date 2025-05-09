@@ -1,15 +1,19 @@
 import type { TaskRecord } from '~/lib/realm'
 import type { VariantProps } from 'class-variance-authority'
 
+import { useRealm } from '@realm/react'
 import { cva } from 'class-variance-authority'
 import { formatDate } from 'date-fns'
-import { CalendarClockIcon, MapPinIcon } from '~/lib/icons'
+import { AlarmClockCheck } from 'lucide-react-native'
 import * as React from 'react'
 import { View } from 'react-native'
 
 import { Checkbox } from '~/components/ui/checkbox'
+import { CheckboxLike } from '~/components/ui/checkbox-like'
 import { Text } from '~/components/ui/text'
 
+import { t } from '~/lib/i18n'
+import { CalendarClockIcon, CheckIcon, ClockIcon, MapPinIcon, MinusIcon, TimerIcon, XIcon } from '~/lib/icons'
 import { TaskStatus } from '~/lib/realm'
 import { cn } from '~/lib/utils'
 
@@ -36,23 +40,43 @@ export type TaskItemDateVariantsProps = VariantProps<typeof taskItemDueVariants>
 
 export interface TaskItemProps {
   task: TaskRecord
-  onCheckedChange?: (checked: boolean) => void
   className?: string
 }
 
 export function TaskItem({
   task,
-  onCheckedChange,
   className,
 }: TaskItemProps) {
+  const realm = useRealm()
+
   const now = new Date()
-  const isOverdue = task.due ? task.due < now : false
+  const isOverdue = (task.status === TaskStatus.PENDING && task.due) ? task.due < now : false
 
   return (
-    <View className={cn('flex-row items-center gap-4', className)}>
-      <Checkbox
-        checked={task.status === TaskStatus.COMPLETED}
-        onCheckedChange={onCheckedChange ?? (() => {})}
+    <View className={cn('flex-row items-center gap-4 px-2', className)}>
+      <CheckboxLike
+        value={task.status}
+        options={[
+          { value: TaskStatus.PENDING, label: t('task_form.status.values.pending'), icon: CheckIcon },
+          { value: TaskStatus.COMPLETED, label: t('task_form.status.values.completed'), rootClass: 'bg-primary', icon: CheckIcon },
+          { value: TaskStatus.OVERDUE_COMPLETED, label: t('task_form.status.values.overdue_completed'), rootClass: 'bg-primary', icon: MinusIcon },
+          { value: TaskStatus.DELETED, label: t('task_form.status.values.pending'), rootClass: 'border-muted-foreground bg-muted-foreground', icon: XIcon },
+        ]}
+        onPressed={(currentValue) => {
+          realm.write(() => {
+            if (currentValue !== TaskStatus.PENDING) {
+              task.status = TaskStatus.PENDING
+              return
+            }
+
+            if (isOverdue) {
+              task.status = TaskStatus.OVERDUE_COMPLETED
+              return
+            }
+
+            task.status = TaskStatus.COMPLETED
+          })
+        }}
       />
 
       <View className="h-full grow justify-center">
