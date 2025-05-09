@@ -50,6 +50,7 @@ task_form:
 alarm:
   notification:
     minutesLeft: '{{ minutes }} minutes left'
+  shake_to_dismiss: Shake to Dismiss
 
 txn_account_form:
   name:
