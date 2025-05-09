@@ -49,6 +49,18 @@
       "error": {
         "no_due": "Due date must be defined when adding to countdown"
       }
+    },
+    "alarm": {
+      "label": "Alarm",
+      "values": {
+        "none": "No Alarm",
+        "minutes": "{{ count }} min"
+      }
+    }
+  },
+  "alarm": {
+    "notification": {
+      "minutesLeft": "{{ minutes }} minutes left"
     }
   },
   "txn_account_form": {
@@ -194,6 +206,13 @@
     },
     "prefered_currency": {
       "label": "Prefered Currency (3 Characters)"
+    },
+    "alarm_type": {
+      "label": "Alarm Type",
+      "values": {
+        "once": "Once",
+        "repeat": "Repeat"
+      }
     }
   }
 }

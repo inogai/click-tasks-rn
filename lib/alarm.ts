@@ -1,6 +1,8 @@
-import type { TimestampTrigger } from '@notifee/react-native'
+import type { IntervalTrigger, TimestampTrigger } from '@notifee/react-native'
 
-import notifee, { AndroidImportance, AndroidNotificationSetting, AndroidVisibility, TriggerType } from '@notifee/react-native'
+import notifee, { AndroidImportance, AndroidNotificationSetting, AndroidVisibility, TimeUnit, TriggerType } from '@notifee/react-native'
+
+import { usePreferenceStore } from '~/lib/preference'
 
 async function requestAlarmPermission() {
   await notifee.requestPermission()
@@ -21,33 +23,36 @@ export async function setAlarm(
   message: string,
   date: Date,
 ) {
-  const trigger: TimestampTrigger = {
-    type: TriggerType.TIMESTAMP,
-    timestamp: date.getTime(),
+  const trigger = { type: TriggerType.TIMESTAMP, timestamp: date.getTime() } satisfies TimestampTrigger
+
+  try {
+    await requestAlarmPermission()
+
+    await notifee.createChannel({
+      id: 'task-alarm',
+      name: 'Task Alarm',
+      visibility: AndroidVisibility.PUBLIC,
+      vibration: true,
+      sound: 'default',
+      importance: AndroidImportance.HIGH,
+    })
+
+    const id = await notifee.createTriggerNotification({
+      title,
+      body: message,
+      android: {
+        channelId: 'task-alarm',
+      },
+    }, trigger)
+
+    console.log('Alarm set with ID:', id, { title, message, date })
+
+    return id
   }
-
-  await requestAlarmPermission()
-
-  await notifee.createChannel({
-    id: 'task-alarm',
-    name: 'Task Alarm',
-    visibility: AndroidVisibility.PUBLIC,
-    vibration: true,
-    sound: 'default',
-    importance: AndroidImportance.HIGH,
-  })
-
-  const id = await notifee.createTriggerNotification({
-    title,
-    body: message,
-    android: {
-      channelId: 'task-alarm',
-    },
-  }, trigger)
-
-  console.log('Alarm set with ID:', id, { title, message, date })
-
-  return id
+  catch (error) {
+    console.error('Error setting alarm:', error)
+    return ''
+  }
 }
 
 export function clearAlarm(id: string) {

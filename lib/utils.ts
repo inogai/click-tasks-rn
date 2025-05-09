@@ -2,8 +2,11 @@ import type { ClassValue } from 'clsx'
 
 import { clsx } from 'clsx'
 import { addMilliseconds, startOfDay } from 'date-fns'
+import { enUS, zhCN, zhHK } from 'date-fns/locale'
 import * as R from 'remeda'
 import { twMerge } from 'tailwind-merge'
+
+import { t } from '~/lib/i18n'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

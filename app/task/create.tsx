@@ -2,13 +2,14 @@ import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 
 import { useRealm } from '@realm/react'
+import { addMilliseconds, endOfMinute } from 'date-fns'
 import { router, useFocusEffect } from 'expo-router'
 import { useCallback } from 'react'
 import { SafeAreaView } from 'react-native'
 
 import { TaskForm, useTaskForm } from '~/components/task-form'
 
-import { Countdown, TaskRecord, TaskStatus } from '~/lib/realm'
+import { Alarm, Countdown, TaskRecord, TaskStatus } from '~/lib/realm'
 
 type FormData = ITaskRecord
 
@@ -31,6 +32,13 @@ export default function Screen() {
 
       if (data.addToCountdown) {
         Countdown.create(task, realm)
+      }
+
+      if (data.plannedBegin && data.alarm !== -1) {
+        Alarm.create({
+          task,
+          time: addMilliseconds(data.plannedBegin, -data.alarm),
+        }, realm)
       }
     })
 

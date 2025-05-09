@@ -88,6 +88,16 @@ export function PreferenceScreen() {
         type="text"
       />
 
+      <SelectField
+        control={control}
+        label={t('preference.alarm_type.label')}
+        name="alarmType"
+        options={[
+          { label: t('preference.alarm_type.values.once'), value: 'once' },
+          { label: t('preference.alarm_type.values.repeat'), value: 'repeat' },
+        ]}
+      />
+
       <Text className="text-destructive">
         { errors.root?.message }
       </Text>

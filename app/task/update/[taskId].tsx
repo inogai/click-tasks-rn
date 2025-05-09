@@ -2,6 +2,7 @@ import type { ITaskRecord } from '~/lib/realm'
 import type { SubmitHandler } from 'react-hook-form'
 
 import { useObject, useRealm } from '@realm/react'
+import { addMilliseconds } from 'date-fns'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useEffect, useMemo } from 'react'
 import { SafeAreaView } from 'react-native'
@@ -10,7 +11,7 @@ import { BSON } from 'realm'
 import { TaskForm, useTaskForm } from '~/components/task-form'
 import { Button } from '~/components/ui/button'
 
-import { Countdown, TaskRecord } from '~/lib/realm'
+import { Alarm, Countdown, TaskRecord } from '~/lib/realm'
 
 type FormData = ITaskRecord
 
@@ -51,6 +52,15 @@ export function TaskUpdateScreen() {
 
       if (data.addToCountdown) {
         Countdown.create(task, realm)
+      }
+
+      task.alarms.forEach(alarm => alarm.delete(realm))
+
+      if (data.plannedBegin && data.alarm !== -1) {
+        Alarm.create({
+          task,
+          time: addMilliseconds(data.plannedBegin, -data.alarm),
+        }, realm)
       }
     })
 

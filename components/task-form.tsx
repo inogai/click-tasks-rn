@@ -17,7 +17,7 @@ import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 import { usePrevious } from '~/lib/use-previous'
-import { cn } from '~/lib/utils'
+import { cn, TimeDelta } from '~/lib/utils'
 
 type FormData = ITaskRecord
 
@@ -57,6 +57,19 @@ function getNewEnd(
     return addMilliseconds(newBegin, duration)
   }
 }
+
+const alarmOptions = [
+  { value: -1, label: t('task_form.alarm.values.none') },
+  ...[
+    TimeDelta.MINUTE(5),
+    TimeDelta.MINUTE(15),
+    TimeDelta.MINUTE(30),
+    TimeDelta.MINUTE(60),
+    TimeDelta.MINUTE(120),
+    TimeDelta.DAY(1),
+  ].map(delta =>
+    ({ value: delta, label: t('task_form.alarm.values.minutes', { count: delta / 60000 }) })),
+]
 
 export function TaskForm({
   form,
@@ -168,6 +181,13 @@ export function TaskForm({
         control={control}
         label={t('task_form.add_to_countdown.label')}
         name="addToCountdown"
+      />
+
+      <SelectField
+        control={control}
+        label={t('task_form.alarm.label')}
+        name="alarm"
+        options={alarmOptions}
       />
 
       <Text className="text-destructive">

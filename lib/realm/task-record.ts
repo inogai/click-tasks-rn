@@ -1,8 +1,11 @@
 import { Realm } from '@realm/react'
+import { addSeconds, differenceInMinutes } from 'date-fns'
 import { z } from 'zod'
 
 import { clearAlarm, setAlarm } from '~/lib/alarm'
 import { t } from '~/lib/i18n'
+import { usePreferenceStore } from '~/lib/preference'
+import { R } from '~/lib/utils'
 
 import { getTaskStatusLabel, TaskStatus } from './lib'
 
@@ -16,6 +19,7 @@ const zodSchema = z.object({
   plannedEnd: z.coerce.date().optional().nullable().describe('null for task, or activity end date'),
 
   addToCountdown: z.coerce.boolean().describe('don\'t modify this'),
+  alarm: z.number().describe('ms before'),
 }).superRefine((val, ctx) => {
   // plannedEnd requires plannedBegin
   if ((!val.plannedBegin && val.plannedEnd)) {
@@ -72,7 +76,7 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   venue!: string | null
   plannedBegin!: Date | null
   plannedEnd!: Date | null
-  alarmId!: string | null
+  alarms!: Realm.List<Alarm>
 
   static schema: Realm.ObjectSchema = {
     name: 'Task',
@@ -91,6 +95,12 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       venue: { type: 'string', optional: true },
       plannedBegin: { type: 'date', optional: true },
       plannedEnd: { type: 'date', optional: true },
+
+      alarms: {
+        type: 'linkingObjects',
+        objectType: 'Alarm',
+        property: 'task',
+      },
     },
   }
 
@@ -135,45 +145,88 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
 ${content}
 </task>`
   }
+}
 
-  async syncAlarm(this: TaskRecord) {
-    if (this.alarmId) {
-      try {
-        await clearAlarm(this.alarmId)
-      }
-      catch {}
-    }
+export class Alarm extends Realm.Object<Alarm> {
+  _id!: Realm.BSON.ObjectId
+  task!: TaskRecord
+  time!: Date
+  alarmIds!: Realm.List<string>
 
-    if (this.status === TaskStatus.COMPLETED) {
-      return
-    }
+  static schema: Realm.ObjectSchema = {
+    name: 'Alarm',
+    primaryKey: '_id',
 
-    if (this.plannedBegin) {
-      const alarmId = await setAlarm(
-        'Alarm',
-        this.summary,
-        this.plannedBegin,
+    properties: {
+      _id: 'objectId',
+      task: 'Task',
+      time: 'date',
+      alarmId: 'string[]',
+    },
+  }
+
+  static async create({
+    task,
+    time,
+  }: {
+    task: TaskRecord
+    time: Date
+  }, realm: Realm) {
+    const alarmType = usePreferenceStore.getState().alarmType
+    const due = task.plannedBegin
+
+    if (!due)
+      throw new Error('Due date is required to set an alarm')
+
+    let alarmIds: string[] = []
+
+    if (alarmType === 'repeat') {
+      console.log(`Alarm: creating repeat alarm for task ${task.summary} at ${time}`)
+      alarmIds = await Promise.all(R
+        .range(0, 60)
+        .map(i => addSeconds(time, 5 * i))
+        .map(date => setAlarm(
+          task.summary,
+          t('alarm.notification.minutesLeft', {
+            minutes: differenceInMinutes(due, date),
+          }),
+          time,
+        )),
       )
-
-      this.alarmId = alarmId
     }
+    else {
+      alarmIds = [await setAlarm(
+        task.summary,
+        t('alarm.notification.minutesLeft', {
+          minutes: differenceInMinutes(due, time),
+        }),
+        time,
+      )]
+    }
+
+    return realm.create(Alarm, { task, time, alarmIds })
+  }
+
+  delete(realm: Realm) {
+    this.alarmIds.forEach((id) => {
+      clearAlarm(id)
+    })
+    realm.delete(this)
   }
 
   static onAttach(realm: Realm) {
-    const objects = realm.objects(TaskRecord)
+    const taskRecords = realm.objects(TaskRecord)
 
-    objects.addListener((collection, changes) => {
-    // changes.deletions.forEach((index) => {
-    // })
+    taskRecords.addListener((collection, changes) => {
+      // Handle deletions
+      changes.deletions.forEach((index) => {
+        const deletedTaskId = collection[index]._id
 
-      changes.newModifications.forEach((index) => {
-        const task = collection[index]
-        task.syncAlarm()
-      })
-
-      changes.insertions.forEach((index) => {
-        const task = collection[index]
-        task.syncAlarm()
+        // Find and delete the associated Alarms
+        const alarms = realm.objects(Alarm).filtered('taskRecord._id == $0', deletedTaskId)
+        realm.write(() => {
+          realm.delete(alarms)
+        })
       })
     })
   }

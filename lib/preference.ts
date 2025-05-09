@@ -15,6 +15,7 @@ export const preferenceSchema = z.object({
   language: languageSchema,
   speechLanguage: z.enum(['en-US', 'zh-CN', 'zh-HK']),
   preferedCurrency: z.string().length(3),
+  alarmType: z.enum(['once', 'repeat']),
 })
 
 export type Preference = z.infer<typeof preferenceSchema>
@@ -53,6 +54,7 @@ export const usePreferenceStore = create(
       language: 'system',
       speechLanguage: 'en-US',
       preferedCurrency: 'USD',
+      alarmType: 'once',
       setTheme: (newTheme: Preference['theme']) => {
         set(_ => ({ theme: newTheme }))
       },
