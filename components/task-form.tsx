@@ -79,7 +79,7 @@ export function TaskForm({
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, isDirty },
     setValue,
   } = form
 
@@ -87,13 +87,10 @@ export function TaskForm({
   const plannedBegin = useWatch({ control, name: 'plannedBegin' })
   const plannedEnd = useWatch({ control, name: 'plannedEnd' })
   const oldPlannedBegin = usePrevious(plannedBegin)
-  const oldPlannedEnd = usePrevious(plannedEnd)
   useEffect(() => {
-    if (oldPlannedEnd !== plannedEnd) {
-      // do nothing if both values are changed at once
+    if (!isDirty || !oldPlannedBegin || !plannedBegin) {
       return
     }
-    console.log('plannedBegin changed', plannedBegin)
     setValue('plannedEnd', getNewEnd(
       oldPlannedBegin,
       plannedEnd,
