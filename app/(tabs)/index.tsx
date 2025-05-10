@@ -26,11 +26,13 @@ export default function Screen() {
   const tasksInMonth = useQuery({
     type: TaskRecord,
     query: collection => collection
-      .filtered(
-        'plannedBegin <= $1 && plannedEnd >= $0', // ensure overlap
-        startOfMonth(currentDate),
-        endOfMonth(currentDate),
-      )
+      .filtered([
+        'plannedBegin <= $1 && plannedEnd >= $0',
+        'plannedEnd == null && plannedBegin >= $0 && plannedBegin <= $1',
+      ]
+        .map(it => `(${it})`)
+        .join('||'), // ensure overlap
+      startOfMonth(currentDate), endOfMonth(currentDate))
       .sorted('plannedBegin'),
   }, [currentDate])
 
@@ -45,7 +47,7 @@ export default function Screen() {
 
         for (const date of dateRange(
           task.plannedBegin,
-          task.plannedEnd!,
+          task.plannedEnd ?? addDays(task.plannedBegin, 1),
           TimeDelta.DAY(1),
         )) {
           const dateStr = formatDate(date, 'yyyy-MM-dd')
