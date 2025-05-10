@@ -47,18 +47,18 @@ export default function RootLayout() {
   useAppPreference()
 
   return (
-    <NestedProviders providers={[
-      ThemeProvider,
-      RealmProvider,
-      QueryClientProvider,
-    ]}
-    >
-      <>
+    <>
+      <NestedProviders providers={[
+        ThemeProvider,
+        RealmProvider,
+        QueryClientProvider,
+      ]}
+      >
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
         <Layout />
+      </NestedProviders>
 
-        <PortalHost />
-      </>
-    </NestedProviders>
+      <PortalHost />
+    </>
   )
 }
