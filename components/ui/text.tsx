@@ -1,9 +1,8 @@
 import type { SlottableTextProps, TextRef } from '@rn-primitives/types'
-import type { ViewProps as RNViewProps } from 'react-native'
 
 import * as Slot from '@rn-primitives/slot'
 import * as React from 'react'
-import { Text as RNText, View as RNView } from 'react-native'
+import { Text as RNText } from 'react-native'
 
 import { cn } from '~/lib/utils'
 
@@ -16,12 +15,6 @@ export function TextClassProvider({ className, children }: { className: string, 
     </TextClassContext.Provider>
   )
 }
-
-interface ViewProps extends RNViewProps {
-  textClass?: string
-}
-
-const View = RNView
 
 const Text = React.forwardRef<TextRef, SlottableTextProps>(
   ({ className, asChild = false, ...props }, ref) => {
@@ -41,6 +34,4 @@ const Text = React.forwardRef<TextRef, SlottableTextProps>(
 )
 Text.displayName = 'Text'
 
-export type { ViewProps }
-
-export { Text, TextClassContext, View }
+export { Text, TextClassContext }
