@@ -1,6 +1,7 @@
 import { useRealm } from '@realm/react'
 import { useInterval } from 'ahooks'
 import { router, useLocalSearchParams } from 'expo-router'
+import { View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -12,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { BSON } from 'realm'
 
 import { Button } from '~/components/ui/button'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { BellRingIcon } from '~/lib/icons'

@@ -1,6 +1,7 @@
 import type { ButtonProps } from '~/components/ui/button'
 
 import { useState } from 'react'
+import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button } from '~/components/ui/button'
@@ -12,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { MicIcon, SquareIcon } from '~/lib/icons'

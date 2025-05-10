@@ -4,10 +4,11 @@ import type { UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
+import { View } from 'react-native'
 
 import { FormField } from '~/components/form/form-field'
 import { Button } from '~/components/ui/button'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'

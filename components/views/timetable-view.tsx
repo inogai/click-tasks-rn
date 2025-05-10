@@ -1,9 +1,10 @@
 import { addDays, addHours, addMilliseconds, addMinutes, differenceInDays, isSameDay } from 'date-fns'
 import { router } from 'expo-router'
 import * as React from 'react'
+import { View } from 'react-native'
 
 import { Pressable } from '~/components/ui/pressable'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { TaskRecord, useRealmQuery } from '~/lib/realm'

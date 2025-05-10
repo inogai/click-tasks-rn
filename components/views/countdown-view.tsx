@@ -2,11 +2,12 @@ import { FlashList } from '@shopify/flash-list'
 import { differenceInCalendarDays } from 'date-fns'
 import { router } from 'expo-router'
 import { Trans } from 'react-i18next'
+import { View } from 'react-native'
 
 import { Card, CardHeader } from '~/components/ui/card'
 import { Pressable } from '~/components/ui/pressable'
 import { Separator } from '~/components/ui/separator'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { TaskRecord, useRealmQuery } from '~/lib/realm'
 import { cn } from '~/lib/utils'

@@ -3,9 +3,10 @@ import type { LucideIcon } from 'lucide-react-native'
 import type { ReactNode } from 'react'
 
 import { cva } from 'class-variance-authority'
+import { View } from 'react-native'
 
 import { Card, CardTitle } from '~/components/ui/card'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { cn } from '~/lib/utils'
 

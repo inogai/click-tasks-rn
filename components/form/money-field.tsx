@@ -4,10 +4,11 @@ import * as SwitchPrimitives from '@rn-primitives/switch'
 import { cva } from 'class-variance-authority'
 import * as React from 'react'
 import { Controller } from 'react-hook-form'
+import { View } from 'react-native'
 
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { Text, TextClassProvider, View } from '~/components/ui/text'
+import { Text, TextClassProvider } from '~/components/ui/text'
 
 import { MinusIcon, PlusIcon } from '~/lib/icons'
 import { cn } from '~/lib/utils'

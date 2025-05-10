@@ -1,9 +1,9 @@
 import { formatDate } from 'date-fns'
 import { router, Tabs } from 'expo-router'
+import { View } from 'react-native'
 
 import { AppTabBar } from '~/components/layouts/app-tab-bar'
 import { Button } from '~/components/ui/button'
-import { View } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import {

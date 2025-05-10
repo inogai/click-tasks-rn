@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRealm } from '@realm/react'
 import { router } from 'expo-router'
 import { useForm } from 'react-hook-form'
+import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { TxnForm, useTxnForm } from '~/components/txn-form'
-import { View } from '~/components/ui/text'
 
 import { TxnRecord } from '~/lib/realm'
 

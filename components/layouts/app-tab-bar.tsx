@@ -3,9 +3,10 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { PlatformPressable } from '@react-navigation/elements'
 import { useLinkBuilder } from '@react-navigation/native'
 import { router } from 'expo-router'
+import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Text, TextClassProvider, View } from '~/components/ui/text'
+import { Text, TextClassProvider } from '~/components/ui/text'
 import { VoiceButton } from '~/components/voice-button'
 
 import { t } from '~/lib/i18n'

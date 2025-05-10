@@ -2,11 +2,12 @@ import type { Preference } from '~/lib/preference'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { View } from 'react-native'
 
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
-import { Text, View } from '~/components/ui/text'
+import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
