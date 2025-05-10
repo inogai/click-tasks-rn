@@ -7,6 +7,8 @@ import { cva } from 'class-variance-authority'
 import { Card, CardTitle } from '~/components/ui/card'
 import { Text, View } from '~/components/ui/text'
 
+import { cn } from '~/lib/utils'
+
 const cardVariant = cva(
   'flex-row items-stretch overflow-hidden rounded-md border-l-4',
   {
@@ -31,6 +33,18 @@ const tagsVariant = cva(
   },
 )
 
+const buttonVariant = cva(
+  'h-auto w-12',
+  {
+    variants: {
+      type: {
+        task: 'bg-blue-500',
+        txn: 'bg-green-500',
+      },
+    },
+  },
+)
+
 export type CardLine = [LucideIcon, string]
 
 export interface BaseCardProps extends VariantProps<typeof cardVariant> {
@@ -48,29 +62,31 @@ export function BaseCard({
   ...props
 }: BaseCardProps) {
   return (
-    <Card className={cardVariant(props)}>
-      <View className="flex-1 p-4 pr-0">
-        <View className="mb-2 flex-row items-center gap-4">
-          <CardTitle className="pt-1">{title}</CardTitle>
-          <Text className={tagsVariant(props)}>{titleTag}</Text>
+    <Card>
+      <View className={cn('flex-row items-center gap-4', cardVariant(props))}>
+        <View className="flex-1 p-4 pr-0">
+          <View className="mb-2 flex-row items-center gap-4">
+            <CardTitle className="pt-1">{title}</CardTitle>
+            <Text className={tagsVariant(props)}>{titleTag}</Text>
+          </View>
+
+          <View className="gap-1">
+            {lines
+              .filter(line => !!line)
+              .map(([IconComp, text]) => (
+                <View className="flex-row items-center gap-1" key={text}>
+                  <IconComp className="h-5 text-muted-foreground" />
+                  <Text className="text-sm text-muted-foreground">{text}</Text>
+                </View>
+              ))}
+          </View>
         </View>
 
-        <View className="gap-1">
-          {lines
-            .filter(line => !!line)
-            .map(([IconComp, text]) => (
-              <View className="flex-row items-center gap-1" key={text}>
-                <IconComp className="h-5 text-muted-foreground" />
-                <Text className="text-sm text-muted-foreground">{text}</Text>
-              </View>
-            ))}
-        </View>
+        {renderRightBtn && renderRightBtn({
+          className: buttonVariant(props),
+          iconClass: 'h-5 w-5',
+        })}
       </View>
-
-      {renderRightBtn && renderRightBtn({
-        className: 'h-auto w-12',
-        iconClass: 'h-5 w-5',
-      })}
     </Card>
   )
 }
