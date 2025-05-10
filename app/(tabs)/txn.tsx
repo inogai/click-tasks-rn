@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import type { TxnCat } from '~/lib/realm'
 
 import { useQuery } from '@realm/react'
 import { formatDate } from 'date-fns'
@@ -10,7 +11,17 @@ import { DataTable } from '~/components/data-table'
 import { TxnRecord } from '~/lib/realm'
 
 const columns: ColumnDef<TxnRecord>[] = [
-  { accessorKey: 'account.name', header: 'Account' },
+  // { accessorKey: 'account.name', header: 'Account' },
+  {
+    accessorKey: 'cat',
+    header: 'Cat.',
+    cell: ({ getValue }) => {
+      const category = getValue<TxnCat | undefined>()
+      if (!category) { return null }
+
+      return category?.renderIcon({ size: 20 })
+    },
+  },
   { accessorKey: 'summary', header: 'Summary' },
   {
     accessorKey: 'date',
@@ -32,7 +43,7 @@ export function TxnScreen() {
       <DataTable
         columns={columns}
         columnWeights={[0, 1, 0, 0]}
-        columnWidths={[80, 10, 120, 60]}
+        columnWidths={[40, 10, 120, 60]}
         data={Array.from(txnRecords)}
         estimatedRowSize={106}
         onRowPressed={(row) => {

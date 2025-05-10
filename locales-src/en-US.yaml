@@ -68,6 +68,8 @@ txn_form:
     label: Transaction Date
   summary:
     label: Summary
+  cat:
+    label: Category
 
 calendar_day:
   taskCount: '{{ count }} task pending.'

@@ -1,10 +1,12 @@
 import type { SelectOption } from '~/components/ui/select'
 import type { ITxnRecord } from '~/lib/realm'
+import type { LucideIcon } from 'lucide-react-native'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@realm/react'
-import { useMemo } from 'react'
+import { icons as lucideIcons } from 'lucide-react-native'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
@@ -15,7 +17,7 @@ import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
-import { TxnAccount, TxnRecord } from '~/lib/realm'
+import { TxnAccount, TxnCat, TxnRecord, useRealmQuery } from '~/lib/realm'
 import { TimeDelta } from '~/lib/utils'
 
 // Define the form data type based on the Transaction schema
@@ -51,11 +53,28 @@ export function TxnForm({
 
   const { errors, isSubmitting, isValid } = formState
 
-  const accounts = useQuery(TxnAccount)
+  const accounts = useRealmQuery(TxnAccount)
   const accountOptions = useMemo(() => accounts.map((x): SelectOption => ({
     label: `${x.name} (${x.currency})`,
     value: x._id.toString(),
   })), [accounts])
+
+  const categories = useRealmQuery(TxnCat)
+  console.log('categories', categories)
+  const categoryOptions = useMemo(() => categories.map((x): SelectOption => ({
+    label: x.name,
+    value: x._id.toString(),
+  })), [categories])
+  const renderCategoryLabel = useCallback((option: SelectOption) => {
+    const category = categories.find(x => x._id.toString() === option.value)
+
+    return (
+      <View className="flex-row items-center gap-4">
+        {category?.renderIcon()}
+        <Text className="font-medium">{category?.name}</Text>
+      </View>
+    )
+  }, [categories])
 
   return (
     <View className="gap-4">
@@ -83,6 +102,14 @@ export function TxnForm({
         label={t('txn_form.date.label')}
         name="date"
         type="datetime"
+      />
+
+      <SelectField
+        control={control}
+        label={t('txn_form.cat.label')}
+        name="catId"
+        options={categoryOptions}
+        renderLabel={renderCategoryLabel}
       />
 
       {/* TODO: Add category field once it's implemented in the schema */}

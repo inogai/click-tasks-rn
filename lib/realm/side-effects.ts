@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react'
 import { Alarm } from './alarm'
 import { TaskRecord } from './task-record'
 import { TxnAccount } from './txn-account'
+import { TxnCat } from './txn-cat'
 import { TxnRecord } from './txn-record'
 
 const OBJECT_CLASSES = [
   TaskRecord,
   TxnAccount,
   TxnRecord,
+  TxnCat,
   Alarm,
 ]
 
