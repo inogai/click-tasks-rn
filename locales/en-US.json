@@ -172,6 +172,9 @@
       "edit": "Edit Transaction Account",
       "create": "Create Transaction Account"
     },
+    "txn-cat": {
+      "list": "Edit Categories"
+    },
     "recognize": "Voice Recognize",
     "prod-summary": {
       "monthly": "Monthly Summary"
@@ -220,6 +223,24 @@
         "once": "Once",
         "repeat": "Repeat"
       }
+    }
+  },
+  "txn_cat": {
+    "icon": {
+      "label": "Icon"
+    },
+    "name": {
+      "label": "Category"
+    },
+    "color": {
+      "label": "Color"
+    },
+    "delete": {
+      "label": "Delete Category"
+    },
+    "new_cat": {
+      "label": "Create a new Category",
+      "name": "New Category"
     }
   }
 }

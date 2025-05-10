@@ -118,4 +118,12 @@ export function dateRange(
   )
 }
 
+export function batched<T>(list: T[], batchSize: number) {
+  const batches = []
+  for (let i = 0; i < list.length; i += batchSize) {
+    batches.push(list.slice(i, i + batchSize))
+  }
+  return batches
+}
+
 export * as R from 'remeda'

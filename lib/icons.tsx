@@ -21,6 +21,7 @@ import {
   CirclePlus,
   Clock,
   DollarSign,
+  Group,
   Home,
   ListTodo,
   MapPin,
@@ -92,6 +93,7 @@ export const CircleDollarSignIcon = createIcon(CircleDollarSign)
 export const CirclePlusIcon = createIcon(CirclePlus)
 export const ClockIcon = createIcon(Clock)
 export const DollarSignIcon = createIcon(DollarSign)
+export const GroupIcon = createIcon(Group)
 export const HomeIcon = createIcon(Home)
 export const ListTodoIcon = createIcon(ListTodo)
 export const MapPinIcon = createIcon(MapPin)

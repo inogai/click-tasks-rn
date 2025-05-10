@@ -8,6 +8,7 @@ import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
 import { HomeIcon, ListTodoIcon, PlusIcon, WalletIcon } from '~/lib/icons'
+import { TxnCat } from '~/lib/realm'
 
 interface RouteDefinition {
   name: string

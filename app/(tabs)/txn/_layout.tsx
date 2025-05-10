@@ -6,7 +6,7 @@ import { View } from 'react-native'
 import { Button } from '~/components/ui/button'
 
 import { t } from '~/lib/i18n'
-import { CirclePlusIcon, UserRoundCogIcon } from '~/lib/icons'
+import { CirclePlusIcon, GroupIcon, UserRoundCogIcon } from '~/lib/icons'
 import { TxnAccount, useRealmQuery } from '~/lib/realm'
 
 import TxnScreen from './[accountId]'
@@ -37,6 +37,7 @@ export default function AccountDrawerLayout() {
                     variant="ghost"
                     onPress={() => router.navigate('/txn-account/list')}
                     accessibilityLabel={t('routes.txn-account.list')}
+                    accessibilityRole="link"
                   >
                     <UserRoundCogIcon />
                   </Button>
@@ -48,6 +49,15 @@ export default function AccountDrawerLayout() {
                     accessibilityRole="link"
                   >
                     <CirclePlusIcon />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onPress={() => router.navigate('/txn-cat/list')}
+                    accessibilityLabel={t('routes.txn-cat.list')}
+                    accessibilityRole="link"
+                  >
+                    <GroupIcon />
                   </Button>
                 </View>
               ),

@@ -20,6 +20,7 @@ const ICON_NAMES = [
   'CirclePlus',
   'Clock',
   'DollarSign',
+  'Group',
   'Home',
   'ListTodo',
   'MapPin',
