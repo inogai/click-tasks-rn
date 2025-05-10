@@ -229,7 +229,7 @@ function AlarmInput({
   const [customError, setCustomError] = useState('')
 
   function submitCustom() {
-    const newVal = Number.parseInt(custom, 10)
+    const newVal = TimeDelta.MINUTE(Number.parseInt(custom, 10))
     if (Number.isNaN(newVal) || newVal < 0) {
       setCustomError(t('task_form.alarms.error.invalid'))
       return
