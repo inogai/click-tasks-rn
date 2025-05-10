@@ -4,7 +4,9 @@ import type { ComponentRef } from 'react'
 import { useControllableState } from '@rn-primitives/hooks'
 import { FlashList } from '@shopify/flash-list'
 import { cva } from 'class-variance-authority'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { FlatList, ScrollView, TouchableWithoutFeedback, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button } from '~/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
@@ -14,6 +16,7 @@ import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { CheckIcon, ChevronsUpDownIcon } from '~/lib/icons'
+import { useMeasure } from '~/lib/use-mesaure'
 import { cn } from '~/lib/utils'
 
 type SelectValue = string | number
@@ -54,6 +57,8 @@ function defaultRenderLabel({ label }: SelectOption) {
   return <Text>{label}</Text>
 }
 
+const ITEM_HEIGHT = 42
+
 export function Select({
   options,
   value: valueProp,
@@ -70,39 +75,50 @@ export function Select({
     onChange: onChangeProp,
   })
 
-  const [open, setOpen] = useState(false)
+  const renderTriggerLabel = useCallback((value: SelectValue | undefined) => {
+    const label = options.find(opt => opt.value === value)?.label
 
-  const triggetRef = useRef<ComponentRef<typeof Button>>(null)
-  const [width, setWidth] = useState(0)
+    if (label) {
+      return renderLabel({ label, value: value! })
+    }
 
-  useLayoutEffect(() => {
-    triggetRef.current?.measure((_x, _y, w) => {
-      setWidth(w)
-    })
-  })
+    return <Text className="text-muted-foreground">{placeholder}</Text>
+  }, [options, placeholder, renderLabel])
+
+  const triggerRef = useRef<ComponentRef<typeof Button>>(null)
+  const { width } = useMeasure(triggerRef, { width: 240 })
 
   const popoverTriggerRef = useRef<ComponentRef<typeof PopoverTrigger>>(null)
 
-  useEffect(() => {
-    if (open) {
+  const insets = useSafeAreaInsets()
+
+  const [open, setOpen] = useState(false)
+
+  function triggerOpen(val: boolean) {
+    if (val) {
       popoverTriggerRef.current?.open()
     }
     else {
       popoverTriggerRef.current?.close()
     }
-    onBlur?.()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
+  }
+
+  function handleOpenChange(val: boolean) {
+    setOpen(val)
+    if (val === false) {
+      onBlur?.()
+    }
+  }
 
   return (
-    <Popover onOpenChange={setOpen}>
+    <Popover onOpenChange={handleOpenChange}>
       <PopoverTrigger ref={popoverTriggerRef} asChild>
         <Button
           accessible={true}
           className={cn(selectTriggerVariants({ error }))}
           disabled={disabled}
           nativeID={nativeID}
-          ref={triggetRef}
+          ref={triggerRef}
           variant="outline"
           // TODO: blocked by react-native
           // https://github.com/facebook/react-native/issues/47268
@@ -136,35 +152,31 @@ export function Select({
             }
           }}
         >
-          {value
-            ? renderLabel(options.find(opt => opt.value === value)!)
-            : <Text className="text-muted-foreground">{placeholder}</Text>}
+          {renderTriggerLabel(value)}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="border border-border p-0"
-        style={{ width }}
+        className="p-0"
+        insets={insets}
+        side="top"
+        style={{ width, height: (ITEM_HEIGHT + 1) * options.length }}
       >
         <FlashList
           data={options}
-          estimatedItemSize={56}
+          estimatedItemSize={ITEM_HEIGHT}
           extraData={[value]}
-          ItemSeparatorComponent={() =>
-            <Separator className="mx-2" />}
+          ItemSeparatorComponent={() => <Separator />}
           renderItem={({ item }) => {
             const isSelected = value === item.value
             return (
               <Pressable
-                className="flex-row items-center px-2 py-1.5"
+                className="flex-row items-center px-2"
+                style={{ height: ITEM_HEIGHT }}
                 onPress={() => {
                   setValue(item.value)
-                  setOpen(false)
+                  triggerOpen(false)
                 }}
-                // accessibilityLabel={item.label}
-                // accessibilityState={{
-                //   selected: isSelected,
-                // }}
               >
                 <CheckIcon className={cn(
                   'mr-2 h-5 w-5 text-foreground',
