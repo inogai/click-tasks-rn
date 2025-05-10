@@ -52,27 +52,7 @@ export default function TabLayout() {
         options={{
           title: t('routes.(tabs).txn'),
           tabBarIcon: props => <WalletIcon {...props} />,
-          headerRight: () => (
-            <View className="mr-4 flex-row gap-2">
-              <Button
-                size="icon"
-                variant="ghost"
-                onPress={() => router.navigate('/txn-account/list')}
-                accessibilityLabel={t('routes.txn-account.list')}
-              >
-                <UserRoundCogIcon />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                onPress={() => router.navigate('/txn/create')}
-                accessibilityLabel={t('routes.txn.create')}
-                accessibilityRole="link"
-              >
-                <CirclePlusIcon />
-              </Button>
-            </View>
-          ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen

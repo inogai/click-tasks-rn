@@ -1,10 +1,12 @@
+import type { DrawerScreenProps } from '@react-navigation/drawer'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { TxnCat } from '~/lib/realm'
 
 import { useQuery } from '@realm/react'
 import { formatDate } from 'date-fns'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { BSON } from 'realm'
 
 import { DataTable } from '~/components/data-table'
 
@@ -32,8 +34,15 @@ const columns: ColumnDef<TxnRecord>[] = [
   { accessorKey: 'amount', header: 'Amnt' },
 ]
 
-export function TxnScreen() {
-  const txnRecords = useQuery(TxnRecord)
+export function TxnScreen({
+  route: { params },
+}: DrawerScreenProps<any>) {
+  const accountId = params?.accountId
+  const txnRecords = useQuery({
+    type: TxnRecord,
+    query: collection => collection
+      .filtered('account._id == $0', new BSON.ObjectId(accountId)),
+  })
 
   return (
     <SafeAreaView
