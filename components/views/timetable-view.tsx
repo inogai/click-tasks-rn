@@ -59,7 +59,7 @@ export function TimeTable({
   const H_PER_MS = height / (timeEnd.getTime() - timeBegin.getTime())
 
   function getY(time: Date) {
-    const delta = Time.difference(timeBegin, Time.validate(time))
+    const delta = Time.difference(timeBegin, Time.fromClamp(time))
     return delta * H_PER_MS + 0
   }
 
