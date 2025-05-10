@@ -33,8 +33,8 @@ export function useRealmSideEffects() {
 
   const alarms = useQuery({
     type: Alarm,
-    // query: collection => collection,
-    // .filtered('time <= $0', date),
+    query: collection => collection
+      .filtered('time <= $0', date),
   }, [date])
 
   useInterval(() => {
