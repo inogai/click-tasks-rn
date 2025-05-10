@@ -83,10 +83,10 @@ export default function RecognizationScreen() {
         if (data) {
           const { tasks, transactions } = data
           tasks?.forEach((task) => {
-            realm.create(TaskRecord, TaskRecord.create(task))
+            TaskRecord.create(task, realm)
           })
           transactions?.forEach((txn) => {
-            realm.create(TxnRecord, TxnRecord.create(txn, realm))
+            TxnRecord.create(txn, realm)
           })
         }
       })
