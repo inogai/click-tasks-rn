@@ -23,7 +23,6 @@ import { useArrayFrom } from '~/lib/use-array-from'
 import { cn, R } from '~/lib/utils'
 
 const columns: ColumnDef<TxnRecord>[] = [
-  // { accessorKey: 'account.name', header: 'Account' },
   {
     accessorKey: 'cat',
     header: 'Cat.',
@@ -35,13 +34,23 @@ const columns: ColumnDef<TxnRecord>[] = [
     },
   },
   { accessorKey: 'summary', header: 'Summary' },
-  {
-    accessorKey: 'date',
-    header: 'Txn Date',
-    cell: ({ getValue }) =>
-      formatDate(getValue<Date>(), 'yyyy-MM-dd'),
-  },
-  { accessorKey: 'amount', header: 'Amnt' },
+  { id: 'right', header: '', cell: ({ row }) => {
+    const amount = Number.parseFloat(row.original.amount.toString())
+    return (
+      <View className="-my-4 flex-1 flex-col items-end justify-center pr-2">
+        <Text className={cn(
+          'text-md font-medium',
+          amount > 0 ? 'text-green-500' : 'text-red-500',
+        )}
+        >
+          {amount.toFixed(2)}
+        </Text>
+        <Text className="text-xs font-medium text-muted-foreground">
+          {formatDate(row.original.date, 'yyyy-MM-dd')}
+        </Text>
+      </View>
+    )
+  } },
 ]
 
 export function TxnScreen({
@@ -51,7 +60,7 @@ export function TxnScreen({
   const accountId = params?.accountId
 
   const account = useRealmObject(TxnAccount, new BSON.ObjectId(accountId))
-  const txnRecords = useArrayFrom(account?.txns ?? [])
+  const txnRecords = useArrayFrom(account?.txns.sorted('date', true) ?? [])
   const sum = useMemo(() => R.pipe(
     txnRecords,
     R.map(it => Number.parseFloat(it.amount.toString())),
@@ -128,9 +137,9 @@ export function TxnScreen({
 
       <DataTable
         columns={columns}
-        columnWeights={[0, 1, 0, 0]}
-        columnWidths={[40, 10, 120, 60]}
-        data={Array.from(txnRecords)}
+        columnWeights={[0, 1, 0]}
+        columnWidths={[40, 10, 90]}
+        data={txnRecords}
         estimatedRowSize={106}
         onRowPressed={(row) => {
           router.push({

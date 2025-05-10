@@ -1,14 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { router } from 'expo-router'
-import React, { useMemo } from 'react'
-import { View } from 'react-native'
+import React from 'react'
 
-import { Button } from '~/components/ui/button'
-
-import { t } from '~/lib/i18n'
-import { CirclePlusIcon, GroupIcon, UserRoundCogIcon } from '~/lib/icons'
 import { TxnAccount, useRealmQuery } from '~/lib/realm'
-import { R } from '~/lib/utils'
 
 import TxnScreen from './[accountId]'
 
