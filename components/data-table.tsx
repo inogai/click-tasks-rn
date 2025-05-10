@@ -1,21 +1,19 @@
 import type { ViewRef } from '@rn-primitives/types'
 import type {
+  CellContext,
   ColumnDef,
-  Renderable,
   Row,
 } from '@tanstack/react-table'
 import type { ComponentProps } from 'react'
 
 import { FlashList } from '@shopify/flash-list'
 import {
-  flexRender as webFlexRender,
+  flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 import { useCallback, useMemo, useRef } from 'react'
-import { Platform, useWindowDimensions } from 'react-native'
 
-import { Pressable } from '~/components/ui/pressable'
 import {
   Table,
   TableBody,
@@ -30,15 +28,6 @@ import { t } from '~/lib/i18n'
 import { useMeasure } from '~/lib/use-mesaure'
 import { cn, R } from '~/lib/utils'
 
-function flexRender<TProps extends object>(
-  Comp: Renderable<TProps>,
-  props: TProps,
-): React.ReactNode | React.JSX.Element {
-  const flexed = webFlexRender(Comp, props)
-
-  return <Text>{flexed}</Text>
-}
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -48,14 +37,28 @@ interface DataTableProps<TData, TValue> {
   onRowPressed?: (row: TData) => void
 }
 
+function defaultRender({ getValue }: CellContext<any, any>) {
+  return <Text>{getValue()}</Text>
+}
+
 export function DataTable<TData, TValue>({
-  columns,
+  columns: columnsProp,
   data,
   columnWidths: baseWidths,
   columnWeights: weights,
   estimatedRowSize,
   onRowPressed,
 }: DataTableProps<TData, TValue>) {
+  const columns: ColumnDef<TData, TValue>[] = useMemo(() => R.map(columnsProp, it => ({
+    cell: defaultRender,
+    ...it,
+    header: typeof it.header === 'string'
+      ? <Text>{it.header}</Text>
+      : it.header,
+  } as ColumnDef<TData, TValue>)), [columnsProp])
+
+  console.log(columns)
+
   baseWidths = baseWidths ?? R.range(0, columns.length).map(() => 0)
   weights = weights ?? R.range(0, columns.length).map(() => 0)
 
