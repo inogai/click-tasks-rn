@@ -33,7 +33,7 @@ export default function TxnCreateScreen() {
     >
       <View className="h-full px-4 pt-4">
         <TxnForm
-          form={form}
+          {...form}
           onSubmit={handleSubmit}
         />
       </View>

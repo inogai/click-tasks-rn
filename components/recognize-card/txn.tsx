@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BSON } from 'realm'
 
-import { TxnForm } from '~/components/txn-form'
+import { TxnForm, useTxnForm } from '~/components/txn-form'
 import { Button } from '~/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
 
@@ -34,12 +34,7 @@ export function TxnCard({
   const account = useRealmObject({ type: TxnAccount, primaryKey: new BSON.ObjectId(accountId) })
 
   const [editDialog, setEditDialog] = useState(false)
-  const editForm = useForm({
-    resolver: zodResolver(TxnRecord.zodSchema),
-    defaultValues: {
-      ...txn,
-    },
-  })
+  const editForm = useTxnForm()
 
   function handleEditSubmit(data: ITxnRecord) {
     setEditDialog(false)
@@ -75,7 +70,7 @@ export function TxnCard({
             </Button>
           </DialogTrigger>
           <DialogContent>
-            <TxnForm form={editForm} onSubmit={handleEditSubmit} />
+            <TxnForm {...editForm} onSubmit={handleEditSubmit} />
           </DialogContent>
         </Dialog>
       )}

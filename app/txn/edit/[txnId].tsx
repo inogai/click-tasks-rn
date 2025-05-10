@@ -21,7 +21,7 @@ export default function TxnEditScreen() {
   const { txnId } = useLocalSearchParams<'/txn/edit/[txnId]'>()
   const txnObj = useObject({ type: TxnRecord, primaryKey: new BSON.ObjectId(txnId) })
 
-  const form = useTxnForm()
+  const { form, ...rest } = useTxnForm()
 
   useFocusEffect(useCallback(() => {
     if (!txnObj) {
@@ -64,6 +64,7 @@ export default function TxnEditScreen() {
     >
       <View className="px-4 pt-4">
         <TxnForm
+          {...rest}
           form={form}
           onSubmit={handleSubmit}
         />

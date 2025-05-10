@@ -18,6 +18,7 @@ import { Button } from '~/components/ui/button'
 import { t } from '~/lib/i18n'
 import { CheckIcon } from '~/lib/icons'
 import { TxnAccount, TxnCat, TxnRecord, useRealmQuery } from '~/lib/realm'
+import { useArrayFrom } from '~/lib/use-array-from'
 import { TimeDelta } from '~/lib/utils'
 
 // Define the form data type based on the Transaction schema
@@ -26,24 +27,35 @@ type FormData = ITxnRecord
 export interface TxnFormProps {
   onSubmit: (data: FormData) => void
   form: UseFormReturn<FormData>
+  accounts: TxnAccount[]
+  categories: TxnCat[]
 }
 
 export function useTxnForm() {
-  const accounts = useQuery(TxnAccount)
+  const accounts = useArrayFrom(useRealmQuery(TxnAccount))
   const schema = TxnRecord.zodSchema
     .refine(x => accounts.some(a => a._id.toString() === x.accountId), {
       message: t('txn_form.account.error'),
     })
 
-  return useForm({
+  const form = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
   })
+  const categories = useArrayFrom(useRealmQuery(TxnCat))
+
+  return {
+    form,
+    accounts,
+    categories,
+  }
 }
 
 export function TxnForm({
   form,
   onSubmit,
+  accounts,
+  categories,
 }: TxnFormProps) {
   const {
     control,
@@ -53,13 +65,11 @@ export function TxnForm({
 
   const { errors, isSubmitting, isValid } = formState
 
-  const accounts = useRealmQuery(TxnAccount)
   const accountOptions = useMemo(() => accounts.map((x): SelectOption => ({
     label: `${x.name} (${x.currency})`,
     value: x._id.toString(),
   })), [accounts])
 
-  const categories = useRealmQuery(TxnCat)
   console.log('categories', categories)
   const categoryOptions = useMemo(() => categories.map((x): SelectOption => ({
     label: x.name,
