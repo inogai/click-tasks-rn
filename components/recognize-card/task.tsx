@@ -56,7 +56,7 @@ export function TaskCard({
               <PencilIcon className={iconClass} />
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="h-screen-safe justify-center">
             <TaskForm form={editForm} onSubmit={handleEditSubmit} />
           </DialogContent>
         </Dialog>

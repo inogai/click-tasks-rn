@@ -273,9 +273,9 @@ function AlarmInput({
             <Text>{t('task_form.alarms.create')}</Text>
           </Button>
         </DialogTrigger>
-        <DialogContent className="h-[800px] w-96">
+        <DialogContent className="w-96">
           <DialogTitle>{t('task_form.alarms.create')}</DialogTitle>
-          <FlashList
+          <FlatList
             data={popularTimedeltas}
             keyExtractor={item => item.toString()}
             renderItem={({ item: newVal }) => (
@@ -319,7 +319,6 @@ function AlarmInput({
           <Text className="text-destructive">{customError}</Text>
         </DialogContent>
       </Dialog>
-
     </View>
   )
 }
