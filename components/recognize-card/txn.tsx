@@ -1,8 +1,6 @@
 import type { ITxnRecord } from '~/lib/realm'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { BSON } from 'realm'
 
 import { TxnForm, useTxnForm } from '~/components/txn-form'
@@ -10,7 +8,7 @@ import { Button } from '~/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
 
 import { BookIcon, CalendarIcon, CircleDollarSignIcon, PencilIcon } from '~/lib/icons'
-import { TxnAccount, TxnRecord, useRealmObject } from '~/lib/realm'
+import { TxnAccount, useRealmObject } from '~/lib/realm'
 import { smartFormatDate } from '~/lib/utils/format-date-range'
 
 import { BaseCard } from './base'
