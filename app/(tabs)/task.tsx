@@ -1,5 +1,6 @@
 import { addDays, startOfDay } from 'date-fns'
 import { useRouter } from 'expo-router'
+import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { H3 } from '~/components/ui/typography'
@@ -38,24 +39,24 @@ export function TaskListScreen() {
       edges={['left', 'right']}
     >
       {tasks.pending.length > 0 && (
-        <>
+        <View className="flex-1">
           <H3>Pending</H3>
           <TaskView
             className="-mx-4"
             tasks={tasks.pending}
             onItemPress={handleItemPress}
           />
-        </>
+        </View>
       )}
       {tasks.recent.length > 0 && (
-        <>
+        <View className="flex-1">
           <H3>Recently Completed</H3>
           <TaskView
             className="-mx-4"
             tasks={tasks.recent}
             onItemPress={handleItemPress}
           />
-        </>
+        </View>
       )}
     </SafeAreaView>
   )
