@@ -152,7 +152,7 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       this.alarms = alarmsProp?.map(alarmMs => realm.create<Alarm>('Alarm', {
         _id: new Realm.BSON.ObjectId(),
         title: this.summary,
-        time: addMilliseconds(this.plannedBegin!, alarmMs),
+        time: addMilliseconds(this.plannedBegin!, -alarmMs),
       })) satisfies Alarm[] as unknown as Realm.List<Alarm>
     }
 
@@ -168,7 +168,7 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
       plannedBegin: this.plannedBegin,
       plannedEnd: this.plannedEnd,
 
-      alarms: this.alarms.map(alarm => alarm.time.getTime() - this.plannedBegin!.getTime()),
+      alarms: this.alarms.map(alarm => this.plannedBegin!.getTime() - alarm.time.getTime()),
       countdown: this.countdown,
     }
   }
