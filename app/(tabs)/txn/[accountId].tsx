@@ -1,12 +1,10 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer'
 import type { ColumnDef } from '@tanstack/react-table'
-import type { TxnCat, TxnRecord } from '~/lib/realm'
+import type { TxnCat } from '~/lib/realm'
 
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import { Header } from '@react-navigation/elements'
-import { useQuery } from '@realm/react'
 import { formatDate } from 'date-fns'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -18,7 +16,7 @@ import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
 import { CirclePlusIcon, GroupIcon, MenuIcon, UserRoundCogIcon } from '~/lib/icons'
-import { TxnAccount, useRealmObject, useRealmQuery } from '~/lib/realm'
+import { TxnAccount, TxnRecord, useRealmObject, useRealmQuery } from '~/lib/realm'
 import { useArrayFrom } from '~/lib/use-array-from'
 import { cn, R } from '~/lib/utils'
 
@@ -60,7 +58,13 @@ export function TxnScreen({
   const accountId = params?.accountId
 
   const account = useRealmObject(TxnAccount, new BSON.ObjectId(accountId))
-  const txnRecords = useArrayFrom(account?.txns.sorted('date', true) ?? [])
+  const txnRecords = useArrayFrom(useRealmQuery({
+    type: TxnRecord,
+    query: collection => collection
+      .filtered('account == $0', account)
+      .sorted('date', true),
+  }))
+
   const sum = useMemo(() => R.pipe(
     txnRecords,
     R.map(it => Number.parseFloat(it.amount.toString())),
