@@ -18,6 +18,7 @@ export function PreferenceScreen() {
   const {
     control,
     formState: { errors },
+    handleSubmit,
   } = useForm<Preference>({
     resolver: zodResolver(preferenceSchema),
     defaultValues: preference,
@@ -92,7 +93,10 @@ export function PreferenceScreen() {
         { errors.root?.message }
       </Text>
 
-      <Button className="flex-row gap-2">
+      <Button
+        className="flex-row gap-2"
+        onPress={handleSubmit(setPreference)}
+      >
         <CheckIcon />
         <Text>{t('button.submit')}</Text>
       </Button>
