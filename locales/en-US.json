@@ -7,6 +7,9 @@
     "prevOption": "Previous Option",
     "nextOption": "Next Option"
   },
+  "data_table": {
+    "placeholder": "No items."
+  },
   "voice_button": {
     "label": "Create Tasks by Voice",
     "title": "Please speak now...",
@@ -61,7 +64,8 @@
   "alarm": {
     "notification": {
       "minutesLeft": "{{ minutes }} minutes left"
-    }
+    },
+    "shake_to_dismiss": "Shake to Dismiss"
   },
   "txn_account_form": {
     "name": {
@@ -84,6 +88,9 @@
     },
     "summary": {
       "label": "Summary"
+    },
+    "cat": {
+      "label": "Category"
     }
   },
   "calendar_day": {
