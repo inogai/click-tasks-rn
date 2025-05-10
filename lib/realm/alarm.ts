@@ -1,10 +1,9 @@
 import { Realm } from '@realm/react'
-import { addSeconds, differenceInMinutes } from 'date-fns'
-import { t } from 'i18next'
+import { addSeconds, differenceInMilliseconds } from 'date-fns'
 
 import { clearAlarm, setAlarm } from '~/lib/alarm'
 import { usePreferenceStore } from '~/lib/preference'
-import { R } from '~/lib/utils'
+import { formatTimeDeltaLeft, R } from '~/lib/utils'
 
 import { TaskRecord } from './task-record'
 
@@ -13,6 +12,7 @@ export class Alarm extends Realm.Object<Alarm> {
 
   title!: string
   time!: Date
+  plannedBegin!: Date
   alarmIds!: Realm.List<string>
   task!: Realm.List<TaskRecord>
 
@@ -25,6 +25,7 @@ export class Alarm extends Realm.Object<Alarm> {
 
       title: 'string',
       time: 'date',
+      plannedBegin: 'date',
       alarmIds: 'string[]',
 
       task: {
@@ -74,7 +75,7 @@ export class Alarm extends Realm.Object<Alarm> {
 }
 
 async function setupAlarm(alarm: Alarm) {
-  const { time, title } = alarm
+  const { time, title, plannedBegin } = alarm
 
   const alarmType = usePreferenceStore.getState().alarmType
 
@@ -82,26 +83,21 @@ async function setupAlarm(alarm: Alarm) {
 
   if (alarmType === 'repeat') {
     console.log(`Alarm: creating repeat alarm for task ${title} at ${time}`)
-    alarmIds = await Promise.all(R
-      .range(0, 60)
-      .map(i => addSeconds(time, 5 * i))
-      .map(date => setAlarm(
+    for (const i of R.range(0, 60)) {
+      const date = addSeconds(time, i * 5)
+      // we intentionally run await in a loop
+      // some android device don't like it when we set multiple alarms at once
+      alarmIds.push(await setAlarm(
         title,
-        '',
-        // t('alarm.notification.minutesLeft', {
-        //   minutes: differenceInMinutes(due, date),
-        // }),
+        plannedBegin ? formatTimeDeltaLeft(differenceInMilliseconds(plannedBegin, date)) : '',
         date,
-      )),
-    )
+      ))
+    }
   }
   else {
     alarmIds = [await setAlarm(
       title,
-      '',
-      // t('alarm.notification.minutesLeft', {
-      //   minutes: differenceInMinutes(due, time),
-      // }),
+      plannedBegin ? formatTimeDeltaLeft(differenceInMilliseconds(plannedBegin, time)) : '',
       time,
     )]
   }

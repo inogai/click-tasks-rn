@@ -163,4 +163,13 @@ export function formatTimeDelta(timeDelta: number) {
     .replaceAll(/\s+/g, ' ')
 }
 
+export function formatTimeDeltaLeft(timeDelta: number) {
+  return t(
+    'timedelta.val_left',
+    timeDeltaBreakdown(timeDelta),
+  )
+    .trim()
+    .replaceAll(/\s+/g, ' ')
+}
+
 export * as R from 'remeda'

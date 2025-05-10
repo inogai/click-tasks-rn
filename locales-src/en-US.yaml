@@ -1,5 +1,6 @@
 timedelta:
   val: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} })"
+  val_left: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} }) left"
   d: '{{ count }} days'
   d_zero: ' '
   h: '{{ count }} hours'

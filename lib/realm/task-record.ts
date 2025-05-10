@@ -123,10 +123,11 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   }: ITaskRecord, realm: Realm) {
     const now = new Date()
 
-    const alarms = alarmProps.map(alarmMs => realm.create('Alarm', {
+    const alarms = alarmProps.map(alarmMs => realm.create<Alarm>('Alarm', {
       _id: new Realm.BSON.ObjectId(),
       title: props.summary,
-      time: addMilliseconds(props.plannedBegin!, alarmMs),
+      plannedBegin: props.plannedBegin!,
+      time: addMilliseconds(props.plannedBegin!, -alarmMs),
     }))
 
     return realm.create(TaskRecord, {
@@ -153,6 +154,7 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
         _id: new Realm.BSON.ObjectId(),
         title: this.summary,
         time: addMilliseconds(this.plannedBegin!, -alarmMs),
+        plannedBegin: this.plannedBegin!,
       })) satisfies Alarm[] as unknown as Realm.List<Alarm>
     }
 
