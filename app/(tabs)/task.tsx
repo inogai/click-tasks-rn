@@ -41,6 +41,7 @@ export function TaskListScreen() {
         <>
           <H3>Pending</H3>
           <TaskView
+            className="-mx-4"
             tasks={tasks.pending}
             onItemPress={handleItemPress}
           />
@@ -50,7 +51,7 @@ export function TaskListScreen() {
         <>
           <H3>Recently Completed</H3>
           <TaskView
-            className="-mx-2"
+            className="-mx-4"
             tasks={tasks.recent}
             onItemPress={handleItemPress}
           />
