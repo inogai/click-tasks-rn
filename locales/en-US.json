@@ -1,4 +1,15 @@
 {
+  "timedelta": {
+    "val": "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} })",
+    "d": "{{ count }} days",
+    "d_zero": " ",
+    "h": "{{ count }} hours",
+    "h_zero": " ",
+    "min": "{{ count }} minutes",
+    "min_zero": " ",
+    "sec": "{{ count }} seconds",
+    "sec_zero": " "
+  },
   "button": {
     "submit": "Submit",
     "delete": "Delete"
@@ -47,18 +58,22 @@
         "deleted": "Deleted"
       }
     },
-    "add_to_countdown": {
+    "countdown": {
       "label": "Add Item to Dashboard Countdown",
       "error": {
         "no_due": "Due date must be defined when adding to countdown"
       }
     },
-    "alarm": {
-      "label": "Alarm",
-      "values": {
-        "none": "No Alarm",
-        "minutes": "{{ count }} min"
-      }
+    "alarms": {
+      "label": "Alarms",
+      "error": {
+        "no_due": "Due date must be defined when adding an alarm",
+        "invalid": "Must be Positive Number",
+        "duplicated": "Cannot be Duplicated"
+      },
+      "create": "Add a alarm before",
+      "minutes": "minutes",
+      "custom": "Custom value"
     }
   },
   "alarm": {

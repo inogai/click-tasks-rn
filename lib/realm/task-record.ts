@@ -18,7 +18,7 @@ const zodSchema = z.object({
   plannedEnd: z.coerce.date().optional().nullable().describe('null for task, or activity end date'),
 
   countdown: z.coerce.boolean().describe('whether to add to countdown'),
-  alarm: z.number().describe('ms before'),
+  alarms: z.array(z.number().positive()).describe('how many ms before the plannedBegin to trigger alarm'),
 }).superRefine((val, ctx) => {
   // plannedEnd requires plannedBegin
   if ((!val.plannedBegin && val.plannedEnd)) {
@@ -51,13 +51,26 @@ const zodSchema = z.object({
   if (val.countdown && !val.plannedBegin) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: t('task_form.add_to_countdown.error.no_due'),
+      message: t('task_form.countdown.error.no_due'),
       path: ['plannedBegin'],
     })
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: t('task_form.add_to_countdown.error.no_due'),
-      path: ['addToCountdown'],
+      message: t('task_form.countdown.error.no_due'),
+      path: ['countdown'],
+    })
+  }
+
+  if (val.alarms.length > 0 && !val.plannedBegin) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('task_form.alarms.error.no_due'),
+      path: ['plannedBegin'],
+    })
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('task_form.alarms.error.no_due'),
+      path: ['alarms'],
     })
   }
 })
@@ -75,6 +88,8 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   venue!: string | null
   plannedBegin!: Date | null
   plannedEnd!: Date | null
+
+  countdown!: boolean
   alarms!: Realm.List<Alarm>
 
   static schema: Realm.ObjectSchema = {
@@ -103,48 +118,59 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
   static zodSchema = zodSchema
 
   static create({
-    alarm: alarmMs,
+    alarms: alarmProps,
     ...props
   }: ITaskRecord, realm: Realm) {
     const now = new Date()
 
-    const alarm = realm.create('Alarm', {
+    const alarms = alarmProps.map(alarmMs => realm.create('Alarm', {
       _id: new Realm.BSON.ObjectId(),
       title: props.summary,
       time: addMilliseconds(props.plannedBegin!, alarmMs),
-    })
+    }))
 
     return realm.create(TaskRecord, {
       ...props,
       _id: new Realm.BSON.ObjectId(),
       created: now,
       updated: now,
-      alarms: [alarm],
+      alarms,
     })
   }
 
   update({
-    alarm: alarmMs,
+    alarms: alarmsProp,
     ...props
   }: Partial<ITaskRecord>, realm: Realm) {
     this.updated = new Date()
 
-    this.alarms.forEach((alarm) => {
-      alarm.delete(realm)
-    })
-    this.alarms = [] as unknown as Realm.List<Alarm>
+    if (alarmsProp) {
+      this.alarms.forEach((alarm) => {
+        alarm.delete(realm)
+      })
 
-    if (alarmMs && this.plannedBegin) {
-      const alarm = realm.create('Alarm', {
+      this.alarms = alarmsProp?.map(alarmMs => realm.create<Alarm>('Alarm', {
         _id: new Realm.BSON.ObjectId(),
         title: this.summary,
-        time: addMilliseconds(this.plannedBegin, alarmMs),
-      }) as unknown as Alarm
-
-      this.alarms.push(alarm)
+        time: addMilliseconds(this.plannedBegin!, alarmMs),
+      })) satisfies Alarm[] as unknown as Realm.List<Alarm>
     }
 
     Object.assign(this, props)
+  }
+
+  toFormValues(): ITaskRecord {
+    return {
+      summary: this.summary,
+      status: this.status,
+
+      venue: this.venue,
+      plannedBegin: this.plannedBegin,
+      plannedEnd: this.plannedEnd,
+
+      alarms: this.alarms.map(alarm => alarm.time.getTime() - this.plannedBegin!.getTime()),
+      countdown: this.countdown,
+    }
   }
 
   toModel(): string {

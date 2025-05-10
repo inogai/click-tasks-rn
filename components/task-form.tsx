@@ -1,24 +1,32 @@
+import type { PopoverTrigger } from '~/components/ui/popover'
 import type { ITaskRecord } from '~/lib/realm'
-import type { UseFormReturn } from 'react-hook-form'
+import type { ComponentRef } from 'react'
+import type { Control, ControllerProps, ControllerRenderProps, FieldValues, Path, UseFormReturn } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { FlashList } from '@shopify/flash-list'
 import { addHours, addMilliseconds, differenceInMilliseconds } from 'date-fns'
-import { useEffect, useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
-import { View } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { FlatList, View } from 'react-native'
 
 import { CheckboxField } from '~/components/form/checkbox-field'
 import { FormField } from '~/components/form/form-field'
 import { SelectField } from '~/components/form/select-field'
 import { Button } from '~/components/ui/button'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
+import { Popover, PopoverContent } from '~/components/ui/popover'
+import { Separator } from '~/components/ui/separator'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Text } from '~/components/ui/text'
 
 import { t } from '~/lib/i18n'
-import { CheckIcon } from '~/lib/icons'
+import { CheckIcon, PlusIcon, XIcon } from '~/lib/icons'
 import { TaskRecord, TaskStatus } from '~/lib/realm'
 import { usePrevious } from '~/lib/use-previous'
-import { cn, TimeDelta } from '~/lib/utils'
+import { cn, formatTimeDelta, TimeDelta } from '~/lib/utils'
 
 type FormData = ITaskRecord
 
@@ -35,7 +43,7 @@ export function useTaskForm() {
     defaultValues: {
       countdown: false,
       status: TaskStatus.PENDING,
-      alarm: -1,
+      alarms: [],
     },
   })
 }
@@ -59,19 +67,6 @@ function getNewEnd(
     return addMilliseconds(newBegin, duration)
   }
 }
-
-const alarmOptions = [
-  { value: -1, label: t('task_form.alarm.values.none') },
-  ...[
-    TimeDelta.MINUTE(5),
-    TimeDelta.MINUTE(15),
-    TimeDelta.MINUTE(30),
-    TimeDelta.MINUTE(60),
-    TimeDelta.MINUTE(120),
-    TimeDelta.DAY(1),
-  ].map(delta =>
-    ({ value: delta, label: t('task_form.alarm.values.minutes', { count: delta / 60000 }) })),
-]
 
 export function TaskForm({
   form,
@@ -178,15 +173,20 @@ export function TaskForm({
 
       <CheckboxField
         control={control}
-        label={t('task_form.add_to_countdown.label')}
+        label={t('task_form.countdown.label')}
         name="countdown"
       />
 
-      <SelectField
+      <Controller
         control={control}
-        label={t('task_form.alarm.label')}
-        name="alarm"
-        options={alarmOptions}
+        name="alarms"
+        render={({ field: { onChange, value }, fieldState }) => (
+          <View>
+            <Label className="text-sm font-medium">{t('task_form.alarms.label')}</Label>
+            <AlarmInput setValues={onChange} values={value} />
+            { fieldState.error && (<Text className="text-destructive">{fieldState.error.message}</Text>) }
+          </View>
+        )}
       />
 
       <Text className="text-destructive">
@@ -203,6 +203,122 @@ export function TaskForm({
           {t('button.submit')}
         </Text>
       </Button>
+
+    </View>
+  )
+}
+
+function AlarmInput({
+  values,
+  setValues,
+}: {
+  values: number[]
+  setValues: (values: number[]) => void
+}) {
+  const popularTimedeltas = [
+    TimeDelta.MINUTE(15),
+    TimeDelta.MINUTE(30),
+    TimeDelta.HOUR(1),
+    TimeDelta.HOUR(1.5),
+    TimeDelta.HOUR(2),
+    TimeDelta.DAY(1),
+  ]
+
+  const [dialog, setDialog] = useState(false)
+  const [custom, setCustom] = useState('')
+  const [customError, setCustomError] = useState('')
+
+  function submitCustom() {
+    const newVal = Number.parseInt(custom, 10)
+    if (Number.isNaN(newVal) || newVal < 0) {
+      setCustomError(t('task_form.alarms.error.invalid'))
+      return
+    }
+    if (values.includes(newVal)) {
+      setCustomError(t('task_form.alarms.error.duplicated'))
+      return
+    }
+
+    setValues([...values, newVal])
+    setCustom('')
+    setDialog(false)
+    setCustomError('')
+  }
+
+  return (
+    <View className="rounded-md border border-border">
+      <FlatList
+        data={values}
+        renderItem={({ item, index }) => (
+          <>
+            <Button
+              className="flex-row justify-start gap-4"
+              variant="ghost"
+              onPress={() => { setValues(values.filter((_, idx) => index !== idx)) }}
+            >
+              <XIcon />
+              <Text>{formatTimeDelta(item)}</Text>
+            </Button>
+            <Separator orientation="horizontal" />
+          </>
+        )}
+      />
+      <Dialog open={dialog} onOpenChange={setDialog}>
+        <DialogTrigger asChild>
+          <Button
+            className="flex-row justify-start gap-4"
+            variant="ghost"
+          >
+            <PlusIcon />
+            <Text>{t('task_form.alarms.create')}</Text>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="h-[800px] w-96">
+          <DialogTitle>{t('task_form.alarms.create')}</DialogTitle>
+          <FlashList
+            data={popularTimedeltas}
+            keyExtractor={item => item.toString()}
+            renderItem={({ item: newVal }) => (
+              newVal && (
+                <>
+                  <Button
+                    className="flex-row justify-start gap-4"
+                    key={newVal}
+                    variant="ghost"
+                    onPress={() => {
+                      !values.includes(newVal) && setValues([...values, newVal])
+                      setDialog(false)
+                    }}
+                  >
+                    <Text>{formatTimeDelta(newVal)}</Text>
+                  </Button>
+                  <Separator orientation="horizontal" />
+                </>
+              )
+            )}
+          />
+          <View
+            className="flex-row items-center justify-start gap-4"
+          >
+            <Input
+              className="!h-12 grow"
+              keyboardType="numeric"
+              placeholder={t('task_form.alarms.custom')}
+              value={custom}
+              onChangeText={setCustom}
+              onKeyPress={e => e.nativeEvent.key === 'Enter' && submitCustom()}
+            />
+            <Text>{t('task_form.alarms.minutes')}</Text>
+            <Button
+              className="flex-row justify-start gap-4"
+              onPress={submitCustom}
+            >
+              <CheckIcon />
+            </Button>
+          </View>
+          <Text className="text-destructive">{customError}</Text>
+        </DialogContent>
+      </Dialog>
 
     </View>
   )

@@ -29,12 +29,9 @@ export function TaskUpdateScreen() {
 
   // trigger reset when task changes
   useEffect(() => {
-    form.reset({
-      ...task,
-    }, {
+    form.reset(task?.toFormValues(), {
       keepDefaultValues: true,
     })
-    form.resetField('alarm')
     form.trigger()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task])
