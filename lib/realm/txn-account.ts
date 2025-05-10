@@ -1,3 +1,5 @@
+import type { TxnRecord } from './txn-record'
+
 import { Realm } from '@realm/react'
 import { z } from 'zod'
 
@@ -15,6 +17,7 @@ export class TxnAccount extends Realm.Object<TxnAccount> {
 
   name!: string
   currency!: string
+  txns!: Realm.List<TxnRecord>
 
   static schema: Realm.ObjectSchema = {
     name: 'TxnAccount',
@@ -28,6 +31,12 @@ export class TxnAccount extends Realm.Object<TxnAccount> {
       // key fields
       name: 'string',
       currency: 'string',
+
+      txns: {
+        type: 'linkingObjects',
+        objectType: 'TxnRecord',
+        property: 'account',
+      },
     },
   }
 

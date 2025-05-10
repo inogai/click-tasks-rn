@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'react-native'
 
 import { Button } from '~/components/ui/button'
@@ -8,6 +8,7 @@ import { Button } from '~/components/ui/button'
 import { t } from '~/lib/i18n'
 import { CirclePlusIcon, GroupIcon, UserRoundCogIcon } from '~/lib/icons'
 import { TxnAccount, useRealmQuery } from '~/lib/realm'
+import { R } from '~/lib/utils'
 
 import TxnScreen from './[accountId]'
 
@@ -30,37 +31,7 @@ export default function AccountDrawerLayout() {
             name={id}
             options={{
               title: account.name,
-              headerRight: () => (
-                <View className="mr-4 flex-row gap-2">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onPress={() => router.navigate('/txn-account/list')}
-                    accessibilityLabel={t('routes.txn-account.list')}
-                    accessibilityRole="link"
-                  >
-                    <UserRoundCogIcon />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onPress={() => router.navigate('/txn/create')}
-                    accessibilityLabel={t('routes.txn.create')}
-                    accessibilityRole="link"
-                  >
-                    <CirclePlusIcon />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onPress={() => router.navigate('/txn-cat/list')}
-                    accessibilityLabel={t('routes.txn-cat.list')}
-                    accessibilityRole="link"
-                  >
-                    <GroupIcon />
-                  </Button>
-                </View>
-              ),
+              headerShown: false,
             }}
           />
         )
