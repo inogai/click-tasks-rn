@@ -91,7 +91,7 @@ async function setupAlarm(alarm: Alarm) {
         // t('alarm.notification.minutesLeft', {
         //   minutes: differenceInMinutes(due, date),
         // }),
-        time,
+        date,
       )),
     )
   }
