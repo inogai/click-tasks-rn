@@ -71,10 +71,11 @@ export function CountdownView() {
                   >
                     <Text className="line-clamp-1 font-medium">{countdown.summary}</Text>
                     <Text className={`
-                      line-clamp-1 w-full justify-end font-medium
+                      -ml-2 line-clamp-1 w-full justify-end font-medium
                       text-muted-foreground
                     `}
                     >
+                      <Text className="text-3xl">{' '}</Text>
                       <Trans
                         components={{ 1: <Text className={numberClass} /> }}
                         i18nKey="countdown_view.days_left"
