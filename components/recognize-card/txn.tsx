@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
 
 import { BookIcon, CalendarIcon, CircleDollarSignIcon, PencilIcon } from '~/lib/icons'
 import { TxnAccount, useRealmObject } from '~/lib/realm'
-import { smartFormatDate } from '~/lib/utils/format-date-range'
+import { smartFormatDate } from '~/lib/utils'
 
 import { BaseCard } from './base'
 
