@@ -7,7 +7,7 @@ export type Time = Date & { __tag: 'Time' }
 export const Time = {
   validate(time: Date): Time {
     const ms = time.getTime()
-    if (ms < 0 || ms > 24 * 60 * 60 * 1000) {
+    if (ms < 0 || ms > 24 * 60 * 60 * 1000 || Number.isNaN(ms)) {
       throw new RangeError('Time must be between 00:00 and 24:00 hours')
     }
     return time as Time
@@ -22,7 +22,17 @@ export const Time = {
     return Time.fromMs(minutes * 60 * 1000)
   },
   fromLiteral(str: `${number}:${number}`): Time {
+    if (!str.match(/^\d{2}:\d{2}$/)) {
+      throw new RangeError('Time must be in the format HH:MM')
+    }
+
     const [hours, minutes] = str.split(':').map(it => Number.parseInt(it, 10))
+    if (minutes < 0 || minutes > 59) {
+      throw new RangeError('Minutes must be between 00 and 59')
+    }
+    if (hours < 0 || hours > 24) {
+      throw new RangeError('Hours must be between 00 and 24')
+    }
     return Time.fromMinutes(hours * 60 + minutes)
   },
   fromDate(date: Date): Time {
@@ -34,14 +44,17 @@ export const Time = {
     return Time.validate(clampDate(date, Time.fromLiteral('00:00'), Time.fromLiteral('24:00')))
   },
   format(time: Time): string {
+    time = Time.validate(time)
     const hours = Time.getHours(time)
     const minutes = Time.getMinutes(time)
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
   },
   getHours(time: Time): number {
+    time = Time.validate(time)
     return Math.floor(time.getTime() / (60 * 60 * 1000))
   },
   getMinutes(time: Time): number {
+    time = Time.validate(time)
     return Math.floor((time.getTime() % (60 * 60 * 1000)) / (60 * 1000))
   },
 }
