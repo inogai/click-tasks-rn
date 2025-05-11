@@ -90,7 +90,7 @@ export function TxnScreen({
             </Button>
             <View>
               <Text className="text-xl font-medium">
-                {t('routes.(tabs).txn')}
+                {account?.name ?? 'Unknown Account'}
               </Text>
               <Text className={cn(
                 'text-sm font-medium leading-none',
