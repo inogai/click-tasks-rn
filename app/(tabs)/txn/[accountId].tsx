@@ -26,8 +26,9 @@ const columns: ColumnDef<TxnRecord>[] = [
     header: 'Cat.',
     cell: ({ getValue }) => {
       const category = getValue<TxnCat | undefined>()
-      if (!category) { return null }
-
+      if (!category) {
+        return null
+      }
       return category?.renderIcon({ size: 20 })
     },
   },
@@ -77,9 +78,9 @@ export function TxnScreen({
       edges={['left', 'right']}
     >
       <Header
-        title={account?.name ?? ''}
+        title=""
         headerLeft={() => (
-          <View className="px-2">
+          <View className="flex-row items-center gap-2 px-2">
             <Button
               size="icon"
               variant="ghost"
@@ -87,6 +88,20 @@ export function TxnScreen({
             >
               <MenuIcon />
             </Button>
+            <View>
+              <Text className="text-xl font-medium">
+                {t('routes.(tabs).txn')}
+              </Text>
+              <Text className={cn(
+                'text-sm font-medium leading-none',
+                sum > 0 ? 'text-green-500' : 'text-red-500',
+              )}
+              >
+                {account?.currency ?? ''}
+                {' '}
+                {sum.toFixed(2)}
+              </Text>
+            </View>
           </View>
         )}
         headerRight={() => (
@@ -120,29 +135,13 @@ export function TxnScreen({
             </Button>
           </View>
         )}
-        headerTitle={props => (
-          <View>
-            <Text className="text-xl font-medium">
-              {props.children}
-            </Text>
-            <Text className={cn(
-              'text-sm font-medium',
-              sum > 0 ? 'text-green-500' : 'text-red-500',
-            )}
-            >
-              {account?.currency ?? ''}
-              {' '}
-              {sum.toFixed(2)}
-            </Text>
-          </View>
-        )}
       >
       </Header>
 
       <DataTable
         columns={columns}
         columnWeights={[0, 1, 0]}
-        columnWidths={[40, 10, 90]}
+        columnWidths={[48, 10, 90]}
         data={txnRecords}
         estimatedRowSize={106}
         onRowPressed={(row) => {
