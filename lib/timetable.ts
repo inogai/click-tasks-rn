@@ -77,7 +77,7 @@ export function scaleBy(
 export function createTimeTable<T>({
   data: dataProp,
   orientation,
-  timeStep = TimeDelta.MINUTE(1),
+  timeStep = TimeDelta.MINUTES(1),
   beginDt,
 }: CreateTimeTableOpts<T>) {
   const data = R.sortBy(dataProp, x => x.from.getTime())

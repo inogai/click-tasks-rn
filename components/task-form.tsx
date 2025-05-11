@@ -216,12 +216,12 @@ function AlarmInput({
   setValues: (values: number[]) => void
 }) {
   const popularTimedeltas = [
-    TimeDelta.MINUTE(15),
-    TimeDelta.MINUTE(30),
-    TimeDelta.HOUR(1),
-    TimeDelta.HOUR(1.5),
-    TimeDelta.HOUR(2),
-    TimeDelta.DAY(1),
+    TimeDelta.MINUTES(15),
+    TimeDelta.MINUTES(30),
+    TimeDelta.HOURS(1),
+    TimeDelta.HOURS(1.5),
+    TimeDelta.HOURS(2),
+    TimeDelta.DAYS(1),
   ]
 
   const [dialog, setDialog] = useState(false)
@@ -229,7 +229,7 @@ function AlarmInput({
   const [customError, setCustomError] = useState('')
 
   function submitCustom() {
-    const newVal = TimeDelta.MINUTE(Number.parseInt(custom, 10))
+    const newVal = TimeDelta.MINUTES(Number.parseInt(custom, 10))
     if (Number.isNaN(newVal) || newVal < 0) {
       setCustomError(t('task_form.alarms.error.invalid'))
       return

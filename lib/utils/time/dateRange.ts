@@ -6,7 +6,7 @@ import { TimeDelta } from './TimeDelta'
 export function dateRange(
   start: Date,
   end: Date,
-  step: TimeDelta = TimeDelta.MINUTE(1),
+  step: TimeDelta = TimeDelta.MINUTES(1),
 ) {
   if (step === 0) {
     throw new RangeError('step should be the same sign as end - start')

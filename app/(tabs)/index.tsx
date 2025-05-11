@@ -48,7 +48,7 @@ export default function Screen() {
         for (const date of dateRange(
           task.plannedBegin,
           task.plannedEnd ?? addDays(task.plannedBegin, 1),
-          TimeDelta.DAY(1),
+          TimeDelta.DAYS(1),
         )) {
           const dateStr = formatDate(date, 'yyyy-MM-dd')
           result[dateStr] = (result[dateStr] ?? 0) + 1

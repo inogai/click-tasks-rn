@@ -20,11 +20,11 @@ interface TimeTableItem {
 
 function getTimeInterval(begin: Date, end: Date) {
   const diff = end.getTime() - begin.getTime()
-  if (diff > TimeDelta.HOUR(12))
-    return TimeDelta.HOUR(2)
-  if (diff > TimeDelta.HOUR(6))
-    return TimeDelta.HOUR(1)
-  return TimeDelta.MINUTE(30)
+  if (diff > TimeDelta.HOURS(12))
+    return TimeDelta.HOURS(2)
+  if (diff > TimeDelta.HOURS(6))
+    return TimeDelta.HOURS(1)
+  return TimeDelta.MINUTES(30)
 }
 
 interface TimeTableProps {
@@ -64,7 +64,7 @@ export function TimeTable({
   }
 
   const timetables = R.pipe(
-    dateRange(dateBegin, dateEnd, TimeDelta.DAY(1)),
+    dateRange(dateBegin, dateEnd, TimeDelta.DAYS(1)),
     R.map(day => [composeDate(day, timeBegin), composeDate(day, timeEnd)]),
     R.map(([beginDt, endDt]) => {
       const localItems = R.pipe(
