@@ -8,7 +8,7 @@ import { Text, View } from 'react-native'
 
 import { Button } from '~/components/ui/button'
 
-import { CalendarIcon, ClockIcon, RotateCcwIcon, TrashIcon } from '~/lib/icons'
+import { CalendarIcon, ClockIcon, TrashIcon } from '~/lib/icons'
 
 interface BaseDateInputProps {
   value: Date | undefined
@@ -52,7 +52,7 @@ function BaseDateInput({
       <Button
         variant="outline"
         className={`
-          native:py-0 native:gap-3
+          native:py-0 native:gap-3 native:px-3
           flex-row items-center justify-start gap-4 py-0 leading-none
         `}
         onPress={handleButtonPress}
@@ -73,7 +73,7 @@ function BaseDateInput({
               </Text>
             )
           : (
-              <Text className="text-lg text-muted-foreground">
+              <Text className="text-muted-foreground">
                 {mode === 'date' ? 'YYYY-MM-DD' : 'HH:mm'}
               </Text>
             )}
