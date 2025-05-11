@@ -6,9 +6,14 @@ export interface TimeDeltaBreakdown {
   minutes: number
   seconds: number
   milliseconds: number
+  count: number
 }
 
 export function timeDeltaBreakdown(delta: number): TimeDeltaBreakdown {
+  if (delta < 0) {
+    throw new RangeError('Negative time delta not supported')
+  }
+
   const milliseconds = delta % 1000
   const seconds = Math.floor(delta / 1000)
   const minutes = Math.floor(seconds / 60)
@@ -21,6 +26,7 @@ export function timeDeltaBreakdown(delta: number): TimeDeltaBreakdown {
     minutes: minutes % 60,
     seconds: seconds % 60,
     milliseconds: milliseconds % 1000,
+    count: delta,
   }
 }
 

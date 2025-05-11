@@ -1,13 +1,19 @@
 timedelta:
   val: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} })"
+  val_zero: No time
   val_left: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} }) left"
+  val_left_zero: No time left
   d: '{{ count }} days'
+  d_one: '{{ count }} day'
   d_zero: ' '
   h: '{{ count }} hours'
+  h_one: '{{ count }} hour'
   h_zero: ' '
   min: '{{ count }} minutes'
+  min_one: '{{ count }} minute'
   min_zero: ' '
   sec: '{{ count }} seconds'
+  sec_one: '{{ count }} second'
   sec_zero: ' '
 
 # Components
