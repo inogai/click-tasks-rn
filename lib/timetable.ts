@@ -1,15 +1,31 @@
 import { R, TimeDelta } from '~/lib/utils'
 
-class CrossAxisBuilder {
+/**
+ * Manages the cross axis allocation (i.e. overlapped item) for a timetable.
+ * It keeps track of the length of the cross axis and the occupied positions.
+ */
+export class CrossAxisBuilder {
+  /** The size of cross axis */
   length = 0
+  /**
+   * The occupied positions in the cross axis
+   * @field key - the position in the time axis
+   * @field value - an array of occupied positions in the cross axis
+   */
   occupance: Record<number, number[]> = {}
 
   bumpAxis() {
     this.length += 1
   }
 
+  /**
+   * allocate a position in the cross axis
+   * @param startPos the start position in the time axis
+   * @param lengthPos the length of the item in the time axis
+   * @returns the cross axis position for the item
+   */
   allocate(startPos: number, lengthPos: number) {
-    const endPos = startPos + lengthPos - 1
+    const endPos = startPos + lengthPos
 
     let availCross: number[] = R.range(0, this.length)
 
@@ -48,32 +64,6 @@ interface CreateTimeTableOpts<T> {
   endDt: Date
 }
 
-interface Style {
-  left: number
-  top: number
-  width: number
-  height: number
-}
-
-interface ScaleOpts {
-  x: (value: number) => number
-  y: (value: number) => number
-  mx?: number
-  my?: number
-}
-
-export function scaleBy(
-  style: Style,
-  { x, y, mx = 0, my = 0 }: ScaleOpts,
-) {
-  return {
-    left: x(style.left) + mx,
-    top: y(style.top) + my,
-    width: x(style.width) - x(0) - 2 * mx,
-    height: y(style.height) - y(0) - 2 * my,
-  }
-}
-
 export function createTimeTable<T>({
   data: dataProp,
   orientation,
@@ -96,7 +86,7 @@ export function createTimeTable<T>({
   function getModel() {
     const items = data.map((it) => {
       const timeBegin = date2Pos(it.from)
-      const timeEnd = date2Pos(it.to) + 1
+      const timeEnd = date2Pos(it.to)
       const timeLength = timeEnd - timeBegin
 
       const crossBegin = crossAxis.allocate(timeBegin, timeLength)
