@@ -1,15 +1,43 @@
+timedelta:
+  val: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} })"
+  val_zero: 無時間
+  val_left: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} }) 剩餘"
+  val_left_zero: 無剩餘時間
+  d: '{{ count }} 天'
+  d_one: '{{ count }} 天'
+  d_zero: ' '
+  h: '{{ count }} 小時'
+  h_one: '{{ count }} 小時'
+  h_zero: ' '
+  min: '{{ count }} 分鐘'
+  min_one: '{{ count }} 分鐘'
+  min_zero: ' '
+  sec: '{{ count }} 秒'
+  sec_one: '{{ count }} 秒'
+  sec_zero: ' '
+
 # Components
 button:
   submit: 提交
   delete: 刪除
 
+select:
+  prevOption: 上一個選項
+  nextOption: 下一個選項
+
+data_table:
+  placeholder: 暫無項目。
+
 voice_button:
-  label: 語音建立任務
+  label: 語音創建任務
   title: 請開始說話...
   cancel: 取消
   accept: 確認
 
 task_form:
+  tab:
+    activity: 活動
+    task: 任務
   summary:
     label: 任務摘要
     placeholder: 輸入任務摘要
@@ -27,6 +55,28 @@ task_form:
     values:
       pending: 待處理
       completed: 已完成
+      overdue_completed: 已逾期完成
+      deleted: 已刪除
+  countdown:
+    label: 添加到儀表板倒計時
+    error:
+      no_due: 添加到倒計時時必須設定截止日期
+
+  alarms:
+    label: 提醒
+    error:
+      no_due: 添加提醒時必須設定截止日期
+      invalid: 必須是正數
+      duplicated: 不能重複
+
+    create: 提前添加提醒
+    minutes: 分鐘
+    custom: 自定義時間
+
+alarm:
+  notification:
+    minutesLeft: '還剩 {{ minutes }} 分鐘'
+  shake_to_dismiss: 搖動關閉
 
 txn_account_form:
   name:
@@ -37,12 +87,15 @@ txn_account_form:
 txn_form:
   account:
     label: 賬戶
+    error: 不是有效賬戶
   amount:
     label: 金額
   date:
     label: 交易日期
   summary:
     label: 摘要
+  cat:
+    label: 分類
 
 calendar_day:
   taskCount: '{{ count }} 個任務待處理。'
@@ -74,6 +127,9 @@ calendar_strip:
     expanded: 收起日曆
 
 timetable:
+  mode:
+    day: 單日視圖
+    3day: 三日視圖
   task:
     label: >
       {{ summary }},
@@ -105,34 +161,51 @@ expenses_view:
   monthly_balance:
     title: 本月收支
 
+prod_summary:
+  currency:
+    label: 選擇要彙總的貨幣...
+  comments:
+    title: 為您提供的建議...
+
+countdown_view:
+  days_left: 還剩 <1>{{ count }}</1> 天
+  days_left_one: 還剩 <1>{{ count }}</1> 天
 # Routes
 routes:
   (tabs):
-    __itself__: 主頁
-    index: 主頁
+    __itself__: 首頁
+    index: 首頁
     task: 任務
     txn: 交易
-    preference: 偏好設定
+    preference: 偏好設置
 
   task:
     update: 更新任務
-    create: 建立任務
+    create: 創建任務
 
   txn:
     edit: 編輯交易
-    create: 建立交易
+    create: 創建交易
 
   txn-account:
     list: 管理交易賬戶
     edit: 編輯交易賬戶
-    create: 建立交易賬戶
+    create: 創建交易賬戶
+
+  txn-cat:
+    list: 編輯分類
+
+  recognize: 語音識別
+
+  prod-summary:
+    monthly: 月度總結
 
 # Pages
 recognize:
   transcribed:
     label: 我聽到你說...
   result:
-    label: 我已識別...
+    label: 我識別到了...
 
 preference:
   theme:
@@ -153,6 +226,30 @@ preference:
   speech_language:
     label: 語音語言
     values:
-      en-US: 英文
+      en-US: 英語
       zh-CN: 中文（普通話）
       zh-HK: 中文（粵語）
+
+  prefered_currency:
+    label: 首選貨幣（3個字符）
+
+  alarm_type:
+    label: 提醒類型
+    values:
+      once: 一次性
+      repeat: 重複
+
+txn_cat:
+  icon:
+    label: 圖標
+  name:
+    label: 分類名稱
+  color:
+    label: 顏色
+
+  delete:
+    label: 刪除分類
+
+  new_cat:
+    label: 創建新分類
+    name: 新分類

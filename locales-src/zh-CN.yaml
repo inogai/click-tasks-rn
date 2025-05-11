@@ -1,7 +1,32 @@
+timedelta:
+  val: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} })"
+  val_zero: 无时间
+  val_left: "$t(timedelta.d, { 'count': {{ days }} }) $t(timedelta.h, { 'count': {{ hours }} }) $t(timedelta.min, { 'count': {{ minutes }} }) $t(timedelta.sec, { 'count': {{ seconds }} }) 剩余"
+  val_left_zero: 无剩余时间
+  d: '{{ count }} 天'
+  d_one: '{{ count }} 天'
+  d_zero: ' '
+  h: '{{ count }} 小时'
+  h_one: '{{ count }} 小时'
+  h_zero: ' '
+  min: '{{ count }} 分钟'
+  min_one: '{{ count }} 分钟'
+  min_zero: ' '
+  sec: '{{ count }} 秒'
+  sec_one: '{{ count }} 秒'
+  sec_zero: ' '
+
 # Components
 button:
   submit: 提交
   delete: 删除
+
+select:
+  prevOption: 上一个选项
+  nextOption: 下一个选项
+
+data_table:
+  placeholder: 暂无项目。
 
 voice_button:
   label: 语音创建任务
@@ -10,6 +35,9 @@ voice_button:
   accept: 确认
 
 task_form:
+  tab:
+    activity: 活动
+    task: 任务
   summary:
     label: 任务摘要
     placeholder: 输入任务摘要
@@ -27,6 +55,28 @@ task_form:
     values:
       pending: 待处理
       completed: 已完成
+      overdue_completed: 已逾期完成
+      deleted: 已删除
+  countdown:
+    label: 添加到仪表盘倒计时
+    error:
+      no_due: 添加到倒计时时必须设定截止日期
+
+  alarms:
+    label: 提醒
+    error:
+      no_due: 添加提醒时必须设定截止日期
+      invalid: 必须是正数
+      duplicated: 不能重复
+
+    create: 提前添加提醒
+    minutes: 分钟
+    custom: 自定义时间
+
+alarm:
+  notification:
+    minutesLeft: '还剩 {{ minutes }} 分钟'
+  shake_to_dismiss: 摇动关闭
 
 txn_account_form:
   name:
@@ -37,12 +87,15 @@ txn_account_form:
 txn_form:
   account:
     label: 账户
+    error: 不是有效账户
   amount:
     label: 金额
   date:
     label: 交易日期
   summary:
     label: 摘要
+  cat:
+    label: 分类
 
 calendar_day:
   taskCount: '{{ count }} 个任务待处理。'
@@ -74,6 +127,9 @@ calendar_strip:
     expanded: 收起日历
 
 timetable:
+  mode:
+    day: 单日视图
+    3day: 三日视图
   task:
     label: >
       {{ summary }},
@@ -105,6 +161,15 @@ expenses_view:
   monthly_balance:
     title: 本月收支
 
+prod_summary:
+  currency:
+    label: 选择要汇总的货币...
+  comments:
+    title: 为您提供的建议...
+
+countdown_view:
+  days_left: 还剩 <1>{{ count }}</1> 天
+  days_left_one: 还剩 <1>{{ count }}</1> 天
 # Routes
 routes:
   (tabs):
@@ -126,6 +191,14 @@ routes:
     list: 管理交易账户
     edit: 编辑交易账户
     create: 创建交易账户
+
+  txn-cat:
+    list: 编辑分类
+
+  recognize: 语音识别
+
+  prod-summary:
+    monthly: 月度总结
 
 # Pages
 recognize:
@@ -156,3 +229,27 @@ preference:
       en-US: 英语
       zh-CN: 中文（普通话）
       zh-HK: 中文（粤语）
+
+  prefered_currency:
+    label: 首选货币（3个字符）
+
+  alarm_type:
+    label: 提醒类型
+    values:
+      once: 一次性
+      repeat: 重复
+
+txn_cat:
+  icon:
+    label: 图标
+  name:
+    label: 分类名称
+  color:
+    label: 颜色
+
+  delete:
+    label: 删除分类
+
+  new_cat:
+    label: 创建新分类
+    name: 新分类
