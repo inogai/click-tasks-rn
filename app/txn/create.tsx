@@ -17,11 +17,8 @@ export default function TxnCreateScreen() {
   const form = useTxnForm()
 
   function handleSubmit(data: ITxnRecord) {
-    const record = TxnRecord.create(data, realm)
-    console.log('record', record)
-
     realm.write(() => {
-      realm.create(TxnRecord, record)
+      TxnRecord.create(data, realm)
     })
 
     router.back()
