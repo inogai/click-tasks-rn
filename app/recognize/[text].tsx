@@ -40,8 +40,7 @@ async function localMutate({
 }
 
 export default function RecognizationScreen() {
-  let { text } = useLocalSearchParams<'/recognize/[text]'>()
-  text = 'Tommorrow 9am take a cup of tea. Cash 10USD.'
+  const { text } = useLocalSearchParams<'/recognize/[text]'>()
   const realm = useRealm()
 
   const { isPending, error, data, refetch, isFetching } = useQuery({
