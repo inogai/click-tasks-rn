@@ -43,7 +43,17 @@ export const CheckboxLike = React.forwardRef<ViewRef, CheckboxLikeProps>(
         accessibilityLabel={selectedOption.label}
         {...props}
       >
-        {IconComp && <IconComp className="text-primary-foreground" size={12} strokeWidth={3.5} />}
+        {IconComp && (
+          <IconComp
+            size={12}
+            strokeWidth={3.5}
+            width={12}
+            className={cn(
+              'text-primary-foreground',
+              selectedOption?.indicatorClass,
+            )}
+          />
+        )}
       </Pressable>
     )
   },

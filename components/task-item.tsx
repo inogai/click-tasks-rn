@@ -55,7 +55,7 @@ export function TaskItem({
       <CheckboxLike
         value={task.status}
         options={[
-          { value: TaskStatus.PENDING, label: t('task_form.status.values.pending'), icon: CheckIcon },
+          { value: TaskStatus.PENDING, label: t('task_form.status.values.pending'), icon: CheckIcon, indicatorClass: 'opacity-0' },
           { value: TaskStatus.COMPLETED, label: t('task_form.status.values.completed'), rootClass: 'bg-primary', icon: CheckIcon },
           { value: TaskStatus.OVERDUE_COMPLETED, label: t('task_form.status.values.overdue_completed'), rootClass: 'bg-primary', icon: MinusIcon },
           { value: TaskStatus.DELETED, label: t('task_form.status.values.pending'), rootClass: 'border-muted-foreground bg-muted-foreground', icon: XIcon },
