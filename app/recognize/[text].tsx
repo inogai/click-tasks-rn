@@ -3,7 +3,7 @@ import type { IntentionRecognitionResult } from '~/lib/intention-recognition'
 import { useRealm } from '@realm/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -43,6 +43,7 @@ export default function RecognizationScreen() {
   const { text } = useLocalSearchParams<'/recognize/[text]'>()
   const realm = useRealm()
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { isPending, error, data, refetch, isFetching } = useQuery({
     queryKey: ['recognization', text],
     queryFn: () => intentionRecognition(text ?? '', realm),
@@ -57,7 +58,7 @@ export default function RecognizationScreen() {
   })
 
   useFocusEffect(useCallback(() => {
-    console.log('focus effect')
+    setIsSubmitting(false)
     if (isFetching || isPending) {
       return
     }
@@ -78,6 +79,11 @@ export default function RecognizationScreen() {
   }
 
   function handleActionButtonPress() {
+    if (isSubmitting) {
+      return
+    }
+    setIsSubmitting(true)
+
     try {
       realm.write(() => {
         if (data) {
