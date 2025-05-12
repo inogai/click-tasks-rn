@@ -70,18 +70,22 @@ export function CountdownView() {
                     }}
                   >
                     <Text className="line-clamp-1 font-medium">{countdown.summary}</Text>
-                    <Text className={`
-                      -ml-2 line-clamp-1 w-full justify-end font-medium
-                      text-muted-foreground
-                    `}
-                    >
-                      <Text className="text-3xl">{' '}</Text>
+                    <View className="flex-row items-baseline justify-start">
                       <Trans
-                        components={{ 1: <Text className={numberClass} /> }}
                         i18nKey="countdown_view.days_left"
                         values={{ count: daysLeft }}
+                        components={{
+                          1: <Text className={numberClass} />,
+                          2: (
+                            <Text className={`
+                              line-clamp-1 justify-end font-medium
+                              text-muted-foreground
+                            `}
+                            />
+                          ),
+                        }}
                       />
-                    </Text>
+                    </View>
                   </Pressable>
                 </>
               )

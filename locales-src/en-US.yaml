@@ -173,8 +173,8 @@ prod_summary:
     title: Recommendations for you...
 
 countdown_view:
-  days_left: <1>{{ count }}</1> days left
-  days_left_one: <1>{{ count }}</1> day left
+  days_left: <1>{{ count }}</1> <2> days left</2>
+  days_left_one: <1>{{ count }}</1> <2> day left</2>
 
 # Routes
 routes:

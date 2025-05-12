@@ -168,8 +168,8 @@ prod_summary:
     title: 為您提供的建議...
 
 countdown_view:
-  days_left: 還剩 <1>{{ count }}</1> 天
-  days_left_one: 還剩 <1>{{ count }}</1> 天
+  days_left: <2>還剩 </2><1>{{ count }}</1><2> 天</2>
+  days_left_one: <2>還剩 </2><1>{{ count }}</1><2> 天</2>
 # Routes
 routes:
   (tabs):

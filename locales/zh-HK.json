@@ -170,8 +170,8 @@
     }
   },
   "countdown_view": {
-    "days_left": "還剩 <1>{{ count }}</1> 天",
-    "days_left_one": "還剩 <1>{{ count }}</1> 天"
+    "days_left": "<2>還剩 </2><1>{{ count }}</1><2> 天</2>",
+    "days_left_one": "<2>還剩 </2><1>{{ count }}</1><2> 天</2>"
   },
   "routes": {
     "(tabs)": {
@@ -222,7 +222,7 @@
     "language": {
       "label": "語言",
       "values": {
-        "en": "英語",
+        "en": "英文",
         "zh-Hans": "簡體中文",
         "zh-Hant": "繁體中文",
         "system": "跟隨系統"
