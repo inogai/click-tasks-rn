@@ -23,6 +23,12 @@ function useColumns(realm: Realm): ColumnDef<TxnCat>[] {
     realm.write(() => { cat.update(props, realm) })
   }, [realm])
 
+  const deleteCat = useCallback((cat: TxnCat) => {
+    realm.write(() => {
+      realm.delete(cat)
+    })
+  }, [realm])
+
   return useMemo(() => [
     {
       accessorKey: 'icon',
@@ -67,13 +73,14 @@ function useColumns(realm: Realm): ColumnDef<TxnCat>[] {
       cell: ({ row }) => (
         <Button
           variant="destructive"
+          onPress={() => { deleteCat(row.original) }}
           accessibilityLabel={t('txn_cat.delete.label')}
         >
           <TrashIcon />
         </Button>
       ),
     },
-  ], [updateCat])
+  ], [deleteCat, updateCat])
 }
 
 export default function TxnCatListScreen() {
