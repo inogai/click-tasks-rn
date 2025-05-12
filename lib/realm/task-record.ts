@@ -150,12 +150,18 @@ export class TaskRecord extends Realm.Object<TaskRecord> {
         alarm.delete(realm)
       })
 
-      this.alarms = alarmsProp?.map(alarmMs => realm.create<Alarm>('Alarm', {
+      this.alarms.splice(0, this.alarms.length)
+
+      const plannedBegin = props.plannedBegin ?? this.plannedBegin
+
+      const alarms = alarmsProp.map(alarmMs => realm.create<Alarm>('Alarm', {
         _id: new Realm.BSON.ObjectId(),
         title: this.summary,
+        plannedBegin: plannedBegin!,
         time: addMilliseconds(this.plannedBegin!, -alarmMs),
-        plannedBegin: this.plannedBegin!,
-      })) satisfies Alarm[] as unknown as Realm.List<Alarm>
+      }))
+
+      this.alarms.push(...alarms)
     }
 
     Object.assign(this, props)
