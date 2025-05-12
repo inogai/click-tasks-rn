@@ -54,7 +54,7 @@ export const usePreferenceStore = create(
       language: 'system',
       speechLanguage: 'en-US',
       preferedCurrency: 'USD',
-      alarmType: 'once',
+      alarmType: 'repeat',
       setTheme: (newTheme: Preference['theme']) => {
         set(_ => ({ theme: newTheme }))
       },
