@@ -1,0 +1,18 @@
+---
+config:
+  theme: base
+  layout: elk
+  look: neo
+---
+flowchart TD
+    A["Click Button"] --> B@{ label: "'react-native-voice'" }
+    B --> C["LangChain Processing"] & B1["System Voice-To-Text"]
+    B1 --> B
+    C --> C1["DeepSeek API"]
+    C1 -- Parse JSON Response --> C2{"Validate"}
+    C2 -- No --> C1
+    C2 -- Yes --> D["Display Result on UI"]
+
+    D{"User Input"} -- Yes --> E["Store in RealmDB"]
+    D -- No --> F[/"Open Form for Editing"/]
+    F --> E

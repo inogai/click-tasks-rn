@@ -1,0 +1,22 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryBorderColor: "#772222"
+  look: classic
+  layout: elk
+---
+
+flowchart TD
+    A[/"Alarm Configured"/]
+    A2[/"Alarm Updated"/] --> A3["Delete all old alarms"] --> B
+    B["Create Alarm Record in RealmDB"]
+    C["Setup Alarm Notification use notifee"]
+    C ---> D
+    D[["Alarm Triggered"]] --> E["Display Notification"]
+    E --> E2["Alarm Screen Opened"]
+    E2 --> E3[/"Dismiss Alarm"/]
+    E3 --> E4["Delete Alarm Record and notifications"]
+
+    A --> B
+    B --> C

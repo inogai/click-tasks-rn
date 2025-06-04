@@ -1,9 +1,12 @@
 import { registerRootComponent } from 'expo'
 import { ExpoRoot } from 'expo-router'
 import { createElement } from 'react'
+import { LogBox } from 'react-native'
 
 import 'react-native-get-random-values'
 import { ReadableStream } from 'web-streams-polyfill'
+
+LogBox.ignoreAllLogs()
 
 globalThis.ReadableStream = ReadableStream
 

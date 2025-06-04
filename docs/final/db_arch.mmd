@@ -1,0 +1,45 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryBorderColor: "#772222"
+  look: classic
+  layout: elk
+---
+
+classDiagram
+    class TaskRecord {
+        +string summary
+        +TaskStatus status
+        +string? venue
+        +Date? plannedBegin
+        +Date? plannedEnd
+        +bool countdown
+        +Alarm[] alarms
+    }
+    class Alarm {
+        +string title
+        +Date time
+        +Date plannedBegin
+        +string[] alarmIds
+    }
+    class TxnAccount {
+        +string name
+        +string currency
+    }
+    class TxnCat {
+        +string name
+        +string color
+        +string icon
+        +bool isDefault
+    }
+    class TxnRecord {
+        +TxnAccount account
+        +TxnCat? cat
+        +Decimal128 amount
+        +Date date
+        +string summary
+    }
+    TaskRecord "1" o-- "*" Alarm : alarms
+    TxnRecord "*" o-- "1" TxnAccount : account
+    TxnRecord "*" o-- "0..1" TxnCat : cat

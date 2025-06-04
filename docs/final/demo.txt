@@ -1,0 +1,21 @@
+
+First, you install it. Once it’s officially out, you’ll grab it from the App Store or Play Store. For now, just double-click the APK and get started.
+
+When you open the app, you’ll land on the home screen. Ignore the calendar strip at the top for now—we’ll come back to that. The star of the show here is the ​​Big Blue Button (BBB)​​ at the bottom. This is where the magic happens.
+
+Tap the BBB, give it mic permission, and just say whatever’s on your mind. For example: "I need to hit the gym tomorrow at 5pm and pay a $200 fee." The app listens, processes your words, and—boom—you’ll see a list of tasks and transactions pop up.
+
+You can tap any of these to check details or make edits. Finished reviewing? Hit the small blue checkmark on
+the bottom right corner to confirm the change.
+
+Now, back to the home screen. Notice the calendar strip? That little dot marks the date you just added a task. Tap the date, and you’ll see your task on the timeline. You can switch between a ​​1-day​​ or ​​3-day​​ view if you’ve got a lot going on. Your monthly balance updates automatically, so you’ll always know where you stand.
+
+Want a bigger picture? Tap the summary button. Here, you’ll see how many tasks you’ve crushed (or, let’s be real, how many are overdue). It also shows your total spending and earnings for the month, plus some AI-generated tips—though, fair warning, AI isn’t perfect, so take them with a grain of salt.
+
+If you’re the tweaky type, dive into ​​Preferences​​. Switch languages (pick one you don’t know if you want to dodge recommendations), flip on dark mode for late-night scrolling, or set your preferred currency (just note it only applies to new accounts).
+
+The ​​Tasks page​​ keeps everything organized—pending vs. completed, sorted by due date. You can edit, add alarms, or even mark tasks as canceled if plans change.
+
+And for money stuff, the ​​Transactions page​​ lays it all out. Tap any transaction to tweak details, or use the top-right menu to manage categories and accounts.
+
+That’s it. Simple, right? If you hit a snag or have ideas to make it better, let us know. After all, that’s how we make this app "Better"

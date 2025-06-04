@@ -1,0 +1,22 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryBorderColor: "#772222"
+  look: classic
+  layout: elk
+---
+flowchart TD
+ subgraph lib["Pure JS Libraries"]
+        1["Tanstack Table"]
+        2["React Native Reusables"]
+        L["langchain-js"]
+  end
+ subgraph nc["Libraies with Native Code"]
+        C["RealmJS (Database)"]
+        D["MMKV (Key-Value Store)"]
+        N["Notifee (Notifications)"]
+  end
+    J["Javascript Runtime"] --> lib & nc
+    U["Native User Interface"] -- Manage States / Rendering --> J
+    L --> inte["DeepSeek API"]
