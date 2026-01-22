@@ -6,6 +6,8 @@ export function getModel(): BaseChatModel {
   return new ChatDeepSeek({
     model: 'deepseek-chat',
     temperature: 0,
-    apiKey: 'sk-2c112dc2deae4476b38e8438f4194c70',
+    apiKey: '<DEEPSEEK_API_KEY>',
+    // Ideally, you would make requests on your server, and this should be your own server's endpoint and API (with ratelimit)
+    // For simplicity of this mobile-app projects, we will demo with a direct API call.
   })
 }
